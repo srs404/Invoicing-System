@@ -6,7 +6,7 @@ Fully Functional Invoicing System Implementation Based on MVC Structure
 
 - [@srs404](https://www.github.com/srs404)
 
-## Features
+## Features (Ongoing)
 
 - Advanced CRUD System For Invoice Management
 - AES-256 Credentials Encryption

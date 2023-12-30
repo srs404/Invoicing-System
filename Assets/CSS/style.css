@@ -1,4 +1,4 @@
-@media print {
+/* @media print {
     body {
         visibility: hidden;
     }
@@ -8,4 +8,106 @@
         left: 0;
         top: 0;
     }
+} */
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Rubik",sans-serif;
+    font-size: 16px;
+}
+
+.invoiceTable {
+    width: 100%;
+    position: inherit;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 20px;
+
+}
+
+.invoiceTable thead{
+    background-color: #1886fb;
+    color: white;
+}
+
+.invoiceTable tr, th, td{
+    /* border: 1px solid #ddd; */
+    padding: 13px;
+}
+
+.invoiceTable tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+.actionBTN:link, .actionBTN:visited{
+    background-color: #f44336;
+    color: white;
+    padding: 7px 8px;
+    margin-left: 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    height: 100%;
+    width: 23%;
+}
+
+.actionBTN:active, .actionBTN:hover{
+    background-color: red;
+}
+
+html, body {
+    height: 100%;
+}
+
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 250px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+.sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.container {
+    margin-left: 280px;
+    padding-top: 70px;
+    height: 100%;
+}
+
+.card {
+    /* position: fixed; */
+    /* transform: translate(-50%,-50%); */
+    /* left: 50%; */
+    /* top: 50%; */
+    /* margin-top: 100px; */
+    position: inherit;
+    background-color: transparent;
+    padding: 50px 30px;
+    border-radius: 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    backdrop-filter: blur(40px);
+    width: 98%;
+    height: 98%;
+    overflow-x:auto;
+}
+
+
+@media screen and (max-width: 700px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .sidebar a {float: left;}
+    .container {margin-left: 0; width: auto;}
 }

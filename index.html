@@ -1,30 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Input Prefix And Suffix</title>
+    <title>TripUp Invoice</title>
     <!--Google Font-->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Stylesheet-->
-    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="Assets/CSS/style.css">
 </head>
+
 <body>
-    <form>
-        <!--Prefix Example-->
-        <label for="amount">Total Amount</label>
-        <div class="input-wrapper">
-            <div class="prefix">$</div>
-            <input type="number" id="amount" placeholder="Amount">
+    <div class="sidebar">
+        <a>Hello</a>
+        <a>World</a>
+    </div>
+
+    <div class="container">
+        <div class="card" style="text-align: center;">
+
+            <table class="invoiceTable">
+                <thead>
+                    <tr>
+                        <th>Invoice No.</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: green;">Paid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: green;">Paid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                    <tr>
+                        <td>1D22</td>
+                        <td>John Doe</td>
+                        <td>john@doe.com</td>
+                        <td style="color: red;">Unpaid</td>
+                        <td><a class="actionBTN" href="#">X</a><a class="actionBTN" href="#"
+                                style="background-color: blue;">✏️</a><a class="actionBTN" href="#"
+                                style="background-color: green;">☑</a></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
-        <br>
-
-        <!--Suffix Example-->
-        <label for="weight">Total Weight</label>
-        <div class="input-wrapper">
-            <input type="number" id="weight" placeholder="Weight">
-            <div class="suffix">Kg</div>
-        </div>
-
-    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
+    </script>
 </body>
+
 </html>

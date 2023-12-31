@@ -5,7 +5,7 @@
     <title>TripUp Invoice</title>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Stylesheet -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -21,50 +21,76 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="createNewLabel">Add New Invoice</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">@</span>
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                            aria-describedby="basic-addon1">
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Recipient's username"
-                            aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <span class="input-group-text" id="basic-addon2">@example.com</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="basic-url" class="form-label">Your vanity URL</label>
-                        <div class="input-group">
-                            <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
-                            <input type="text" class="form-control" id="basic-url"
-                                aria-describedby="basic-addon3 basic-addon4">
+                    <form class="row g-3 needs-validation" novalidate>
+                        <div class="col-md-4 position-relative">
+                            <label for="validationTooltip01" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="validationTooltip01" placeholder="Sami"
+                                required>
+                            <div class="valid-tooltip">
+                                Looks good!
+                            </div>
                         </div>
-                        <div class="form-text" id="basic-addon4">Example help text goes outside the input group.</div>
-                    </div>
+                        <div class="col-md-4 position-relative">
+                            <label for="validationTooltip02" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="validationTooltip02" placeholder="Rahman"
+                                required>
+                            <div class="valid-tooltip">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="col-md-4 position-relative">
+                            <label for="validationTooltipUsername" class="form-label">Phone No.</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text" id="validationTooltipUsernamePrepend">+880</span>
+                                <input type="number" max="1999999999" placeholder="1625469920" class="form-control"
+                                    id="validationTooltipUsername" aria-describedby="validationTooltipUsernamePrepend"
+                                    required>
+                                <div class="invalid-tooltip">
+                                    Please provide a valid phone number.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 position-relative">
+                            <label for="validationTooltip03" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="validationTooltip03" required>
+                            <div class="invalid-tooltip">
+                                Please provide a valid Address.
+                            </div>
+                        </div>
+                        <div class="col-md-3 position-relative">
+                            <label for="formType" class="form-label">Form Type</label>
+                            <select class="form-select" id="formType" required onchange="showForm()">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="receipt">Receipt</option>
+                                <option value="invoice">Invoice</option>
+                                <option value="quotation">Quotation</option>
+                            </select>
+                            <div class="invalid-tooltip">
+                                Please select a valid state.
+                            </div>
+                        </div>
+                        <div class="col-md-3 position-relative">
+                            <label for="validationTooltip05" class="form-label">Identifier</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" disabled id="identifier"
+                                    aria-describedby="button-addon2" required>
+                                <button class="btn btn-outline-success" type="button" id="button-addon2">Check <span
+                                        class="fas fa-check"></span></button>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit">Submit form</button>
+                        </div>
+                    </form>
 
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">$</span>
-                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                        <span class="input-group-text">.00</span>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username">
-                        <span class="input-group-text">@</span>
-                        <input type="text" class="form-control" placeholder="Server" aria-label="Server">
-                    </div>
-
-                    <div class="input-group">
-                        <span class="input-group-text">With textarea</span>
-                        <textarea class="form-control" aria-label="With textarea"></textarea>
-                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
+                    <button type="button" id="modalDiscardBtn" class="btn btn-danger"
+                        data-bs-dismiss="modal">Discard</button>
                     <button type="button" class="btn btn-primary">Add Invoice</button>
                 </div>
             </div>
@@ -117,7 +143,7 @@
                     <!-- Search form -->
 
                     <li class="nav-item">
-                        <a class="nav-link me-3 me-lg-0" href="#" id="navbarDropdownMenuLink" role="button">
+                        <a class="nav-link me-3 me-lg-0" href="#" id="createNewNavBtn" role="button">
                             <i class="fas fa-folder-plus"></i>
                         </a>
                     </li>
@@ -221,9 +247,11 @@
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script src="Assets/JS/main.js"></script>
 
     <script>
         $(document).ready(function () {
+            // DataTable
             var myTable = $('#myTable').DataTable({
                 "lengthMenu": [
                     [5, 10, 25, 50, -1],
@@ -236,7 +264,6 @@
                     search: "Find",
                 },
                 info: false,
-                // searching: false,
             });
 
             // Remove the default search input
@@ -247,11 +274,14 @@
                 myTable.search(this.value).draw();
             });
 
-            $('#newInvoice').on('click', function () {
+            // Add new invoice modal
+            $('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function () {
                 $('#createNewModal').modal('show');
             });
-            $('#sidebarCreateNew').on('click', function () {
-                $('#createNewModal').modal('show');
+
+            // Close modal
+            $('#modalCloseBtn, #modalDiscardBtn').on('click', function () {
+                $('#createNewModal').modal('hide');
             });
         });
     </script>

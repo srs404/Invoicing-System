@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Login Panel | TripUp</title>
     <!--Google Font-->
@@ -7,8 +8,9 @@
     <!--Stylesheet-->
     <link rel="stylesheet" href="Assets/CSS/login.css">
 </head>
+
 <body>
-    <form method="POST" action="test.php">
+    <div class="loginCard">
         <center>
             <h2 style="font-weight: bold;">Invoice System Panel</h2>
             <!-- <img src="Assets/Images/loginIcon.png" alt="" width="200px"> -->
@@ -24,10 +26,17 @@
         </div>
         <br>
         <div style="text-align: center; width: 100%;">
-            <button class="customBTN" style="width: 100%; border-radius: 10px; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;" role="button"><span style="font-weight: bold;">Login</span></button>
+            <button class="customBTN" onclick="redirect()"
+                style="width: 100%; border-radius: 10px; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;"
+                role="button"><span style="font-weight: bold;">Login</span></button>
         </div>
-    </form>
+    </div>
     <img class="companyLogo" src="https://tripup.info/wp-content/uploads/2023/01/Tripup-logo-1.png" size="200px">
+    <script>
+        function redirect() {
+            window.location.href = "index.html";
+        }
+    </script>
 </body>
-</html>
 
+</html>

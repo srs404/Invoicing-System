@@ -3,8 +3,29 @@ $(function () {
     $('#datetimepicker1').datetimepicker();
 });
 
-function itemQuatity(item, option) {
+// Enable/Disable the item-price input field
+$('#price-checkbox').on('change', function () {
+    if (this.checked) {
+        for (var i = 0; i < document.querySelectorAll('#item-price').length; i++) {
+            document.querySelectorAll('#item-price')[i].disabled = false;
+        }
+    } else {
+        for (var i = 0; i < document.querySelectorAll('#item-price').length; i++) {
+            document.querySelectorAll('#item-price')[i].disabled = true;
+        }
+    }
 
+});
+
+// Change Total Price Based on item-price change
+$('#item-price').on('change', function () {
+    for (var i = 0; i < document.querySelectorAll('#item-total').length; i++) {
+        document.querySelectorAll('#item-total')[i].value = parseInt(document.querySelectorAll('#item-quantity')[i].value) * parseInt(document.querySelectorAll('#item-price')[i].value);
+    }
+});
+
+// Change Quantity, price and total price
+function itemQuatity(item, option) {
     // Find the corresponding textbox in the same group
     let item_quantity = item.parentElement.querySelector('#item-quantity');
     let default_price = item.parentElement.parentElement.parentElement.querySelector('#item-price');
@@ -28,7 +49,7 @@ function itemQuatity(item, option) {
 
 
 
-
+// Validate Date Input
 function checkDate(option) {
     if (option === 'unlock-due-date') {
         if (document.getElementById("issued-date").value === "") {
@@ -50,16 +71,66 @@ function checkDate(option) {
     }
 }
 
-
+// Don't Delete The First Row
 function deleteRow(row) {
     var i = row.parentNode.parentNode.rowIndex;
-    document.getElementById('item-table').deleteRow(i);
+    if (i == 1) {
+        return;
+    } else {
+        document.getElementById('item-table').deleteRow(i);
+    }
 }
 
 
-
+// Insert New Row: With Custom CSS
 function insRow() {
-    var x = document.getElementById('item-table');
-    var new_row = x.rows[1].cloneNode(true);
+    var table = document.getElementById('item-table');
+    // var new_row = x.rows[1].cloneNode(true);
+
+    var x = table.rows.length;
+    var id = "tbl" + x;
+    var row = table.insertRow(x);
+    row.id = id;
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
+    var cell6 = row.insertCell(5);
+    cell1.outerHTML = `<td style="width: 130px;">
+                        <input type="text" class="form-control" id="item-id" value="BXD-00${x}"disabled>
+                        </td>`;
+    cell2.innerHTML = '<td><input type="text" class="form-control" id="item-name" placeholder="Item Name" required></td>';
+    cell3.innerHTML = `<td style="width: 120px;">
+                            <div class="input-group">
+                                <button class="btn btn-secondary btn-sm form-control"onclick="itemQuatity(this, 'minus')">
+                                <span class="fa fa-minus"></span></button>
+                                <input type="number" class="form-control" id="item-quantity" placeholder="1" value="1" aria-describedby="minus-btn" disabled>
+                                <button class="btn btn-secondary btn-sm" id="incrementBtn" onclick="itemQuatity(this, 'add')"><span class="fa fa-plus"></span></button>
+                            </div>
+                        </td>`;
+    cell4.innerHTML = `<td style="width: 160px;">
+    <div class="input-group mb-3">
+        <span class="input-group-text">BDT</span>
+        <input type="number" class="form-control" style="text-align: right;"
+            id="item-price" value="9600" disabled aria-label="Item Quantity">
+        <span class="input-group-text">৳</span>
+    </div>
+</td>`;
+    cell5.innerHTML = `<td style="width: 180px;">
+    <div class="input-group mb-3">
+        <span class="input-group-text">BDT</span>
+        <input type="number" class="form-control" style="text-align: right;"
+            id="item-total" value="9600" disabled aria-label="Item Quantity">
+        <span class="input-group-text">৳</span>
+    </div>
+</td>`;
+    cell6.innerHTML = `<td>
+    <button class="btn btn-danger btn-sm" onclick="deleteRow(this)"><span
+            class="fa fa-trash"></span></button>
+    <button class="btn btn-success btn-sm" onclick="insRow()"><span
+            class="fa fa-plus"></span></button>
+</td>`;
+
     x.appendChild(new_row);
 }

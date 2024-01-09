@@ -71,14 +71,16 @@
                                         class="fas fa-check"></span></button>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="margin-top: 50px;">
                             <table class="table text-center" id="item-table">
-                                <thead>
+                                <thead class="table-dark">
                                     <tr>
                                         <th>ID</th>
                                         <th>Item Name</th>
                                         <th>Quantity</th>
-                                        <th>Price</th>
+                                        <th><label for="price-checkbox">Price</label> <input class="form-check-input"
+                                                type="checkbox" value="" id="price-checkbox">
+                                        </th>
                                         <th>Total</th>
                                         <th>Action</th>
                                     </tr>
@@ -106,7 +108,7 @@
                                             </div>
 
                                         </td>
-                                        <td style="width: 160px;">
+                                        <td style="width: 175px;">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">BDT</span>
                                                 <input type="number" class="form-control" style="text-align: right;"
@@ -349,6 +351,7 @@
             $('#modalCloseBtn, #modalDiscardBtn').on('click', function () {
                 $('#createNewModal').modal('hide');
             });
+
         });
     </script>
 </body>

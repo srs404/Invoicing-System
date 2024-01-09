@@ -1,0 +1,26 @@
+# Default Things (Dynamic):
+#     x) Receipt Number
+#     x) Office Address
+#     x) Office Phone Number
+#     x) Payment Date (Today's Date)
+#     x) Terms & Conditions
+#     x) Email Address, Website
+
+
+# Manual Input Things (Static):
+#   x) Payment Method (DropDown: Bkash, Nagad, Rocket, Bank Transfer, Cash)
+#   x) Customer Details
+#   x) Name, Contact, Email
+#   x) Payment Status (DropDown: Paid, partially paid)
+#   x) Due Date
+
+
+# Table Things:
+#   x) Item Name (DropDown: Hotel/Resort, Ship, flight, Package, Bus)
+#   x) Item Description (Text Field)
+#   x) Amount (Dynamic)
+#   x) Add Row
+
+
+# Calculations:
+#  x) Total Amount

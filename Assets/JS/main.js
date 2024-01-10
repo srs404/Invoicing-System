@@ -3,16 +3,37 @@ $(function () {
     $('#datetimepicker1').datetimepicker();
 });
 
+// TODO: Subtotal Calculator
+function subtotalCalculator(option) {
+    if (option === 'new') {
+        document.getElementById('subtotal').value = parseInt(document.getElementById('subtotal').value) + 9600;
+    } else {
+        if (this.value < 1) {
+            this.value = '100';
+        }
+        let sum = 0;
+        let prices = document.querySelectorAll('#item-price');
+
+        for (let i = 0; i < prices.length; i++) {
+            sum += parseInt(prices[i].value) || 0; // Ensure to add 0 if the value is not a valid number
+        }
+
+        document.getElementById('subtotal').value = sum;
+    }
+
+}
+
 // Enable/Disable the item-price input field
 $('#price-checkbox').on('change', function () {
     if (this.checked) {
         for (var i = 0; i < document.querySelectorAll('#item-price').length; i++) {
             document.querySelectorAll('#item-price')[i].disabled = false;
-
+            subtotalCalculator();
         }
     } else {
         for (var i = 0; i < document.querySelectorAll('#item-price').length; i++) {
             document.querySelectorAll('#item-price')[i].disabled = true;
+            subtotalCalculator();
         }
     }
 
@@ -65,7 +86,6 @@ window.addEventListener("load", function () {
 // TODO: Fix the css
 function insRow() {
     var table = document.getElementById('item-table');
-    // var new_row = x.rows[1].cloneNode(true);
 
     var x = table.rows.length;
     var id = "tbl" + x;
@@ -89,7 +109,7 @@ function insRow() {
     cell3.innerHTML = `<td>
     <div class="input-group mb-3">
         <span class="input-group-text">BDT</span>
-        <input type="number" class="form-control" style="text-align: right;"
+        <input type="number" class="form-control" style="text-align: right;" onchange="subtotalCalculator()"
             id="item-price" value="9600" disabled aria-label="Item Quantity">
         <span class="input-group-text">৳</span>
     </div>
@@ -97,7 +117,7 @@ function insRow() {
     cell4.innerHTML = `<td>
     <button class="btn btn-danger btn-sm" onclick="deleteRow(this)"><span
             class="fa fa-trash"></span></button>
-    <button class="btn btn-success btn-sm" onclick="insRow()"><span
+    <button class="btn btn-success btn-sm" onclick="subtotalCalculator('new'); insRow()"><span
             class="fa fa-plus"></span></button>
 </td>`;
 
@@ -114,4 +134,5 @@ function deleteRow(row) {
     } else {
         document.getElementById('item-table').deleteRow(i);
     }
+    subtotalCalculator();
 }

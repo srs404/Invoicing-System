@@ -8,6 +8,7 @@ $('#price-checkbox').on('change', function () {
     if (this.checked) {
         for (var i = 0; i < document.querySelectorAll('#item-price').length; i++) {
             document.querySelectorAll('#item-price')[i].disabled = false;
+
         }
     } else {
         for (var i = 0; i < document.querySelectorAll('#item-price').length; i++) {
@@ -16,44 +17,6 @@ $('#price-checkbox').on('change', function () {
     }
 
 });
-
-// Change Total Price Based on item-price change
-$('#item-price').on('change', function () {
-    for (var i = 0; i < document.querySelectorAll('#item-total').length; i++) {
-        document.querySelectorAll('#item-total')[i].value = parseInt(document.querySelectorAll('#item-quantity')[i].value) * parseInt(document.querySelectorAll('#item-price')[i].value);
-    }
-});
-
-// Change Quantity, price and total price
-function itemQuatity(item, option) {
-    // Find the corresponding textbox in the same group
-    let item_quantity = item.parentElement.querySelector('#item-quantity');
-    let default_price = item.parentElement.parentElement.parentElement.querySelector('#item-price');
-    let total_price = item.parentElement.parentElement.parentElement.querySelector('#item-total');
-
-    // var item_quantity = document.getElementById(item[0]);
-    if (option === 'add') {
-        item_quantity.value = parseInt(item_quantity.value) + 1;
-
-        total_price.value = parseInt(item_quantity.value) * parseInt(default_price.value);
-    } else if (option === 'minus') {
-        if (item_quantity.value > 1) {
-            item_quantity.value = parseInt(item_quantity.value) - 1;
-            total_price.value = parseInt(item_quantity.value) * parseInt(default_price.value);
-        } else {
-            // Quantity Is Zero
-
-        }
-    }
-}
-
-function enableCurrentDateCheckbox(object) {
-    if (object.checked) {
-        object.parentElement.parentElement.querySelector('#payment-date').disabled = false;
-    } else {
-        object.parentElement.parentElement.querySelector('#payment-date').disabled = true;
-    }
-}
 
 
 // Validate Date Input
@@ -78,13 +41,12 @@ function checkDate(option) {
     }
 }
 
-// Don't Delete The First Row
-function deleteRow(row) {
-    var i = row.parentNode.parentNode.rowIndex;
-    if (i == 1) {
-        return;
+// Toggle Payment Date Enable/Disable: Checkbox
+function enableCurrentDateCheckbox(object) {
+    if (object.checked) {
+        object.parentElement.parentElement.querySelector('#payment-date').disabled = false;
     } else {
-        document.getElementById('item-table').deleteRow(i);
+        object.parentElement.parentElement.querySelector('#payment-date').disabled = true;
     }
 }
 
@@ -93,13 +55,14 @@ window.addEventListener("load", function () {
     var now = new Date();
     var offset = now.getTimezoneOffset() * 60000;
     var adjustedDate = new Date(now.getTime() - offset);
-    var formattedDate = adjustedDate.toISOString().substring(0,16); // For minute precision
+    var formattedDate = adjustedDate.toISOString().substring(0, 16); // For minute precision
     var datetimeField = document.getElementById("payment-date");
     datetimeField.value = formattedDate;
 });
 
 
 // Insert New Row: With Custom CSS
+// TODO: Fix the css
 function insRow() {
     var table = document.getElementById('item-table');
     // var new_row = x.rows[1].cloneNode(true);
@@ -112,21 +75,18 @@ function insRow() {
     var cell2 = row.insertCell(1);
     var cell3 = row.insertCell(2);
     var cell4 = row.insertCell(3);
-    var cell5 = row.insertCell(4);
-    var cell6 = row.insertCell(5);
-    cell1.outerHTML = `<td style="width: 130px;">
-                        <input type="text" class="form-control" id="item-id" value="BXD-00${x}"disabled>
-                        </td>`;
-    cell2.innerHTML = '<td><input type="text" class="form-control" id="item-name" placeholder="Item Name" required></td>';
-    cell3.innerHTML = `<td style="width: 120px;">
-                            <div class="input-group">
-                                <button class="btn btn-secondary btn-sm form-control"onclick="itemQuatity(this, 'minus')">
-                                <span class="fa fa-minus"></span></button>
-                                <input type="number" class="form-control" id="item-quantity" placeholder="1" value="1" aria-describedby="minus-btn" disabled>
-                                <button class="btn btn-secondary btn-sm" id="incrementBtn" onclick="itemQuatity(this, 'add')"><span class="fa fa-plus"></span></button>
-                            </div>
-                        </td>`;
-    cell4.innerHTML = `<td style="width: 160px;">
+    cell1.outerHTML = `<td style="width: 250px;">
+    <select class="form-select" id="formType" required>
+        <option selected disabled value="">Choose...</option>
+        <option value="hotel-resort">Hotel/Resort</option>
+        <option value="Ship">Ship</option>
+        <option value="Flight">Flight</option>
+        <option value="Package">Package</option>
+        <option value="Bus">Bus</option>
+    </select>
+</td>`;
+    cell2.innerHTML = '<td><textarea type="text" class="form-control" style="height: 2px;" id="item-description" placeholder="Item Description" required></textarea></td>';
+    cell3.innerHTML = `<td>
     <div class="input-group mb-3">
         <span class="input-group-text">BDT</span>
         <input type="number" class="form-control" style="text-align: right;"
@@ -134,15 +94,7 @@ function insRow() {
         <span class="input-group-text">৳</span>
     </div>
 </td>`;
-    cell5.innerHTML = `<td style="width: 180px;">
-    <div class="input-group mb-3">
-        <span class="input-group-text">BDT</span>
-        <input type="number" class="form-control" style="text-align: right;"
-            id="item-total" value="9600" disabled aria-label="Item Quantity">
-        <span class="input-group-text">৳</span>
-    </div>
-</td>`;
-    cell6.innerHTML = `<td>
+    cell4.innerHTML = `<td>
     <button class="btn btn-danger btn-sm" onclick="deleteRow(this)"><span
             class="fa fa-trash"></span></button>
     <button class="btn btn-success btn-sm" onclick="insRow()"><span
@@ -150,4 +102,16 @@ function insRow() {
 </td>`;
 
     x.appendChild(new_row);
+}
+
+
+// Delete Row
+// Additional: Don't delete the first row
+function deleteRow(row) {
+    var i = row.parentNode.parentNode.rowIndex;
+    if (i == 1) {
+        return;
+    } else {
+        document.getElementById('item-table').deleteRow(i);
+    }
 }

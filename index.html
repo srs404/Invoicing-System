@@ -20,7 +20,9 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="createNewLabel">Add New Invoice</h1>
+                    <h1 class="modal-title fs-5" id="createNewLabel">Receipt Number: <span
+                            id="invoiceNumber">070124-001</span>
+                    </h1>
                     <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -46,8 +48,8 @@
                             <label for="payment-date" class="form-label">Payment Date</label><input
                                 class="form-check-input bg-dark" type="checkbox" style="margin-left: 10px;"
                                 id="payment-date-checkbox" onchange="enableCurrentDateCheckbox(this)">
-                            <input type="datetime-local" onload="setDefaultDate()" id="payment-date" class="form-control"
-                                onchange="checkDate('unlock-due-date')" required disabled>
+                            <input type="datetime-local" onload="setDefaultDate()" id="payment-date"
+                                class="form-control" onchange="checkDate('unlock-due-date')" required disabled>
 
                         </div>
                         <div class="col-md-3 position-relative">
@@ -56,73 +58,59 @@
                                 required>
                         </div>
                         <div class="col-md-3 position-relative">
-                            <label for="formType" class="form-label">Form Type</label>
-                            <select class="form-select" id="formType" required onchange="showForm()" required>
+                            <label for="payment-type" class="form-label">Payment Method</label>
+                            <select class="form-select" id="payment-type" onchange="" required>
                                 <option selected disabled value="">Choose...</option>
-                                <option value="receipt">Receipt</option>
-                                <option value="invoice">Invoice</option>
-                                <option value="quotation">Quotation</option>
+                                <option value="Bkash">Bkash</option>
+                                <option value="Nagad">Nagad</option>
+                                <option value="Rocket">Rocket</option>
+                                <option value="Bank-transfer">Bank Transfer</option>
+                                <option value="Cash">Cash</option>
                             </select>
                         </div>
                         <div class="col-md-3 position-relative">
-                            <label for="identifier" class="form-label">Receipt No.</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" disabled id="identifier"
-                                    aria-describedby="button-addon2" value="070124-001" required>
-                                <button class="btn btn-outline-success" type="button" id="button-addon2">Check <span
-                                        class="fas fa-check"></span></button>
-                            </div>
+                            <label for="payment-type" class="form-label">Payment Status</label>
+                            <select class="form-select" id="payment-type" onchange="" required>
+                                <option selected disabled value="">Choose...</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Partially-paid">Partially Paid</option>
+                            </select>
                         </div>
                         <div class="col-md-12" style="margin-top: 50px;">
                             <table class="table text-center" id="item-table">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>ID</th>
                                         <th>Item Name</th>
-                                        <th>Quantity</th>
+                                        <th>Item Description</th>
                                         <th><label for="price-checkbox">Price</label> <input class="form-check-input"
                                                 type="checkbox" value="" id="price-checkbox">
                                         </th>
-                                        <th>Total</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="width: 130px;">
-                                            <input type="text" class="form-control" id="item-id" value="BXD-001"
-                                                disabled>
+                                        <td style="width: 250px;">
+                                            <select class="form-select" id="formType" required>
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value="hotel-resort">Hotel/Resort</option>
+                                                <option value="Ship">Ship</option>
+                                                <option value="Flight">Flight</option>
+                                                <option value="Package">Package</option>
+                                                <option value="Bus">Bus</option>
+                                            </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" id="item-name"
-                                                placeholder="Item Name" required>
+                                            <textarea class="form-control" style="height: 2px;" id="item-description"
+                                                placeholder="Item Description" required></textarea>
                                         </td>
-                                        <td style="width: 120px;">
-                                            <div class="input-group">
-                                                <button class="btn btn-secondary btn-sm form-control"
-                                                    onclick="itemQuatity(this, 'minus')"><span
-                                                        class="fa fa-minus"></span></button>
-                                                <input type="number" class="form-control" id="item-quantity"
-                                                    placeholder="1" value="1" aria-describedby="minus-btn" disabled>
-                                                <button class="btn btn-secondary btn-sm" id="incrementBtn"
-                                                    onclick="itemQuatity(this, 'add')"><span
-                                                        class="fa fa-plus"></span></button>
-                                            </div>
-
-                                        </td>
-                                        <td style="width: 175px;">
+                                        <td style="width: 190px;">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">BDT</span>
                                                 <input type="number" class="form-control" style="text-align: right;"
-                                                    id="item-price" value="9600" disabled aria-label="Item Quantity">
-                                                <span class="input-group-text">৳</span>
-                                            </div>
-                                        </td>
-                                        <td style="width: 180px;">
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text">BDT</span>
-                                                <input type="number" class="form-control" style="text-align: right;"
-                                                    id="item-total" value="9600" disabled aria-label="Item Quantity">
+                                                    id="item-price" onchange="if(this.value < 1) {this.value = '100';}"
+                                                    value="9600" disabled aria-label="Item Quantity">
                                                 <span class="input-group-text">৳</span>
                                             </div>
                                         </td>
@@ -132,6 +120,52 @@
                                             <button class="btn btn-success btn-sm" onclick="insRow()"><span
                                                     class="fa fa-plus"></span></button>
                                         </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- TODO: Style Final Pricing Table -->
+                        <div class="col-md-12" style="margin-top: 50px;">
+                            <table class="table table-dark table-borderless" style="width: 100%;">
+                                <tbody>
+                                    <tr>
+                                        <th style="vertical-align: middle;">Discount:</th>
+                                        <td>
+                                            <div class="input-group"><input style="text-align: right;" type="number"
+                                                    class="form-control" id="discount" name="discount"
+                                                    placeholder="Discount" onchange="calculateTotalPayable()"> <span
+                                                    class="input-group-text">%</span></div>
+                                        </td>
+                                        <th style="text-align: right; width: 600px; vertical-align: middle;">Subtotal:
+                                        </th>
+                                        <td>
+                                            <div class="input-group"><input
+                                                    style="text-align: right; cursor: not-allowed;" type="number"
+                                                    class="form-control" id="subtotal" name="subtotal"
+                                                    placeholder="0000" value="19200" disabled> <span
+                                                    class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3" style="text-align: right; vertical-align: middle;">Convenience
+                                            Fee: </th>
+                                        <td>
+                                            <div class="input-group"><input style="text-align: right;" type="number"
+                                                    class="form-control" id="convenience-pay" name="convenience-pay"
+                                                    placeholder="0000"> <span class="input-group-text"
+                                                    style="cursor: not-allowed;">BDT</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3" style="text-align: right; vertical-align: middle;">Total
+                                            Payable: </th>
+                                        <td><div class="input-group"><input style="text-align: right;" type="number"
+                                            class="form-control" id="total-payable" name="total-payable"
+                                            placeholder="0000"> <span class="input-group-text"
+                                            style="cursor: not-allowed;">BDT</span>
+                                    </div></td>
                                     </tr>
                                 </tbody>
                             </table>

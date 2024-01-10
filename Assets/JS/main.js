@@ -3,6 +3,41 @@ $(function () {
     $('#datetimepicker1').datetimepicker();
 });
 
+// NOTE: Onchange Discount will disable the Payable Amount Input Field And Calculate the Discounted Price
+$('#discount').on('input', function () {
+    if ($(this).val() !== '' && $(this).val() !== null && $(this).val() !== 0 && $(this).val() !== '0') {
+        let originalPrice = parseInt(document.getElementById('subtotal').value);
+        var discountAmount = (parseInt(document.getElementById('discount').value) / 100) * originalPrice;
+        var discountedPrice = originalPrice - discountAmount;
+        document.getElementById('total-payable').value = discountedPrice;
+        document.getElementById('total-payable').disabled = true;
+    } else {
+        document.getElementById('discount').value = '';
+        document.getElementById('total-payable').value = '';
+        document.getElementById('total-payable').disabled = false;
+    }
+});
+
+// NOTE: Onchange Payable Amount will disable the Discount Input Field And Calculate the Discounted Price
+$('#total-payable').on('input', function () {
+    if ($(this).val() !== '' && $(this).val() !== null && $(this).val() !== 0 && $(this).val() !== '0') {
+        let originalPrice = parseFloat(document.getElementById('subtotal').value);
+        var discountValue = parseFloat(document.getElementById('total-payable').value);
+
+        // Convert discount value to percentage
+        var discountPercentage = (discountValue / originalPrice) * 100;
+
+        // Calculate discounted price
+        var discountedPrice = discountPercentage.toFixed(2);
+        document.getElementById('discount').value = discountedPrice;
+        document.getElementById('discount').disabled = true;
+    } else {
+        document.getElementById('total-payable').value = '';
+        document.getElementById('discount').value = '';
+        document.getElementById('discount').disabled = false;
+    }
+});
+
 // TODO: Subtotal Calculator
 function subtotalCalculator(option) {
     if (option === 'new') {

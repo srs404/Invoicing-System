@@ -3,40 +3,51 @@ $(function () {
     $('#datetimepicker1').datetimepicker();
 });
 
-// NOTE: Onchange Discount will disable the Payable Amount Input Field And Calculate the Discounted Price
-$('#discount').on('input', function () {
-    if ($(this).val() !== '' && $(this).val() !== null && $(this).val() !== 0 && $(this).val() !== '0') {
-        let originalPrice = parseInt(document.getElementById('subtotal').value);
-        var discountAmount = (parseInt(document.getElementById('discount').value) / 100) * originalPrice;
-        var discountedPrice = originalPrice - discountAmount;
-        document.getElementById('total-payable').value = discountedPrice;
-        document.getElementById('total-payable').disabled = true;
-    } else {
-        document.getElementById('discount').value = '';
-        document.getElementById('total-payable').value = '';
-        document.getElementById('total-payable').disabled = false;
+// NOTE: This function is used to check if user gave discount or total payable amount and disable the other input field and calculate the discounted price
+function handleDiscount(option) {
+    var discountInput = document.getElementById('discount');
+    var totalPayableInput = document.getElementById('total-payable');
+    var subtotalInput = document.getElementById('subtotal');
+
+    if (option === 'discount') {
+        if (discountInput.value !== '' && parseFloat(discountInput.value) !== 0 && parseFloat(discountInput.value) <= 100 && parseFloat(discountInput.value) >= 0) {
+            let originalPrice = parseInt(subtotalInput.value);
+            var discountAmount = (parseInt(discountInput.value) / 100) * originalPrice;
+            var discountedPrice = originalPrice - discountAmount;
+            totalPayableInput.value = discountedPrice.toFixed(2);
+            totalPayableInput.disabled = true;
+        } else {
+            discountInput.value = '';
+            totalPayableInput.value = '';
+            totalPayableInput.disabled = false;
+        }
+    } else if (option === 'total-payable') {
+        if (totalPayableInput.value !== '' && parseFloat(totalPayableInput.value) !== 0 && parseFloat(totalPayableInput.value) <= parseFloat(subtotalInput.value) && parseFloat(totalPayableInput.value) >= 0) {
+            let originalPrice = parseFloat(subtotalInput.value);
+            var discountValue = parseFloat(totalPayableInput.value);
+
+            // Convert discount value to percentage
+            var discountPercentage = (discountValue / originalPrice) * 100;
+
+            // Calculate discounted price
+            var discountedPrice = discountValue;
+            discountInput.value = discountPercentage.toFixed(2);
+            discountInput.disabled = true;
+        } else {
+            totalPayableInput.value = '';
+            discountInput.value = '';
+            discountInput.disabled = false;
+        }
     }
-});
+}
 
-// NOTE: Onchange Payable Amount will disable the Discount Input Field And Calculate the Discounted Price
-$('#total-payable').on('input', function () {
-    if ($(this).val() !== '' && $(this).val() !== null && $(this).val() !== 0 && $(this).val() !== '0') {
-        let originalPrice = parseFloat(document.getElementById('subtotal').value);
-        var discountValue = parseFloat(document.getElementById('total-payable').value);
+// Usage example:
+// For discount input change
+// handleDiscount('discount');
 
-        // Convert discount value to percentage
-        var discountPercentage = (discountValue / originalPrice) * 100;
+// For total payable input change
+// handleDiscount('total-payable');
 
-        // Calculate discounted price
-        var discountedPrice = discountPercentage.toFixed(2);
-        document.getElementById('discount').value = discountedPrice;
-        document.getElementById('discount').disabled = true;
-    } else {
-        document.getElementById('total-payable').value = '';
-        document.getElementById('discount').value = '';
-        document.getElementById('discount').disabled = false;
-    }
-});
 
 // TODO: Subtotal Calculator
 function subtotalCalculator(option) {

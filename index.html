@@ -109,8 +109,8 @@
                                             <div class="input-group mb-3" id="item-price-container">
                                                 <span class="input-group-text">BDT</span>
                                                 <input type="number" class="form-control" style="text-align: right;"
-                                                    id="item-price" onchange="subtotalCalculator()" value="9600"
-                                                    disabled aria-label="Item Quantity">
+                                                    id="item-price" oninput="subtotalCalculator()" value="9600" disabled
+                                                    aria-label="Item Quantity">
                                                 <span class="input-group-text">৳</span>
                                             </div>
                                         </td>
@@ -138,9 +138,9 @@
                                     <th style="vertical-align: middle; text-align: right;">Discount:</th>
                                     <td>
                                         <div class="input-group"><input style="text-align: right;" type="number"
-                                                class="form-control" id="discount" name="discount"
-                                                placeholder="Discount" onchange="calculateTotalPayable()"> <span
-                                                class="input-group-text"
+                                                class="form-control" min="0" max="100"
+                                                oninput="handleDiscount('discount')" id="discount" name="discount"
+                                                placeholder="Discount"> <span class="input-group-text"
                                                 style="cursor: not-allowed; width: 55px;">%</span></div>
                                     </td>
                                     <th style="text-align: right; width: 600px; vertical-align: middle;">Subtotal:
@@ -148,7 +148,9 @@
                                     <td>
                                         <div class="input-group"><input style="text-align: right; cursor: not-allowed;"
                                                 type="number" class="form-control" id="subtotal" name="subtotal"
-                                                placeholder="0000" value="9600" disabled> <span class="input-group-text"
+                                                placeholder="0000" value="9600"
+                                                onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else { handleDiscount('discount'); }"
+                                                disabled> <span class="input-group-text"
                                                 style="cursor: not-allowed;">BDT</span>
                                         </div>
                                     </td>
@@ -158,9 +160,9 @@
                                         Payable: </th>
                                     <td>
                                         <div class="input-group"><input style="text-align: right;" type="number"
-                                                class="form-control" id="total-payable" name="total-payable"
-                                                placeholder="0000"> <span class="input-group-text"
-                                                style="cursor: not-allowed;">BDT</span>
+                                                class="form-control" min="0" oninput="handleDiscount('total-payable')"
+                                                id="total-payable" name="total-payable" placeholder="0000"> <span
+                                                class="input-group-text" style="cursor: not-allowed;">BDT</span>
                                         </div>
                                     </td>
                                     <th style="text-align: right; vertical-align: middle;">Convenience

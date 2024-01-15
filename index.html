@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
 
     <!-- Modal -->
+    <!-- ANCHOR: Primary Modal
+        Description: This is the primary modal for creating new invoice
+    -->
     <div class="modal fade" id="createNewModal" tabindex="-1" aria-labelledby="createNewLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
@@ -78,6 +81,8 @@
                             </select>
                         </div>
                         <div class="col-md-12" style="margin-top: 50px;">
+                            <button class="btn btn-primary" id="addNewItemBtn">Add
+                                Item(s)</button>
                             <table class="table text-center" id="item-table">
                                 <thead class="table-dark">
                                     <tr>
@@ -183,6 +188,58 @@
                     <button type="button" id="modalDiscardBtn" class="btn btn-danger"
                         data-bs-dismiss="modal">Discard</button>
                     <input type="submit" class="btn btn-primary" value="Add New">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal 2 -->
+    <!-- Title: Item Modal
+        ~ Description: This is the modal to get table content information
+    -->
+    <div class="modal fade" id="addNewTableItem" tabindex="-1" data-backdrop="static" data-keyboard="false"
+        aria-labelledby="addNewTableItem" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addNewTableItem">Add New Item</h1>
+                    <button type="button" id="modalItemCloseBtn" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="mb-3">
+                        <label for="formType" class="form-label">Item Name</label>
+                        <select class="form-select" id="formType" required>
+                            <option selected disabled value="">Choose...</option>
+                            <option value="hotel-resort">Hotel/Resort</option>
+                            <option value="Ship">Ship</option>
+                            <option value="Flight">Flight</option>
+                            <option value="Package">Package</option>
+                            <option value="Bus">Bus</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="item-desc" class="form-label">Item Description</label>
+                        <textarea class="form-control" id="item-desc" rows="6"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for=""></label>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group" id="item-price-container">
+                            <span class="input-group-text">BDT</span>
+                            <input type="number" class="form-control" style="text-align: right;" id="item-price"
+                                oninput="subtotalCalculator()" value="9600" disabled aria-label="Item Quantity">
+                            <span class="input-group-text">৳</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalItemDiscardBtn" class="btn btn-danger"
+                        data-bs-dismiss="modal">Discard</button>
+                    <input type="submit" class="btn btn-primary" value="Insert">
                 </div>
                 </form>
             </div>
@@ -358,6 +415,7 @@
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
     <script src="Assets/JS/main.js"></script>
+    <script src="Assets/JS/modal.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -384,15 +442,6 @@
                 myTable.search(this.value).draw();
             });
 
-            // Add new invoice modal
-            $('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function () {
-                $('#createNewModal').modal('show');
-            });
-
-            // Close modal
-            $('#modalCloseBtn, #modalDiscardBtn').on('click', function () {
-                $('#createNewModal').modal('hide');
-            });
 
         });
     </script>

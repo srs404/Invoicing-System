@@ -119,14 +119,15 @@
                     <button type="button" id="tableModalCloseBtn" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-3">
+                <div class="modal-body p-3" style="height: 400px;">
                     <div class="col-md-12" style="text-align: right; margin-bottom: 10px;">
                         <button class="btn btn-primary" id="addNewItemBtn"><span class="fa fa-plus"></span> New
                             Item</button>
                     </div>
-                    <form class="row g-3">
+                    <form id="item-form" class="row g-3">
                         <div class="col-md-12">
-                            <div class="table-responsive-sm" style="max-height: 400px; overflow-y: auto;">
+                            <div class="table-responsive-sm"
+                                style="max-height: 400px; margin-bottom: 10px; min-height: 300px; border-bottom: 1px solid black; overflow-y: auto;">
                                 <table class="table text-center" id="item-table">
                                     <thead class="table-dark">
                                         <tr>
@@ -140,94 +141,98 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td style="min-width: 175px;">
-                                                <select class="form-select" id="formType">
-                                                    <option selected disabled value="">Choose...</option>
-                                                    <option value="Hotel/Resort">Hotel/Resort</option>
-                                                    <option value="Ship">Ship</option>
-                                                    <option value="Flight">Flight</option>
-                                                    <option value="Package">Package</option>
-                                                    <option value="Bus">Bus</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <textarea class="form-control" style="min-width: 355px; height: 2px;"
-                                                    id="item-description" placeholder="Item Description"></textarea>
-                                            </td>
-                                            <td style="min-width: 190px;">
-                                                <div class="input-group mb-3" id="item-price-container">
-                                                    <span class="input-group-text">BDT</span>
-                                                    <input type="number" class="form-control" style="text-align: right;"
-                                                        id="item-price" oninput="subtotalCalculator()" value="9600"
-                                                        disabled aria-label="Item Quantity">
-                                                    <span class="input-group-text">৳</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style="min-width: max-content;">
-                                                    <button class="btn btn-outline-primary" onclick="insRow()"><span
-                                                            class="fa fa-pencil"></span></button>
-                                                    <button class="btn btn-danger"
-                                                        onclick="deleteRow(this); subtotalCalculator()"><span
-                                                            class="fa fa-trash"></span></button>
-
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <tr></tr>
                                     </tbody>
                                 </table>
                             </div>
                     </form>
                 </div>
-                <!-- TODO: Style Final Pricing Table -->
-                <div class="col-md-12">
-                    <table class="table table-borderless" style="width: 100%;">
-                        <tbody>
-                            <tr>
-                                <th style="vertical-align: middle; text-align: right;">Discount:</th>
-                                <td>
-                                    <div class="input-group"><input style="text-align: right;" type="number"
-                                            class="form-control" min="0" max="100" oninput="handleDiscount('discount')"
-                                            id="discount" name="discount" placeholder="Discount"> <span
-                                            class="input-group-text" style="cursor: not-allowed; width: 55px;">%</span>
-                                    </div>
-                                </td>
-                                <th style="text-align: right; width: 600px; vertical-align: middle;">
-                                    Subtotal:
-                                </th>
-                                <td>
-                                    <div class="input-group"><input style="text-align: right; cursor: not-allowed;"
-                                            type="number" class="form-control" id="subtotal" name="subtotal"
-                                            placeholder="0000" value="9600"
-                                            onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else { handleDiscount('discount'); }"
-                                            disabled> <span class="input-group-text"
-                                            style="cursor: not-allowed;">BDT</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="text-align: right; vertical-align: middle; width: 130px;">Total
-                                    Payable: </th>
-                                <td>
-                                    <div class="input-group"><input style="text-align: right;" type="number"
-                                            class="form-control" min="0" oninput="handleDiscount('total-payable')"
-                                            id="total-payable" name="total-payable" placeholder="0000"> <span
-                                            class="input-group-text" style="cursor: not-allowed;">BDT</span>
-                                    </div>
-                                </td>
-                                <th style="text-align: right; vertical-align: middle;">Convenience
-                                    Fee: </th>
-                                <td>
-                                    <div class="input-group"><input style="text-align: right;" type="number"
-                                            class="form-control" id="convenience-pay" name="convenience-pay"
-                                            placeholder="0000"> <span class="input-group-text"
-                                            style="cursor: not-allowed;">BDT</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                <!-- Discount Input Form -->
+                <div class="col-md-12 position-relative">
+                    <div class="col-md-12 position-absolute top-0 end-0">
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input style="text-align: right;" type="number" class="form-control" min="0"
+                                        max="100" oninput="handleDiscount('discount')" id="discount" name="discount"
+                                        placeholder="Discount"> <label for="discount">Discount</label>
+                                </div>
+                                <span class="input-group-text" style="cursor: not-allowed;"><span
+                                        class="fa fa-percent"></span></span>
+                                <div class="form-floating">
+                                    <input style="text-align: right;" type="text" class="form-control"
+                                        id="discountAmount" oninput="handleDiscount('discountAmount')"
+                                        placeholder="1000">
+                                    <label for="discountAmount">Amount</label>
+                                </div>
+                                <span class="input-group-text" style="cursor: not-allowed; width: 55px;">BDT</span>
+                            </div>
+                        </div>
+
+                        <!-- Subtotal Input Form -->
+                        <div id="row" style="margin-bottom: 10px;">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input style="text-align: right; cursor: not-allowed;" type="number" disabled
+                                        class="form-control" id="subtotal" name="subtotal" placeholder="0000"
+                                        onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else if(document.getElementById('discountAmount').disabled) {handleDiscount('total-payable')} else { handleDiscount('discount'); }">
+                                    <label for="discount">Subtotal</label>
+                                </div>
+                                <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                            </div>
+                        </div>
+                        <!-- Payable Input Form -->
+                        <div id="row" style="margin-bottom: 10px;">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input style="text-align: right;" type="number" class="form-control" min="0"
+                                        oninput="handleDiscount('total-payable')" onchange="duePaymentCalculator()"
+                                        id="total-payable" name="total-payable" placeholder="0000"> <label
+                                        for="total-payable">Payable</label>
+                                </div>
+                                <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                            </div>
+                        </div>
+                        <!-- Convenience fee Input Form -->
+                        <div id="row" style="margin-bottom: 10px;">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input style="text-align: right;" type="number" class="form-control"
+                                        id="convenience-fee" name="convenience-fee" placeholder="0000"> <label
+                                        for="convenience-fee" oninput="duePaymentCalculator()">Convenience
+                                        Fee</label>
+                                </div>
+                                <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                            </div>
+                        </div>
+
+                        <!-- Advance Payment Input Form -->
+                        <div id="row" style="margin-bottom: 10px;">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input style="text-align: right;" type="number" class="form-control"
+                                        id="advance-payment" name="advance-payment" placeholder="0000"> <label
+                                        for="advance-payment" oninput="duePaymentCalculator()">Advance
+                                        Payment</label>
+                                </div>
+                                <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                            </div>
+                        </div>
+
+                        <!-- Due Payment Input Form -->
+                        <div id="row" style="margin-bottom: 10px;">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input style="text-align: right;" type="number" class="form-control"
+                                        id="due-payment" disabled value="0" name="due-payment"> <label
+                                        for="due-payment">Due
+                                        Payment</label>
+                                </div>
+                                <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>

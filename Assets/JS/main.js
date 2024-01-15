@@ -1,6 +1,7 @@
 // Function to show the selected form based on the dropdown value
 $(function () {
     $('#datetimepicker1').datetimepicker();
+    subtotalCalculator();
 });
 
 // NOTE: This function is used to check if user gave discount or total payable amount and disable the other input field and calculate the discounted price
@@ -50,22 +51,15 @@ function handleDiscount(option) {
 
 
 // TODO: Subtotal Calculator
-function subtotalCalculator(option) {
-    if (option === 'new') {
-        document.getElementById('subtotal').value = parseInt(document.getElementById('subtotal').value) + 9600;
-    } else {
-        if (this.value < 1) {
-            this.value = '100';
-        }
-        let sum = 0;
-        let prices = document.querySelectorAll('#item-price');
+function subtotalCalculator() {
+    let sum = 0;
+    let prices = document.querySelectorAll('#item-price');
 
-        for (let i = 0; i < prices.length; i++) {
-            sum += parseInt(prices[i].value) || 0; // Ensure to add 0 if the value is not a valid number
-        }
-
-        document.getElementById('subtotal').value = sum;
+    for (let i = 0; i < prices.length; i++) {
+        sum += parseInt(prices[i].value) || 0; // Ensure to add 0 if the value is not a valid number
     }
+
+    document.getElementById('subtotal').value = sum;
 
 }
 
@@ -130,7 +124,7 @@ window.addEventListener("load", function () {
 
 // Insert New Row: With Custom CSS
 // TODO: Fix the css
-function insRow() {
+function insRow(item_name, item_description, item_price) {
     var table = document.getElementById('item-table');
 
     var x = table.rows.length;
@@ -142,21 +136,13 @@ function insRow() {
     var cell3 = row.insertCell(2);
     var cell4 = row.insertCell(3);
     cell1.outerHTML = `<td style="width: 250px;">
-    <select class="form-select" id="formType" required>
-        <option selected disabled value="">Choose...</option>
-        <option value="hotel-resort">Hotel/Resort</option>
-        <option value="Ship">Ship</option>
-        <option value="Flight">Flight</option>
-        <option value="Package">Package</option>
-        <option value="Bus">Bus</option>
-    </select>
-</td>`;
-    cell2.innerHTML = '<td><textarea type="text" class="form-control" style="height: 2px;" id="item-description" placeholder="Item Description" required></textarea></td>';
+    <input class="form-control" id="formType" disabled value="` + item_name + `"></td>`;
+    cell2.innerHTML = '<td><textarea type="text" disabled class="form-control" style="height: 2px;" id="item-description" placeholder="Item Description" required>' + item_description + '</textarea></td>';
     cell3.innerHTML = `<td>
     <div class="input-group mb-3">
         <span class="input-group-text">BDT</span>
         <input type="number" class="form-control" style="text-align: right;" onchange="subtotalCalculator()"
-            id="item-price" value="9600" disabled aria-label="Item Quantity">
+            id="item-price" value="` + item_price + `" disabled aria-label="Item Quantity">
         <span class="input-group-text">৳</span>
     </div>
 </td>`;
@@ -166,7 +152,7 @@ function insRow() {
     <button class="btn btn-success btn-sm" onclick="subtotalCalculator('new'); insRow()"><span
             class="fa fa-plus"></span></button>
 </td>`;
-
+    subtotalCalculator();
     x.appendChild(new_row);
 }
 
@@ -182,3 +168,66 @@ function deleteRow(row) {
     }
     subtotalCalculator();
 }
+
+// Modal Section
+// Title: Invoice modal
+/*
+    ~ Description:
+    This modal provides functionalities for creating a new invoice.
+    It allows the user to input data for the new invoice and submit it to be added to the table.
+    The modal includes the following functionalities:
+    - Input fields for entering data
+    - Validation of input data
+    - Submit button to add the new invoice
+    - Cancel button to close the modal without adding the invoice
+*/
+$('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function () {
+    $('#createNewModal').modal('show');
+});
+
+// Close modal
+$('#modalCloseBtn, #modalDiscardBtn').on('click', function () {
+    $('#createNewModal').modal('hide');
+});
+
+
+// Title : Item Modal
+/*    
+    ~ Description:
+    This modal provides functionalities for adding a new table item.
+    It allows the user to input data for the new item and submit it to be added to the table.
+    The modal includes the following functionalities:
+    - Input fields for entering data
+    - Validation of input data
+    - Submit button to add the new item
+    - Cancel button to close the modal without adding the item
+*/
+$('#addNewItemBtn').on('click', function () {
+    $('#addNewTableItem').modal('show');
+    $('#createNewModal').modal('hide');
+});
+
+// Close Modal
+$('#modalItemCloseBtn, #modalItemDiscardBtn').on('click', function () {
+    $('#addNewTableItem').modal('hide');
+    $('#createNewModal').modal('show');
+});
+
+// Functionalities: Add new item to table
+$('#modalItemSubmitBtn').on('click', function () {
+    // Get values from input fields
+    let item_name = $('#formTypeModal').val();
+    let item_description = $('#item-description-modal').val();
+    let item_price = $('#item-price-modal').val();
+
+    // Validate input fields
+    if (item_name === '' || item_description === '' || item_price === '') {
+        alert('Please fill in all the fields');
+    } else {
+        // After Executing Every Tasks
+        $('#addNewTableItem').modal('hide');
+        $('#createNewModal').modal('show');
+        // Add new item to table
+        insRow(item_name, item_description, item_price);
+    }
+});

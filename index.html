@@ -83,53 +83,59 @@
                         <div class="col-md-12" style="margin-top: 50px;">
                             <button class="btn btn-primary" id="addNewItemBtn">Add
                                 Item(s)</button>
-                            <table class="table text-center" id="item-table">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Item Name</th>
-                                        <th>Item Description</th>
-                                        <th><label for="price-checkbox">Price</label> <input class="form-check-input"
-                                                type="checkbox" value="" id="price-checkbox">
-                                        </th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 250px;">
-                                            <select class="form-select" id="formType" required>
-                                                <option selected disabled value="">Choose...</option>
-                                                <option value="hotel-resort">Hotel/Resort</option>
-                                                <option value="Ship">Ship</option>
-                                                <option value="Flight">Flight</option>
-                                                <option value="Package">Package</option>
-                                                <option value="Bus">Bus</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <textarea class="form-control" style="height: 2px;" id="item-description"
-                                                placeholder="Item Description" required></textarea>
-                                        </td>
-                                        <td style="width: 190px;">
-                                            <div class="input-group mb-3" id="item-price-container">
-                                                <span class="input-group-text">BDT</span>
-                                                <input type="number" class="form-control" style="text-align: right;"
-                                                    id="item-price" oninput="subtotalCalculator()" value="9600" disabled
-                                                    aria-label="Item Quantity">
-                                                <span class="input-group-text">৳</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm"
-                                                onclick="deleteRow(this); subtotalCalculator()"><span
-                                                    class="fa fa-trash"></span></button>
-                                            <button class="btn btn-success btn-sm"
-                                                onclick="subtotalCalculator('new'); insRow()"><span
-                                                    class="fa fa-plus"></span></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive-sm">
+                                <table class="table text-center" width="100%" id="item-table">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Item Name</th>
+                                            <th>Item Description</th>
+                                            <th><label for="price-checkbox">Price</label> <input
+                                                    class="form-check-input" type="checkbox" value=""
+                                                    id="price-checkbox">
+                                            </th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="min-width: 175px;">
+                                                <select class="form-select" id="formType" required>
+                                                    <option selected disabled value="">Choose...</option>
+                                                    <option value="Hotel/Resort">Hotel/Resort</option>
+                                                    <option value="Ship">Ship</option>
+                                                    <option value="Flight">Flight</option>
+                                                    <option value="Package">Package</option>
+                                                    <option value="Bus">Bus</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <textarea class="form-control" style="height: 2px;"
+                                                    id="item-description" placeholder="Item Description"
+                                                    required></textarea>
+                                            </td>
+                                            <td style="min-width: 190px;">
+                                                <div class="input-group mb-3" id="item-price-container">
+                                                    <span class="input-group-text">BDT</span>
+                                                    <input type="number" class="form-control" style="text-align: right;"
+                                                        id="item-price" oninput="subtotalCalculator()" value="9600"
+                                                        disabled aria-label="Item Quantity">
+                                                    <span class="input-group-text">৳</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="min-width: max-content;">
+                                                    <button class="btn btn-danger btn-sm"
+                                                        onclick="deleteRow(this); subtotalCalculator()"><span
+                                                            class="fa fa-trash"></span></button>
+                                                    <button class="btn btn-success btn-sm" onclick="insRow()"><span
+                                                            class="fa fa-plus"></span></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
 
 
@@ -210,10 +216,10 @@
                 </div>
                 <div class="modal-body p-3">
                     <div class="mb-3">
-                        <label for="formType" class="form-label">Item Name</label>
-                        <select class="form-select" id="formType" required>
+                        <label for="formTypeModal" class="form-label">Item Name</label>
+                        <select class="form-select" id="formTypeModal" required>
                             <option selected disabled value="">Choose...</option>
-                            <option value="hotel-resort">Hotel/Resort</option>
+                            <option value="Hotel/Resort">Hotel/Resort</option>
                             <option value="Ship">Ship</option>
                             <option value="Flight">Flight</option>
                             <option value="Package">Package</option>
@@ -221,17 +227,15 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="item-desc" class="form-label">Item Description</label>
-                        <textarea class="form-control" id="item-desc" rows="6"></textarea>
+                        <label for="item-description-modal" class="form-label">Item Description</label>
+                        <textarea class="form-control" id="item-description-modal" rows="6"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for=""></label>
-                    </div>
-                    <div class="mb-3">
-                        <div class="input-group" id="item-price-container">
+                        <label for="item-price-modal" class="form-label">Item Price</label>
+                        <div class="input-group" id="item-price-container-modal">
                             <span class="input-group-text">BDT</span>
-                            <input type="number" class="form-control" style="text-align: right;" id="item-price"
-                                oninput="subtotalCalculator()" value="9600" disabled aria-label="Item Quantity">
+                            <input type="number" class="form-control" style="text-align: right;" id="item-price-modal"
+                                oninput="subtotalCalculator()" placeholder="0" aria-label="Item Quantity">
                             <span class="input-group-text">৳</span>
                         </div>
                     </div>
@@ -239,7 +243,8 @@
                 <div class="modal-footer">
                     <button type="button" id="modalItemDiscardBtn" class="btn btn-danger"
                         data-bs-dismiss="modal">Discard</button>
-                    <input type="submit" class="btn btn-primary" value="Insert">
+                    <button type="button" class="btn btn-primary" id="modalItemSubmitBtn"
+                        data-bs-dismiss="modal">Insert</button>
                 </div>
                 </form>
             </div>

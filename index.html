@@ -15,6 +15,96 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
 
+
+    <!-- Modal -->
+    <!-- ANCHOR: Customer Information Modal -->
+    <!-- Description: This is the infomation page of the modal or first page -->
+    <!-- Modal -->
+    <!-- ANCHOR: Primary Modal
+        Description: This is the primary modal for creating new invoice
+    -->
+    <div class="modal fade" id="customerInformationModal" tabindex="-1" aria-labelledby="customerInformationModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="customerInformationModal">Receipt Number: <span
+                            id="invoiceNumber">070124-001</span>
+                    </h1>
+                    <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <form class="row g-3">
+
+                        <div class="col-md-4 position-relative">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Sami Rahman">
+                        </div>
+                        <div class="col-md-4 position-relative">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="email" placeholder="sami@rahman.dev">
+                        </div>
+                        <div class="col-md-4 position-relative">
+                            <label for="phone-number" class="form-label">Phone Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="phone-Number-Prepend">+880</span>
+                                <input type="number" max="1999999999" placeholder="1625469920" class="form-control"
+                                    id="phone-number" aria-describedby="phone-Number-Prepend">
+                            </div>
+                        </div>
+                        <div class="col-md-3 position-relative">
+                            <label for="payment-date" class="form-label">Payment Date</label><input
+                                class="form-check-input bg-dark" type="checkbox" style="margin-left: 10px;"
+                                id="payment-date-checkbox" onchange="enableCurrentDateCheckbox(this)">
+                            <input type="datetime-local" onload="setDefaultDate()" id="payment-date"
+                                class="form-control" onchange="checkDate('unlock-due-date')" disabled>
+
+                        </div>
+                        <div class="col-md-3 position-relative">
+                            <label for="due-date" class="form-label">Due Date</label>
+                            <input type="datetime-local" id="due-date" class="form-control" onchange="checkDate('')">
+                        </div>
+                        <div class="col-md-3 position-relative">
+                            <label for="payment-method" class="form-label">Payment Method</label>
+                            <select class="form-select" id="payment-method">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="Bkash">Bkash</option>
+                                <option value="Nagad">Nagad</option>
+                                <option value="Rocket">Rocket</option>
+                                <option value="Bank-transfer">Bank Transfer</option>
+                                <option value="Cash">Cash</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 position-relative">
+                            <label for="payment-status" class="form-label">Payment Status</label>
+                            <select class="form-select" id="payment-status">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Partially-paid">Partially Paid</option>
+                            </select>
+                        </div>
+                </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" id="modalDiscardBtn" class="btn btn-danger" data-bs-dismiss="modal"
+                        style="position: absolute; left: 10px;">Discard</button>
+                    <button type="submit" id="nextModalBtn" class="btn btn-outline-dark"><span
+                            class="fa fa-arrow-right"></span></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+        END MODAL
+            title: customerInformationModal
+            ~ description: This is the infomation page of the modal or first page
+    -->
+
+
     <!-- Modal -->
     <!-- ANCHOR: Primary Modal
         Description: This is the primary modal for creating new invoice
@@ -26,65 +116,18 @@
                     <h1 class="modal-title fs-5" id="createNewLabel">Receipt Number: <span
                             id="invoiceNumber">070124-001</span>
                     </h1>
-                    <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal"
+                    <button type="button" id="tableModalCloseBtn" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
+                    <div class="col-md-12" style="text-align: right; margin-bottom: 10px;">
+                        <button class="btn btn-primary" id="addNewItemBtn"><span class="fa fa-plus"></span> New
+                            Item</button>
+                    </div>
                     <form class="row g-3">
-                        <div class="col-md-4 position-relative">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Sami Rahman" required>
-                        </div>
-                        <div class="col-md-4 position-relative">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" placeholder="sami@rahman.dev" required>
-                        </div>
-                        <div class="col-md-4 position-relative">
-                            <label for="phone-number" class="form-label">Phone Number</label>
-                            <div class="input-group">
-                                <span class="input-group-text" id="phone-Number-Prepend">+880</span>
-                                <input type="number" max="1999999999" placeholder="1625469920" class="form-control"
-                                    id="phone-number" aria-describedby="phone-Number-Prepend" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3 position-relative">
-                            <label for="payment-date" class="form-label">Payment Date</label><input
-                                class="form-check-input bg-dark" type="checkbox" style="margin-left: 10px;"
-                                id="payment-date-checkbox" onchange="enableCurrentDateCheckbox(this)">
-                            <input type="datetime-local" onload="setDefaultDate()" id="payment-date"
-                                class="form-control" onchange="checkDate('unlock-due-date')" required disabled>
-
-                        </div>
-                        <div class="col-md-3 position-relative">
-                            <label for="due-date" class="form-label">Due Date</label>
-                            <input type="datetime-local" id="due-date" class="form-control" onchange="checkDate('')"
-                                required>
-                        </div>
-                        <div class="col-md-3 position-relative">
-                            <label for="payment-type" class="form-label">Payment Method</label>
-                            <select class="form-select" id="payment-type" onchange="" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option value="Bkash">Bkash</option>
-                                <option value="Nagad">Nagad</option>
-                                <option value="Rocket">Rocket</option>
-                                <option value="Bank-transfer">Bank Transfer</option>
-                                <option value="Cash">Cash</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 position-relative">
-                            <label for="payment-type" class="form-label">Payment Status</label>
-                            <select class="form-select" id="payment-type" onchange="" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option value="Paid">Paid</option>
-                                <option value="Unpaid">Unpaid</option>
-                                <option value="Partially-paid">Partially Paid</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12" style="margin-top: 50px;">
-                            <button class="btn btn-primary" id="addNewItemBtn">Add
-                                Item(s)</button>
-                            <div class="table-responsive-sm">
-                                <table class="table text-center" width="100%" id="item-table">
+                        <div class="col-md-12">
+                            <div class="table-responsive-sm" style="max-height: 400px; overflow-y: auto;">
+                                <table class="table text-center" id="item-table">
                                     <thead class="table-dark">
                                         <tr>
                                             <th>Item Name</th>
@@ -99,7 +142,7 @@
                                     <tbody>
                                         <tr>
                                             <td style="min-width: 175px;">
-                                                <select class="form-select" id="formType" required>
+                                                <select class="form-select" id="formType">
                                                     <option selected disabled value="">Choose...</option>
                                                     <option value="Hotel/Resort">Hotel/Resort</option>
                                                     <option value="Ship">Ship</option>
@@ -109,9 +152,8 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <textarea class="form-control" style="height: 2px;"
-                                                    id="item-description" placeholder="Item Description"
-                                                    required></textarea>
+                                                <textarea class="form-control" style="min-width: 355px; height: 2px;"
+                                                    id="item-description" placeholder="Item Description"></textarea>
                                             </td>
                                             <td style="min-width: 190px;">
                                                 <div class="input-group mb-3" id="item-price-container">
@@ -124,80 +166,83 @@
                                             </td>
                                             <td>
                                                 <div style="min-width: max-content;">
-                                                    <button class="btn btn-danger btn-sm"
+                                                    <button class="btn btn-outline-primary" onclick="insRow()"><span
+                                                            class="fa fa-pencil"></span></button>
+                                                    <button class="btn btn-danger"
                                                         onclick="deleteRow(this); subtotalCalculator()"><span
                                                             class="fa fa-trash"></span></button>
-                                                    <button class="btn btn-success btn-sm" onclick="insRow()"><span
-                                                            class="fa fa-plus"></span></button>
+
                                                 </div>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-
-                        </div>
-
-
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <!-- TODO: Style Final Pricing Table -->
-                    <div class="col-md-12">
-                        <table class="table table-borderless" style="width: 100%;">
-                            <tbody>
-                                <tr>
-                                    <th style="vertical-align: middle; text-align: right;">Discount:</th>
-                                    <td>
-                                        <div class="input-group"><input style="text-align: right;" type="number"
-                                                class="form-control" min="0" max="100"
-                                                oninput="handleDiscount('discount')" id="discount" name="discount"
-                                                placeholder="Discount"> <span class="input-group-text"
-                                                style="cursor: not-allowed; width: 55px;">%</span></div>
-                                    </td>
-                                    <th style="text-align: right; width: 600px; vertical-align: middle;">Subtotal:
-                                    </th>
-                                    <td>
-                                        <div class="input-group"><input style="text-align: right; cursor: not-allowed;"
-                                                type="number" class="form-control" id="subtotal" name="subtotal"
-                                                placeholder="0000" value="9600"
-                                                onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else { handleDiscount('discount'); }"
-                                                disabled> <span class="input-group-text"
-                                                style="cursor: not-allowed;">BDT</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: right; vertical-align: middle; width: 130px;">Total
-                                        Payable: </th>
-                                    <td>
-                                        <div class="input-group"><input style="text-align: right;" type="number"
-                                                class="form-control" min="0" oninput="handleDiscount('total-payable')"
-                                                id="total-payable" name="total-payable" placeholder="0000"> <span
-                                                class="input-group-text" style="cursor: not-allowed;">BDT</span>
-                                        </div>
-                                    </td>
-                                    <th style="text-align: right; vertical-align: middle;">Convenience
-                                        Fee: </th>
-                                    <td>
-                                        <div class="input-group"><input style="text-align: right;" type="number"
-                                                class="form-control" id="convenience-pay" name="convenience-pay"
-                                                placeholder="0000"> <span class="input-group-text"
-                                                style="cursor: not-allowed;">BDT</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button class="btn btn-info text-white"
-                        style="position: absolute; left: 10px; bottom: 10px;">Preview</button>
-                    <button type="button" id="modalDiscardBtn" class="btn btn-danger"
-                        data-bs-dismiss="modal">Discard</button>
-                    <input type="submit" class="btn btn-primary" value="Add New">
+                <!-- TODO: Style Final Pricing Table -->
+                <div class="col-md-12">
+                    <table class="table table-borderless" style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <th style="vertical-align: middle; text-align: right;">Discount:</th>
+                                <td>
+                                    <div class="input-group"><input style="text-align: right;" type="number"
+                                            class="form-control" min="0" max="100" oninput="handleDiscount('discount')"
+                                            id="discount" name="discount" placeholder="Discount"> <span
+                                            class="input-group-text" style="cursor: not-allowed; width: 55px;">%</span>
+                                    </div>
+                                </td>
+                                <th style="text-align: right; width: 600px; vertical-align: middle;">
+                                    Subtotal:
+                                </th>
+                                <td>
+                                    <div class="input-group"><input style="text-align: right; cursor: not-allowed;"
+                                            type="number" class="form-control" id="subtotal" name="subtotal"
+                                            placeholder="0000" value="9600"
+                                            onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else { handleDiscount('discount'); }"
+                                            disabled> <span class="input-group-text"
+                                            style="cursor: not-allowed;">BDT</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle; width: 130px;">Total
+                                    Payable: </th>
+                                <td>
+                                    <div class="input-group"><input style="text-align: right;" type="number"
+                                            class="form-control" min="0" oninput="handleDiscount('total-payable')"
+                                            id="total-payable" name="total-payable" placeholder="0000"> <span
+                                            class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                                    </div>
+                                </td>
+                                <th style="text-align: right; vertical-align: middle;">Convenience
+                                    Fee: </th>
+                                <td>
+                                    <div class="input-group"><input style="text-align: right;" type="number"
+                                            class="form-control" id="convenience-pay" name="convenience-pay"
+                                            placeholder="0000"> <span class="input-group-text"
+                                            style="cursor: not-allowed;">BDT</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                </form>
+
             </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-info text-white"><span class="fa fa-eye"></span></button>
+                <button type="button" id="backModalBtn" class="btn btn-outline-dark"
+                    style="position: absolute; left: 10px; bottom: 10px;"><span
+                        class="fa fa-arrow-left"></span></button>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+
         </div>
+    </div>
     </div>
 
 
@@ -209,15 +254,15 @@
         aria-labelledby="addNewTableItem" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="addNewTableItem">Add New Item</h1>
-                    <button type="button" id="modalItemCloseBtn" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" id="modalItemCloseBtn" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
                     <div class="mb-3">
                         <label for="formTypeModal" class="form-label">Item Name</label>
-                        <select class="form-select" id="formTypeModal" required>
+                        <select class="form-select" id="formTypeModal">
                             <option selected disabled value="">Choose...</option>
                             <option value="Hotel/Resort">Hotel/Resort</option>
                             <option value="Ship">Ship</option>
@@ -240,9 +285,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id="modalItemDiscardBtn" class="btn btn-danger"
-                        data-bs-dismiss="modal">Discard</button>
+                <div class="modal-footer bg-dark text-bold">
+                    <button type="button" id="modalItemClearBtn" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                        style="position: absolute; font-weight: bold; left: 10px; bottom: 10px;">Discard</button>
                     <button type="button" class="btn btn-primary" id="modalItemSubmitBtn"
                         data-bs-dismiss="modal">Insert</button>
                 </div>
@@ -330,8 +375,7 @@
                         <input id="mySearch" autocomplete="off" type="search" class="form-control rounded border-3"
                             placeholder='Search (ctrl + "/" to focus)' />
                     </form>
-                    <button class="btn btn-primary btn-sm" id="newInvoice"><span class="fa fa-plus"></span> Add
-                        New</button>
+                    <button class="btn btn-primary" id="newInvoice"><span class="fa fa-plus"></span> New</button>
                 </div>
                 <div class="container">
                     <div class="table-responsive text-center">
@@ -398,6 +442,7 @@
             </div>
         </div>
     </main>
+
     <!--Main layout-->
 
     <footer class="bg-light text-center text-lg-start shadow-lg border-top">

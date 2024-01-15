@@ -153,6 +153,7 @@ function insRow(item_name, item_description, item_price) {
             class="fa fa-plus"></span></button>
 </td>`;
     subtotalCalculator();
+    clearModal('item');
     x.appendChild(new_row);
 }
 
@@ -169,7 +170,76 @@ function deleteRow(row) {
     subtotalCalculator();
 }
 
-// Modal Section
+// ================================
+// Title: All Clear Functions
+// ================================
+
+// Clear: Modals
+function clearModal(option) {
+    if (option === 'customer-information') {
+        $('#name').val('');
+        $('#email').val('');
+        $('#phone-number').val('');
+        $('#payment-date').val('');
+        $('#due-date').val('');
+        $('#payment-method').val('');
+        $('#payment-status').val('');
+    } else if (option === 'invoice') {
+        $('#invoice-number').val('');
+        $('#invoice-date').val('');
+        $('#invoice-due-date').val('');
+        $('#invoice-payment-method').val('');
+        $('#invoice-payment-status').val('');
+    } else if (option === 'item') {
+        $('#formTypeModal').val('');
+        $('#item-description-modal').val('');
+        $('#item-price-modal').val('');
+    }
+}
+
+
+// ================================
+// ~ End Clear Function Block
+// ================================
+
+// Modal: 1st
+// Title: Customer Information Modal
+/*
+    ~ Description:
+    This modal provides functionalities for adding customer information.
+    It allows the user to input data for the customer and submit it to be added to the table.
+    The modal includes the following functionalities:
+    - Input fields for entering data
+    - Validation of input data
+    - Submit button to add the new customer
+    - Cancel button to close the modal without adding the customer
+*/
+$('#nextModalBtn').on('click', function () {
+    // ! THIS IS COMPLETED. UNCOMMENT IT AFTER WORK DONE
+    // var fields = ['#name', '#email', '#phone-number', '#payment-date', '#due-date', '#payment-method', '#payment-status'];
+
+    // if (fields.some(field => $(field).val() === '') || fields.some(field => $(field).val() === null)) {
+    //     alert('Please fill in all the fields');
+    // } else {
+    //     $('#createNewModal').modal('show');
+    //     $('#customerInformationModal').modal('hide');
+    // }
+
+    // Remove These After Uncommenting the previous codes
+    $('#createNewModal').modal('show');
+    $('#customerInformationModal').modal('hide');
+});
+
+$('#backModalBtn').on('click', function () {
+    $('#createNewModal').modal('hide');
+    $('#customerInformationModal').modal('show');
+});
+
+$('#tableModalCloseBtn').on('click', function () {
+    $('#createNewModal').modal('hide');
+});
+
+// Modal: 2nd
 // Title: Invoice modal
 /*
     ~ Description:
@@ -182,12 +252,12 @@ function deleteRow(row) {
     - Cancel button to close the modal without adding the invoice
 */
 $('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function () {
-    $('#createNewModal').modal('show');
+    $('#customerInformationModal').modal('show');
 });
 
 // Close modal
 $('#modalCloseBtn, #modalDiscardBtn').on('click', function () {
-    $('#createNewModal').modal('hide');
+    $('#customerInformationModal').modal('hide');
 });
 
 
@@ -204,13 +274,20 @@ $('#modalCloseBtn, #modalDiscardBtn').on('click', function () {
 */
 $('#addNewItemBtn').on('click', function () {
     $('#addNewTableItem').modal('show');
+    $('#customerInformationModal').modal('hide');
     $('#createNewModal').modal('hide');
 });
 
 // Close Modal
-$('#modalItemCloseBtn, #modalItemDiscardBtn').on('click', function () {
+$('#modalItemCloseBtn').on('click', function () {
     $('#addNewTableItem').modal('hide');
     $('#createNewModal').modal('show');
+});
+
+$('#modalItemClearBtn').on('click', function () {
+    $('#addNewTableItem').modal('hide');
+    $('#createNewModal').modal('show');
+    clearModal('item');
 });
 
 // Functionalities: Add new item to table

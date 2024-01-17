@@ -12,8 +12,19 @@ $("#item-form").submit(function (e) {
 $('#convenience-fee, #advance-payment, #total-payable').on('input', function () {
     duePaymentCalculator();
 });
+/*
+    TITLE: GLOBAL VARIABLES
+    ~ Description: Consists of all the global variables used in the script and flags
+*/
 
 
+var editItemDict = {
+    flag: false,
+    currentRow: null
+}; // Flag to check if the user is editing an item or not
+
+
+// ================================ END GLOBAL VARIABLES ================================
 function duePaymentCalculator() {
     var totalPayableValue = parseFloat(document.getElementById('total-payable').value);
     var convenienceFeeValue = parseFloat(document.getElementById('convenience-fee').value);
@@ -230,7 +241,9 @@ window.addEventListener("load", function () {
     datetimeField.value = formattedDate;
 });
 
-
+// ================================
+// Title: Insert New Row
+// ================================
 // Insert New Row: With Custom CSS
 // TODO: Fix the css
 function insRow(item_name, item_description, item_price) {
@@ -246,18 +259,73 @@ function insRow(item_name, item_description, item_price) {
     var cell3 = row.insertCell(2);
     var cell4 = row.insertCell(3);
 
-    cell1.innerHTML = '<td><input style="min-width: 175px;" class="form-control" id="formType" disabled value="' + item_name + '"></td>';
+    cell1.innerHTML = '<td><input style="min-width: 175px;" class="form-control" id="item-name" disabled value="' + item_name + '"></td>';
     cell2.innerHTML = '<td><textarea type="text" disabled class="form-control" style="min-width: 355px; height: 2px;" id="item-description" placeholder="Item Description" required>' + item_description + '</textarea></td>';
     cell3.innerHTML = '<td><div style="min-width: 190px;" class="input-group mb-3" id="item-price-container"><span class="input-group-text">BDT</span><input type="number" class="form-control" style="text-align: right;" id="item-price" oninput="subtotalCalculator()" value="' + item_price + '" disabled aria-label="Item Quantity"><span class="input-group-text">৳</span></div></td>';
-    cell4.innerHTML = '<td><div style="min-width: max-content;"><button class="btn btn-outline-primary" onclick="insRow()" style="margin-right: 5px;"><span class="fa fa-pencil"></span></button><button class="btn btn-danger" onclick="deleteRow(this); subtotalCalculator()"><span class="fa fa-trash"></span></button></div></td>';
+    cell4.innerHTML = '<td><div style="min-width: max-content;"><button class="btn btn-outline-primary" onclick="editItem(this)" style="margin-right: 5px;"><span" class="fa fa-pencil"></span></button><button class="btn btn-danger" onclick="deleteRow(this); subtotalCalculator()"><span class="fa fa-trash"></span></button></div></td>';
 
     subtotalCalculator();
     clearModal('item');
 }
 
+// Functionalities: Add new item to table
+$('#modalItemSubmitBtn').on('click', function () {
+    if (editItemDict.flag) {
+        editItemDict.flag = false;
+        deleteRow(editItemDict.currentRow);
+    }
 
-// Delete Row
-// Additional: Don't delete the first row
+    // Get values from input fields
+    let item_name = $('#item-nameModal').val();
+    let item_description = $('#item-description-modal').val();
+    let item_price = $('#item-price-modal').val();
+
+    // Validate input fields
+    if (item_name === '' || item_description === '' || item_price === '') {
+        alert('Please fill in all the fields');
+    } else {
+        // After Executing Every Tasks
+        $('#addNewTableItem').modal('hide');
+        $('#createNewModal').modal('show');
+        // Add new item to table
+        insRow(item_name, item_description, item_price);
+    }
+});
+
+// ================================
+// ! End Insert New Row
+// ================================
+
+// ================================
+// Title: Edit Item
+// ================================
+
+
+function editItem(current) {
+    var item_description = current.parentElement.parentElement.parentElement.querySelector('#item-description').value;
+    var item_price = current.parentElement.parentElement.parentElement.querySelector('#item-price').value;
+    var item_name = current.parentElement.parentElement.parentElement.querySelector('#item-name').value;
+    $('#item-nameModal').val(item_name);
+    $('#item-description-modal').val(item_description);
+    $('#item-price-modal').val(item_price);
+    $('#addNewTableItem').modal('show');
+    $('#createNewModal').modal('hide');
+    editItemDict.flag = true;
+    editItemDict.currentRow = current;
+
+}
+
+
+// ================================
+//  ! End EDIT Item
+// ================================
+
+
+// ================================
+// Title: Delete Row
+// ================================
+
+
 function deleteRow(button) {
     var row = button.parentNode.parentNode.parentNode;
     if (row.rowIndex > 1) {
@@ -265,6 +333,10 @@ function deleteRow(button) {
         subtotalCalculator();
     }
 }
+
+// ================================
+//  ! End DELETE Item
+// ================================
 
 // ================================
 // Title: All Clear Functions
@@ -287,9 +359,11 @@ function clearModal(option) {
         $('#invoice-payment-method').val('');
         $('#invoice-payment-status').val('');
     } else if (option === 'item') {
-        $('#formTypeModal').val('');
+        $('#item-nameModal').val('');
         $('#item-description-modal').val('');
         $('#item-price-modal').val('');
+        editItemDict.flag = false;
+        editItemDict.currentRow = null;
     }
 }
 
@@ -384,23 +458,4 @@ $('#modalItemClearBtn').on('click', function () {
     $('#addNewTableItem').modal('hide');
     $('#createNewModal').modal('show');
     clearModal('item');
-});
-
-// Functionalities: Add new item to table
-$('#modalItemSubmitBtn').on('click', function () {
-    // Get values from input fields
-    let item_name = $('#formTypeModal').val();
-    let item_description = $('#item-description-modal').val();
-    let item_price = $('#item-price-modal').val();
-
-    // Validate input fields
-    if (item_name === '' || item_description === '' || item_price === '') {
-        alert('Please fill in all the fields');
-    } else {
-        // After Executing Every Tasks
-        $('#addNewTableItem').modal('hide');
-        $('#createNewModal').modal('show');
-        // Add new item to table
-        insRow(item_name, item_description, item_price);
-    }
 });

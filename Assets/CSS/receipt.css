@@ -1,0 +1,78 @@
+#printBody {
+    padding: 0 20px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    ;
+    color: #000;
+    line-height: 1.5;
+    position: absolute;
+    top: 10px;
+    width: 100%;
+}
+
+.receiptTopPart {
+    top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.receiptMiddlePart {
+    position: absolute;
+    top: 320px;
+    width: 100%;
+    border: none;
+}
+
+.receiptMiddlePart table tr td {
+    border: none;
+}
+
+#itemReceiptTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 20px;
+}
+
+.itemReceiptTable tr th:nth-child(1),
+.itemReceiptTable tr td:nth-child(1) {
+    padding-left: 80px;
+    width: 15%;
+}
+
+.receiptTopPart .receiptTopLeft {
+    position: absolute;
+    left: 80px;
+}
+
+.receiptTopPart .receiptTopRight {
+    position: absolute;
+    right: 80px;
+}
+
+#receiptTopLeftInformation {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #000;
+    line-height: 1.5;
+}
+
+.noborder {
+    border: none;
+}
+
+h3 {
+
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+#footerMenu {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+    padding: 0 20px;
+}

@@ -148,6 +148,19 @@
                     </form>
                 </div>
 
+                <!-- Subtotal Input Form -->
+                <div id="row" style="margin-bottom: 10px;">
+                    <div class="input-group">
+                        <div class="form-floating">
+                            <input style="text-align: right; cursor: not-allowed;" type="number" disabled
+                                class="form-control" id="subtotal" name="subtotal" placeholder="0000"
+                                onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else if(document.getElementById('discountAmount').disabled) {handleDiscount('total-payable')} else { handleDiscount('discount'); }">
+                            <label for="discount">Subtotal</label>
+                        </div>
+                        <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
+                    </div>
+                </div>
+
                 <!-- Discount Input Form -->
                 <div class="col-md-12 position-relative">
                     <div class="col-md-12 position-absolute top-0 end-0">
@@ -170,25 +183,14 @@
                             </div>
                         </div>
 
-                        <!-- Subtotal Input Form -->
-                        <div id="row" style="margin-bottom: 10px;">
-                            <div class="input-group">
-                                <div class="form-floating">
-                                    <input style="text-align: right; cursor: not-allowed;" type="number" disabled
-                                        class="form-control" id="subtotal" name="subtotal" placeholder="0000"
-                                        onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else if(document.getElementById('discountAmount').disabled) {handleDiscount('total-payable')} else { handleDiscount('discount'); }">
-                                    <label for="discount">Subtotal</label>
-                                </div>
-                                <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
-                            </div>
-                        </div>
+
                         <!-- Payable Input Form -->
                         <div id="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
                                     <input style="text-align: right;" type="number" class="form-control" min="0"
-                                        oninput="handleDiscount('total-payable')" onchange="duePaymentCalculator()"
-                                        id="total-payable" name="total-payable" placeholder="0000"> <label
+                                        oninput="handleDiscount('total-payable')" id="total-payable"
+                                        name="total-payable" placeholder="0000"> <label
                                         for="total-payable">Payable</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed;">BDT</span>

@@ -9,6 +9,46 @@ $("#item-form").submit(function (e) {
     return false;
 });
 
+$('#convenience-fee, #advance-payment, #total-payable').on('input', function () {
+    duePaymentCalculator();
+});
+
+
+function duePaymentCalculator() {
+    var totalPayableValue = parseFloat(document.getElementById('total-payable').value);
+    var convenienceFeeValue = parseFloat(document.getElementById('convenience-fee').value);
+    var advancePaymentValue = parseFloat(document.getElementById('advance-payment').value);
+    var duePaymentInput = document.getElementById('due-payment');
+    var subtotalValue = parseFloat(document.getElementById('subtotal').value);
+
+    if (convenienceFeeValue === 0 || convenienceFeeValue === null || isNaN(convenienceFeeValue)) {
+        convenienceFeeValue = 0;
+    }
+
+    if (advancePaymentValue === 0 || advancePaymentValue === null || isNaN(advancePaymentValue)) {
+        advancePaymentValue = 0;
+    }
+
+    if (totalPayableValue === null || isNaN(totalPayableValue) || totalPayableValue < 0) {
+        totalPayableValue = subtotalValue;
+    } else {
+        totalPayableValue = parseFloat(document.getElementById('total-payable').value);
+    }
+
+    if (advancePaymentValue < 0 || advancePaymentValue > (totalPayableValue + convenienceFeeValue)) {
+        advancePaymentValue = 0;
+        document.getElementById('advance-payment').value = '';
+    }
+
+    // Check if the duePaymentValue is a valid number between 0 and the subtotal
+    if (!isNaN(totalPayableValue) && totalPayableValue >= 0) {
+        duePaymentInput.value = ((totalPayableValue + convenienceFeeValue) - advancePaymentValue).toFixed(2);
+    } else {
+        // Clear input fields and enable them
+        duePaymentInput.value = ((subtotalValue + convenienceFeeValue) - advancePaymentValue).toFixed(2);
+    }
+}
+
 
 // NOTE: This function is used to check if user gave discount or total payable amount and disable the other input field and calculate the discounted price
 function handleDiscount(option) {
@@ -17,7 +57,6 @@ function handleDiscount(option) {
     var totalPayableInput = document.getElementById('total-payable');
     var subtotalInput = document.getElementById('subtotal');
     var discountAmountInput = document.getElementById('discountAmount');
-    var duePaymentInput = document.getElementById('due-payment');
 
     if (option === 'discount') {
         // Get the discount value from the discount input
@@ -38,11 +77,13 @@ function handleDiscount(option) {
             // Disable the discount amount and total payable inputs
             discountAmountInput.disabled = true;
             totalPayableInput.disabled = true;
+            duePaymentCalculator();
         } else {
             // Clear input fields and enable them
             discountInput.value = '';
             totalPayableInput.value = '';
             discountAmountInput.value = '';
+            duePaymentCalculator();
 
 
             discountAmountInput.disabled = false;
@@ -67,6 +108,7 @@ function handleDiscount(option) {
             // Disable the discount input and total payable inputs
             discountInput.disabled = true;
             totalPayableInput.disabled = true;
+            duePaymentCalculator();
         } else {
             // Clear input fields and enable them
             discountAmountInput.value = '';
@@ -75,6 +117,7 @@ function handleDiscount(option) {
 
             discountInput.disabled = false;
             totalPayableInput.disabled = false;
+            duePaymentCalculator();
         }
     } else if (option === 'total-payable') {
         // Get the total payable value from the totalPayableInput
@@ -85,12 +128,15 @@ function handleDiscount(option) {
             // Get the original price from the subtotal input
             var originalPrice = parseFloat(subtotalInput.value);
 
+            discountAmountInput.value = (originalPrice - totalPayableValue).toFixed(2);
+
             // Calculate the discount percentage based on the total payable and update the discount input
-            var discountPercentage = ((originalPrice - totalPayableValue) / originalPrice) * 100;
-            discountInput.value = discountPercentage.toFixed(2);
+            discountInput.value = (((originalPrice - totalPayableValue) / originalPrice) * 100).toFixed(2);
 
             // Disable the discount input
             discountInput.disabled = true;
+            discountAmountInput.disabled = true;
+            duePaymentCalculator();
         } else {
             // Clear input fields and enable them
             totalPayableInput.value = '';
@@ -99,33 +145,9 @@ function handleDiscount(option) {
 
             discountInput.disabled = false;
             discountAmountInput.disabled = false;
-        }
-    } else if (option === 'due-payment') {
-        // Get the due payment value from the duePaymentInput
-        var totalPayableValue = parseFloat(totalPayableInput.value);
-        var duePaymentInput = document.getElementById('due-payment');
-
-        // Check if the duePaymentValue is a valid number between 0 and the subtotal
-        if (!isNaN(totalPayableValue) && totalPayableValue >= 0 && totalPayableValue <= parseFloat(subtotalInput.value)) {
-            // Get the original price from the subtotal input
-            var originalPrice = totalPayableValue;
-
-            // Calculate the total payable price and update the input
-            duePaymentInput.value = (originalPrice - duePaymentValue).toFixed(2);
-
-            // Disable the total payable input
-            totalPayableInput.disabled = true;
-        } else {
-            // Clear input fields and enable them
-            totalPayableInput.value = '';
-
-            totalPayableInput.disabled = false;
+            duePaymentCalculator();
         }
     }
-}
-
-function duePaymentCalculator() {
-
 }
 
 
@@ -147,6 +169,7 @@ function subtotalCalculator() {
     }
 
     document.getElementById('subtotal').value = sum.toFixed(2);
+    duePaymentCalculator();
 }
 
 // Enable/Disable the item-price input field

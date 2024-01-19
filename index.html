@@ -336,8 +336,9 @@
                     <div class="mb-3">
 
                         <!-- Receipt Preview Code Goes Here -->
+                        <iframe id="frame" style="width: 100%; border: 0;" src="print.html"></iframe>
 
-                        <div id="printBody">
+                        <!-- <div id="printBody">
                             <div class="container mb-4">
                                 <div class="row justify-content-between">
                                     <div class="col-md-4">
@@ -421,7 +422,7 @@
                                 </div>
                             </div>
 
-                            <!-- Middle Table Part -->
+                            
                             <div class="receiptMiddlePart table-responsive-sm" style="left: 0px;">
                                 <table class="table itemReceiptTable">
                                     <thead class="table-dark">
@@ -504,7 +505,7 @@
                                         fee will be deducted automatically.</li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="modal-footer bg-dark text-bold">
@@ -694,26 +695,26 @@
                 myTable.search(this.value).draw();
             });
 
-            // $('#togglePrintBTN').on('click', function () {
-            //     $('#receiptPreviewModal').modal('toggle');
-            // });
-
-
-            $('#previewSubmitBtn').on('click', function () {
-                printDiv();
+            $('#togglePrintBTN').on('click', function () {
+                $('#receiptPreviewModal').modal('toggle');
             });
 
-            function printDiv() {
-                $('#receiptPreviewModal').modal('hide');
 
-                var printContents = document.getElementById('printBody').innerHTML;
-                var originalContents = document.getElementById('mainBodyDiv').innerHTML;
-                document.getElementById('mainBodyDiv').innerHTML = printContents;
-                window.print();
-                window.location.reload();
-                document.getElementById('mainBodyDiv').innerHTML = originalContents;
+            // $('#previewSubmitBtn').on('click', function () {
+            //     printDiv();
+            // });
 
-            }
+            // function printDiv() {
+            //     $('#receiptPreviewModal').modal('hide');
+
+            //     var printContents = document.getElementById('printBody').innerHTML;
+            //     var originalContents = document.getElementById('mainBodyDiv').innerHTML;
+            //     document.getElementById('mainBodyDiv').innerHTML = printContents;
+            //     window.print();
+            //     window.location.reload();
+            //     document.getElementById('mainBodyDiv').innerHTML = originalContents;
+
+            // }
 
         });
     </script>

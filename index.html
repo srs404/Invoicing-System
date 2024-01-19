@@ -240,7 +240,7 @@
 
             <div class="modal-footer">
 
-                <button class="btn btn-info text-white"><span class="fa fa-eye"></span></button>
+                <button id="previewInvoiceBTN" class="btn btn-info text-white"><span class="fa fa-eye"></span></button>
                 <button type="button" id="backModalBtn" class="btn btn-outline-dark"
                     style="position: absolute; left: 10px; bottom: 10px;"><span
                         class="fa fa-arrow-left"></span></button>
@@ -323,7 +323,7 @@
         ~ Description: This is the modal to preview the receipt
     -->
 
-    <iframe allowfullscreen="true" id="frame" style="visibility: hidden; width: 100%; border: 0; height: 500px;"
+    <iframe allowfullscreen="true" id="frame" style="visibility: hidden; width: 0px; border: 0; height: 0px;"
         src="print/"></iframe>
 
     <!-- 
@@ -504,6 +504,12 @@
 
             $('#togglePrintBTN').on('click', function () {
                 $('#receiptPreviewModal').modal('toggle');
+            });
+
+            $('#previewInvoiceBTN').click(function () {
+                let wspFrame = document.getElementById('frame').contentWindow;
+                wspFrame.focus();
+                wspFrame.print();
             });
 
 

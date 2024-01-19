@@ -8,7 +8,15 @@
     }
 }
 
+.mainCircleLogo {
+    position: fixed;
+    bottom: -10%;
+    right: -10%;
+    opacity: 30%;
+}
+
 body {
+    overflow: hidden;
     height: 100%;
     width: 100%;
     font-size: 14px;

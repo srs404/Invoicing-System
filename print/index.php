@@ -15,37 +15,9 @@
 
 <body>
 
-    <!-- <div id="printBody">
-        <div class="container mb-4">
-            <div class="row justify-content-between">
-                <div class="col-md-4">
-                    <div class="card border-0">
-                        <div class="card-body" style="text-align: left;">
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0">
-                        <div class="card-body">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        
-
-        <div class="container">
-            <div class="row">
-                
-            </div>
-        </div>
-
-
-        
-    </div> -->
+    <div class="mainCircleLogo">
+        <img src="tripuplogocircle.png" loading="lazy" width="400px">
+    </div>
 
     <div class="receiptTopPart">
         <div class="receiptTopLeftPart">

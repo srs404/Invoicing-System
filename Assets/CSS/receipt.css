@@ -1,78 +1,64 @@
-#printBody {
-    padding: 0 20px;
-    font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
-    ;
-    color: #000;
-    line-height: 1.5;
-    position: absolute;
-    top: 10px;
-    width: 100%;
-}
-
 .receiptTopPart {
-    top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    width: 100%;
 }
 
-.receiptMiddlePart {
-    position: absolute;
-    top: 320px;
-    width: 100%;
-    border: none;
+.receiptTopPart .receiptTopLeftPart {
+    width: 60%;
 }
 
-.receiptMiddlePart table tr td {
-    border: none;
+.receiptTopPart .receiptTopRightPart {
+    width: 39%;
 }
 
-#itemReceiptTable {
+.receiptTopPart .receiptTopRightPart {
+    text-align: right;
+}
+
+.itemReceiptTable {
     width: 100%;
     border-collapse: collapse;
-    border-spacing: 0;
-    margin-bottom: 20px;
 }
 
-.itemReceiptTable tr th:nth-child(1),
-.itemReceiptTable tr td:nth-child(1) {
-    padding-left: 80px;
-    width: 15%;
+.itemReceiptTable thead tr th {
+    padding: 15px;
 }
 
-.receiptTopPart .receiptTopLeft {
-    position: absolute;
-    left: 80px;
+.itemReceiptTable tbody tr td:nth-child(1) {
+    width: 10%;
+    max-width: 10%;
 }
 
-.receiptTopPart .receiptTopRight {
-    position: absolute;
-    right: 80px;
+.itemReceiptTable tbody tr td:nth-child(2) {
+    width: 30%;
+    max-width: 30%;
 }
 
-#receiptTopLeftInformation {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #000;
-    line-height: 1.5;
+.itemReceiptTable tbody tr td:nth-child(3) {
+    width: 40%;
+    max-width: 40%;
+}
+
+.itemReceiptTable tbody tr td:nth-child(4) {
+    width: 20%;
+    max-width: 20%;
 }
 
 .noborder {
     border: none;
 }
 
-h3 {
-
-    font-size: 28px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-}
-
 #footerMenu {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
-    margin-top: 20px;
-    padding: 0 20px;
+    background-color: #fff;
+    z-index: 999;
+    border-top: 1px solid #ccc;
+}
+
+.disclaimer ul li {
+    margin: 20px 0;
 }

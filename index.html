@@ -323,8 +323,11 @@
         ~ Description: This is the modal to preview the receipt
     -->
 
-    <iframe allowfullscreen="true" id="frame" style="visibility: hidden; width: 0px; border: 0; height: 0px;"
-        src="print/"></iframe>
+    <div class="modal">
+        <iframe id="frame" style="visibility: hidden; width: 0px; border: 0; height: 0px;" src="print/"></iframe>
+    </div>
+
+
 
     <!-- 
         ! ==========================================
@@ -342,8 +345,11 @@
         <header>
             <!-- Sidebar -->
             <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+
                 <div class="position-sticky">
+
                     <div class="list-group list-group-flush mx-3 mt-4">
+
                         <a href="#" class="list-group-item list-group-item-action py-2 ripple" id="sidebarCreateNew">
                             <i class="fas fa-chart-area fa-book me-3"></i><span>Create New</span>
                         </a><br><br>
@@ -366,9 +372,46 @@
             </nav>
             <!-- Sidebar -->
 
+
+            <!-- Navbar -->
+            <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+                <!-- Container wrapper -->
+                <div class="container-fluid">
+                    <!-- Toggle button -->
+                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                        data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- Brand -->
+                    <a class="navbar-brand" href="#">
+                        <img src="Assets/Images/tripuplogo.png" height="35" alt="" loading="lazy" />
+                    </a>
+
+                    <!-- Right links -->
+                    <ul class="navbar-nav ms-auto d-flex flex-row">
+                        <!-- Search form -->
+
+                        <li class="nav-item">
+                            <a class="nav-link me-3 me-lg-0" href="#" id="createNewNavBtn" role="button">
+                                <i class="fas fa-folder-plus"></i>
+                            </a>
+                        </li>
+
+                        <!-- Icon -->
+                        <li class="nav-item">
+                            <a class="nav-link me-3 me-lg-0" href="#">
+                                <i class="fas fa-user-pen"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Container wrapper -->
+            </nav>
+            <!-- Navbar -->
+
         </header>
-        <!--Main Navigation-->
-        <button style="position: absolute; right: 50px; top: 80%;" id="togglePrintBTN">Click Me</button>
         <!--Main layout-->
         <main id="mainBody" style="min-height: calc(100vh - 58px);">
 
@@ -502,34 +545,12 @@
                 myTable.search(this.value).draw();
             });
 
-            $('#togglePrintBTN').on('click', function () {
-                $('#receiptPreviewModal').modal('toggle');
-            });
-
+            // Print PDF Preview
             $('#previewInvoiceBTN').click(function () {
                 let wspFrame = document.getElementById('frame').contentWindow;
                 wspFrame.focus();
                 wspFrame.print();
             });
-
-
-            // $('#previewSubmitBtn').on('click', function () {
-            //     printDiv();
-            // });
-
-            // function printDiv() {
-            //     $('#receiptPreviewModal').modal('hide');
-
-            //     var printContents = document.getElementById('printBody').innerHTML;
-            //     var originalContents = document.getElementById('mainBodyDiv').innerHTML;
-            //     document.getElementById('mainBodyDiv').innerHTML = printContents;
-            //     window.print();
-            //     window.location.reload();
-            //     document.getElementById('mainBodyDiv').innerHTML = originalContents;
-
-            // }
-
-
 
         });
     </script>

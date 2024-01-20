@@ -1,20 +1,73 @@
+@media print {
+
+    /* Ensures the background color and text color in the table headers are printed */
+    .itemReceiptTable thead tr th {
+        color: white !important;
+        background-color: #1965af !important;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+.mainCircleLogo {
+    position: fixed;
+    bottom: -10%;
+    right: -10%;
+    opacity: 30%;
+}
+
+body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+}
+
 .receiptTopPart {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
 }
 
 .receiptTopPart .receiptTopLeftPart {
-    width: 60%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 50%;
+}
+
+.customerDetailsTable {
+    width: 250px;
+}
+
+.customerDetailsTable tbody tr td:nth-child(2) {
+    text-align: right;
+}
+
+.itemReceiptTable thead tr th {
+    color: white;
+    background-color: #000;
 }
 
 .receiptTopPart .receiptTopRightPart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #fff;
     width: 39%;
 }
 
 .receiptTopPart .receiptTopRightPart {
     text-align: right;
+}
+
+.receiptMiddlePart {
+    width: 100%;
+    position: absolute;
+    top: 350px;
+    left: 0;
+    padding: 0px;
 }
 
 .itemReceiptTable {
@@ -50,6 +103,20 @@
     border: none;
 }
 
+.subtotalTable {
+    min-width: fit-content;
+    border-top: 1px solid gray;
+}
+
+.subtotalTable tbody tr td {
+    font-weight: bold;
+    border: none;
+}
+
+.subtotalTable tbody tr td:nth-child(1) {
+    text-align: right;
+}
+
 #footerMenu {
     position: fixed;
     bottom: 0;
@@ -59,6 +126,7 @@
     border-top: 1px solid #ccc;
 }
 
+
 .disclaimer ul li {
-    margin: 20px 0;
+    margin: 10px 0;
 }

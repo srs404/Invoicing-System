@@ -36,8 +36,7 @@ class Login extends Database
      * TITLE: Unique ID Generator
      * ~ DESCRIPTION: This function will generate a unique ID
      * ~ PRIVATE Function
-     * $quantity ~ Length of the string
-     * @param int $quantity
+     * @param int $quantity ~ Length of the string
      * @return string $randomString
      */
     private function uniqID_generator($quantity)
@@ -52,16 +51,16 @@ class Login extends Database
     }
 
     /**
-     * TITLE: Validate Login Credentials
+     * TITLE: Validate Login Credentials [MAIN FUNCTION]
      * ~ DESCRIPTION: This function will validate the login credentials
-     * ~ PUBLIC Function
+     * ~ PRIVATE Function
      * @param string $email
      * @param string $password
      * @return redirect $this->redirect()
      * @exception EMAIL_NOT_FOUND, INVALID_PASSWORD, DATABASE_ERROR
      * @session $_SESSION['agent']['id'], $_SESSION['agent']['loggedin']
      */
-    public function validate($email, $password)
+    private function validate($email, $password)
     {
         try {
             // Check the database for the provided username
@@ -93,7 +92,20 @@ class Login extends Database
     }
 
     /**
-     * TITLE: Register New User [MAIN]
+     * TITLE: Validate Login Credentials [PLACEHOLDER FUNCTION]
+     * ~ DESCRIPTION: This function will call the validate function
+     * ~ PUBLIC Function
+     * @param string $email
+     * @param string $password
+     * @return void
+     */
+    public function login($email, $password)
+    {
+        $this->validate($email, $password);
+    }
+
+    /**
+     * TITLE: Register New User [MAIN FUNCTION]
      * ~ DESCRIPTION: This function will register a new user
      * ~ PRIVATE Function
      * @param string $email

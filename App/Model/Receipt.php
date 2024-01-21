@@ -10,6 +10,12 @@ class Receipt extends Database
         parent::__construct();
     }
 
+    public function generateReceiptID()
+    {
+        $receipt_id = "R" . date("dmy") . "-" . $this->getLastRow()["id"];
+        return $receipt_id;
+    }
+
     /**
      * Title: Create Receipt [MAIN FUNCTION]
      * ~ Description: Create a new receipt

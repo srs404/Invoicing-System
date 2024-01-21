@@ -1,9 +1,5 @@
 <?php
 
-require_once "App/Model/Receipt.php";
-
-// $receipt = new Receipt();
-
 if (!isset($_SESSION['agent']['loggedin'])) {
     if (!$_SESSION['agent']['loggedin']) {
         include_once "index.php";
@@ -16,6 +12,11 @@ if (isset($_GET['logout'])) {
         header("Refresh:0");
     }
 }
+
+require_once "App/Model/Receipt.php";
+
+$receipt = new Receipt();
+$receipt_id = $receipt->generateReceiptID();
 
 ?>
 
@@ -43,8 +44,7 @@ if (isset($_GET['logout'])) {
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="customerInformationModal">Receipt Number: <span id="invoiceNumber">070124-001</span>
-                    </h1>
+                    <h1 class="modal-title fs-5" id="customerInformationModal">Receipt No: <?php echo $receipt_id; ?></h1>
                     <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
@@ -126,8 +126,7 @@ if (isset($_GET['logout'])) {
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="createNewLabel">Receipt Number: <span id="invoiceNumber">070124-001</span>
-                    </h1>
+                    <h1 class="modal-title fs-5" id="createNewLabel">Receipt No: <?php echo $receipt_id; ?></h1>
                     <button type="button" id="tableModalCloseBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3" style="height: 400px;">
@@ -234,8 +233,8 @@ if (isset($_GET['logout'])) {
             <div class="modal-footer">
 
                 <button id="previewInvoiceBTN" class="btn btn-info text-white"><span class="fa fa-eye"></span></button>
-                <button type="button" id="backModalBtn" class="btn btn-outline-dark" style="position: absolute; left: 10px; bottom: 10px;"><span class="fa fa-arrow-left"></span></button>
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button id="backModalBtn" class="btn btn-outline-dark" style="position: absolute; left: 10px; bottom: 10px;"><span class="fa fa-arrow-left"></span></button>
+                <button id="submitReceiptBTN" class="btn btn-primary">Create</button>
             </div>
 
         </div>
@@ -520,6 +519,109 @@ if (isset($_GET['logout'])) {
                 wspFrame.print();
             });
 
+            /**
+             * Title: submitReceiptBTN
+             * ~ Description: This function is called when the submitReceiptBTN is clicked
+             * ~ This function will create a new receipt
+             */
+
+            // Function to handle form submission
+            function handleSubmit() {
+
+            }
+
+            // Function to convert table body to JSON
+            function tableBodyToJson(tableId) {
+                var data = [];
+
+                // Get the table element by its ID
+                var table = document.getElementById(tableId);
+
+                // Iterate through rows in the table body
+                var rows = table.querySelectorAll("tbody tr");
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    var rowData = {};
+                    var cells = row.querySelectorAll("td");
+                    for (var j = 0; j < cells.length; j++) {
+                        var headerText = table.querySelector("thead tr th:nth-child(" + (j + 1) + ")").textContent;
+                        rowData[headerText] = cells[j].textContent;
+                    }
+                    data.push(rowData);
+                }
+
+                return JSON.stringify(data);
+            }
+
+
+            $('#submitReceiptBTN').click(function() {
+                // Collect input field data
+                let name = document.getElementById('name').value;
+                let email = document.getElementById('email').value;
+                let phone = document.getElementById('phone-number').value;
+                let paymentDate = document.getElementById('payment-date').value;
+                let dueDate = document.getElementById('due-date').value;
+                let paymentMethod = document.getElementById('payment-method').value;
+                let paymentStatus = document.getElementById('payment-status').value;
+
+                // Collect values for variables with default of 0
+                let discount = parseFloat(document.getElementById('discount').value) || 0;
+                let discountAmount = parseFloat(document.getElementById('discountAmount').value) || 0;
+                let totalPayable = parseFloat(document.getElementById('total-payable').value) || 0;
+                let convenienceFee = parseFloat(document.getElementById('convenience-fee').value) || 0;
+                let advancePayment = parseFloat(document.getElementById('advance-payment').value) || 0;
+                let duePayment = parseFloat(document.getElementById('due-payment').value) || 0;
+
+
+                // Convert table body to JSON
+                var tableJson = tableBodyToJson("item-table");
+
+                // Create an object to hold all the data
+                var formData = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    paymentDate: paymentDate,
+                    dueDate: dueDate,
+                    paymentMethod: paymentMethod,
+                    paymentStatus: paymentStatus,
+                    subtotal: subtotal,
+                    discount: discount,
+                    discountAmount: discountAmount,
+                    totalPayable: totalPayable,
+                    convenienceFee: convenienceFee,
+                    advancePayment: advancePayment,
+                    duePayment: duePayment,
+                    tableData: JSON.parse(tableJson) // Parse the table JSON
+                };
+
+                // Convert the combined data object to JSON
+                var combinedJson = JSON.stringify(formData);
+
+                // Send data to PHP using AJAX (or any other method)
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "process.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // Handle the response from PHP if needed
+                        console.log(xhr.responseText);
+                    }
+                };
+
+                // Send the combined JSON data
+                var requestData = "data=" + encodeURIComponent(combinedJson);
+                xhr.send(requestData);
+            });
+
+            /**
+             * Title: setDefaultDate
+             * ~Description: This function sets the default date to the current date
+             *  ~ This function is called when the page is loaded
+             *  ~ This function is called when the payment-date-checkbox is checked
+             *  ~ This function is called when the payment-date is changed
+             *  ~ This function is called when the due-date is changed
+             */
             setDefaultDate();
 
             function setDefaultDate() {

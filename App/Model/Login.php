@@ -1,8 +1,8 @@
 <?php
 
-require_once "App/Controller/Database.php";
+require_once "App/Controller/User";
 
-class Login extends Database
+class Login extends User
 {
     /**
      * TITLE: Constructor
@@ -63,6 +63,7 @@ class Login extends Database
     private function validate($email, $password)
     {
         try {
+
             // Check the database for the provided username
             $query = "SELECT email, password, agent_id FROM users WHERE email = :email";
             $stmt = $this->getConnection()->prepare($query);
@@ -138,16 +139,18 @@ class Login extends Database
      * @param string $password
      * @return void
      */
-    private function register_new_user($email, $password)
+    private function register_new_user($email, $password, $name = "Demo")
     {
-        $secure_password = password_hash($password, PASSWORD_DEFAULT);
-        $agent_id = $this->validate_Agent_ID(10);
-        $query = "INSERT INTO users (agent_id, email, password) VALUES (:agent_id, :email, :password)";
-        $stmt = $this->getConnection()->prepare($query);
-        $stmt->bindParam(":agent_id", $agent_id, PDO::PARAM_STR);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->bindParam(":password", $secure_password, PDO::PARAM_STR);
-        $stmt->execute();
+        $data = array(
+            'agent_id' => $this->validate_Agent_ID(10),
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        );
+        if ($this->post($data)) {
+            echo "Data inserted successfully.";
+        } else {
+            echo "Error inserting data.";
+        }
     }
 
     /**

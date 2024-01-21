@@ -59,41 +59,32 @@ class Database
         }
     }
 
-
-    function query($sql, $params = [])
+    protected function getLastRow()
     {
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute($params);
-            return $stmt;
-        } catch (PDOException $e) {
-            // Handle database query error
-            die("Database query failed: " . $e->getMessage());
+        $sql = "SELECT * FROM users ORDER BY id DESC LIMIT 1";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return $row;
+        } else {
+            return 1;
         }
     }
 
-    function fetch($sql, $params = [])
+    protected function validate_Unique_Email($email)
     {
-        try {
-            $stmt = $this->query($sql, $params);
-            return $stmt->fetch();
-        } catch (PDOException $e) {
-            // Handle database query error
-            die("Database query failed: " . $e->getMessage());
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return false;
+        } else {
+            return true;
         }
     }
-
-    function fetchAll($sql, $params = [])
-    {
-        try {
-            $stmt = $this->query($sql, $params);
-            return $stmt->fetchAll();
-        } catch (PDOException $e) {
-            // Handle database query error
-            die("Database query failed: " . $e->getMessage());
-        }
-    }
-
 
     /**
      * TITLE: Destructor

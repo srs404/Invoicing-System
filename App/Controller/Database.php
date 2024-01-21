@@ -19,6 +19,12 @@ class Database
         }
     }
 
+    /**
+     * TITLE: Connect
+     * ~ DESCRIPTION: This function will establish a connection to the database
+     * ~ PRIVATE Function
+     * @return void
+     */
     private function connect()
     {
         $host = "localhost"; // Change this to your MySQL server host
@@ -40,49 +46,39 @@ class Database
         }
     }
 
+    /**
+     * TITLE: GET Connection
+     * ~ Description: This function will return the database connection
+     * ~ PROTECTED Function
+     * @return PDO $this->connection
+     */
     protected function getConnection()
     {
         return $this->connection;
     }
 
-    protected function validate_Unique_ID($id)
+    /**
+     * Title: Get Last User
+     * ~ DESCRIPTION: This function will get the last row
+     * ~ PROTECTED Function
+     * @return string $agent_id
+     */
+    protected function getLast($table)
     {
-        $sql = "SELECT * FROM users WHERE agent_id = :id";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    protected function getLastRow()
-    {
-        $sql = "SELECT * FROM users ORDER BY id DESC LIMIT 1";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
-            return $row;
-        } else {
-            return 1;
-        }
-    }
-
-    protected function validate_Unique_Email($email)
-    {
-        $sql = "SELECT * FROM users WHERE email = :email";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
-            return false;
-        } else {
-            return true;
+        try {
+            $sql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
+            $stmt = $this->getConnection()->prepare($sql);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                return $row['id'];
+            } else {
+                return "1";
+            }
+        } catch (PDOException $e) {
+            // Handle database connection or query errors
+            return "5";
+            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
         }
     }
 

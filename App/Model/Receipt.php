@@ -12,7 +12,7 @@ class Receipt extends Database
 
     public function generateReceiptID()
     {
-        $receipt_id = "R" . date("dmy") . "-" . $this->getLastRow()["id"];
+        $receipt_id = "R" . date("dmy") . "-" . $this->getLast("receipts");
         return $receipt_id;
     }
 

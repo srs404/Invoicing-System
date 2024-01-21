@@ -1,6 +1,6 @@
 <?php
 
-require_once "App/Controller/User";
+require_once "App/Controller/User.php";
 
 class Login extends User
 {
@@ -60,16 +60,10 @@ class Login extends User
      * @session $_SESSION['agent']['id'], $_SESSION['agent']['loggedin']
      * @return boolean true
      */
-    private function validate($email, $password)
+    public function login($email, $password)
     {
         try {
-
-            // Check the database for the provided username
-            $query = "SELECT email, password, agent_id FROM users WHERE email = :email";
-            $stmt = $this->getConnection()->prepare($query);
-            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-            $stmt->execute();
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $this->get($email, "email", "email, password, agent_id");
 
             if ($row) {
                 // Verify the password using password_verify
@@ -92,19 +86,6 @@ class Login extends User
     }
 
     /**
-     * TITLE: Validate Login Credentials [PLACEHOLDER FUNCTION]
-     * ~ DESCRIPTION: This function will call the validate function
-     * ~ PUBLIC Function
-     * @param string $email
-     * @param string $password
-     * @return boolean $this->validate()
-     */
-    public function login($email, $password)
-    {
-        return $this->validate($email, $password);
-    }
-
-    /**
      * TITLE: Last Logged In [MAIN FUNCTION]
      * ~ DESCRIPTION: This function will update the last logged in date
      * ~ PRIVATE Function
@@ -114,7 +95,7 @@ class Login extends User
     private function last_logged_in($agent_id)
     {
         $query = "UPDATE users SET logged_in_at = NOW() WHERE agent_id = :agent_id";
-        $stmt = $this->getConnection()->prepare($query);
+        $stmt = parent::getConnection()->prepare($query);
         $stmt->bindParam(":agent_id", $agent_id, PDO::PARAM_STR);
         $stmt->execute();
     }
@@ -139,7 +120,7 @@ class Login extends User
      * @param string $password
      * @return void
      */
-    private function register_new_user($email, $password, $name = "Demo")
+    private function register($email, $password, $name = "Demo")
     {
         $data = array(
             'agent_id' => $this->validate_Agent_ID(10),
@@ -151,19 +132,6 @@ class Login extends User
         } else {
             echo "Error inserting data.";
         }
-    }
-
-    /**
-     * TITLE: Register New User [PLACEHOLDER]
-     * ~ DESCRIPTION: This function will call the register_new_user function
-     * ~ PUBLIC Function
-     * @param string $email
-     * @param string $password
-     * @return void
-     */
-    public function register($email, $password)
-    {
-        $this->register_new_user($email, $password);
     }
 
     /**

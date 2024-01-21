@@ -19,27 +19,10 @@ class User extends Database
      * Title: POST
      * ~ DESCRIPTION: This function will create a new user
      * ~ PROTECTED Function
-     * @param string $email
-     * @param string $password
-     * @param string $name
-     * 
-     * @return boolean true
-     */
-    // protected function post($agent_id, $email, $password, $username)
-    // {
-    //     $sql = "INSERT INTO users (agent_id, email, password, name) VALUES (:agent_id, :email, :password, :username)";
-    //     $stmt = $this->getConnection()->prepare($sql);
-    //     $stmt->bindParam(":agent_id", $agent_id, PDO::PARAM_STR);
-    //     $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-    //     $stmt->bindParam(":password", $password, PDO::PARAM_STR);
-    //     $stmt->bindParam(":name", $username, PDO::PARAM_STR);
-    //     $stmt->execute();
-    //     return true;
-    // }
-
-    /**
+     * @exception EMAIL_ALREADY_EXISTS, DATABASE_ERROR
+     *  
      * Perform a dynamic INSERT operation into a table.
-     *
+     *  
      * @param string $table The name of the table to insert data into.
      * @param array $data An associative array of column names and values to insert.
      *
@@ -75,11 +58,11 @@ class User extends Database
      * @param string $email
      * @return array $row
      */
-    protected function get($email)
+    protected function get($value, $placeholder, $returns = "*")
     {
-        $sql = "SELECT * FROM users WHERE email = :email";
+        $sql = "SELECT $returns FROM users WHERE $placeholder = :$placeholder";
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->bindParam(":$placeholder", $value, PDO::PARAM_STR);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row) {
@@ -100,7 +83,6 @@ class User extends Database
     {
         $sql = "SELECT * FROM users";
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if ($row) {
@@ -141,10 +123,62 @@ class User extends Database
      */
     protected function delete($agent_id)
     {
-        $sql = "DELETE FROM users WHERE email = :email";
+        $sql = "DELETE FROM users WHERE agent_id = :agent_id";
         $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(":email", $agent_id, PDO::PARAM_STR);
+        $stmt->bindParam(":agent_id", $agent_id, PDO::PARAM_STR);
         $stmt->execute();
         return true;
+    }
+
+    /**
+     * ! ====================================!
+     * !                                     !
+     * !        END OF CRUD OPERATIONS       !
+     * !                                     !   
+     * ! ====================================!
+     */
+
+    /**
+     * Title: Redirect
+     * ~ DESCRIPTION: This function will redirect the user to the specified page
+     * ~ PUBLIC Function
+     * @param string $url
+     * @return redirect $this->redirect()
+     */
+    function redirect($url)
+    {
+        parent::redirect($url);
+    }
+
+    /**
+     * Title: Validate Agent ID
+     * ~ DESCRIPTION: This function will validate the agent ID
+     * ~ PRIVATE Function
+     * @param string $length
+     * @return string $agent_id
+     */
+    protected function validate_Unique_ID($id)
+    {
+        $sql = "SELECT * FROM users WHERE agent_id = :id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Title: Destructor
+     * ~ DESCRIPTION: This function will destroy the database connection
+     * @return void
+     */
+    function __destruct()
+    {
+        // Destroy the database connection
+        parent::__destruct();
     }
 }

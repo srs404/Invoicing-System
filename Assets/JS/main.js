@@ -1,6 +1,5 @@
 // Function to show the selected form based on the dropdown value
 $(function () {
-    $('#datetimepicker1').datetimepicker();
     subtotalCalculator();
 });
 
@@ -203,14 +202,9 @@ $('#price-checkbox').on('change', function () {
 // Validate Date Input
 function checkDate(option) {
     if (option === 'unlock-due-date') {
-        if (document.getElementById("payment-date").value === "") {
-            document.getElementById("due-date").disabled = true;
-        } else if (document.getElementById("payment-date").value > document.getElementById("due-date").value && document.getElementById("due-date").value !== "") {
-            document.getElementById("due-date").disabled = true;
+        if (document.getElementById("payment-date").value === "") {} else if (document.getElementById("payment-date").value > document.getElementById("due-date").value && document.getElementById("due-date").value !== "") {
             document.getElementById("due-date").value = "";
             alert("Due Date Cannot be earlier than Issued Date");
-        } else {
-            document.getElementById("due-date").disabled = false;
         }
     } else {
         var date = document.getElementById("payment-date").value;
@@ -231,15 +225,6 @@ function enableCurrentDateCheckbox(object) {
     }
 }
 
-// Set Default Date of Payment Date to Today
-window.addEventListener("load", function () {
-    var now = new Date();
-    var offset = now.getTimezoneOffset() * 60000;
-    var adjustedDate = new Date(now.getTime() - offset);
-    var formattedDate = adjustedDate.toISOString().substring(0, 16); // For minute precision
-    var datetimeField = document.getElementById("payment-date");
-    datetimeField.value = formattedDate;
-});
 
 // ================================
 // Title: Insert New Row

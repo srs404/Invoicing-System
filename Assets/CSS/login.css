@@ -1,27 +1,28 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     border: none;
     outline: none;
-    font-family: "Rubik",sans-serif;
+    font-family: "Rubik", sans-serif;
     font-size: 16px;
-    
+
 }
-body{
+
+body {
     background-color: #e2ebf0;
 }
 
-.companyLogo{
+.companyLogo {
     position: absolute;
     right: 1rem;
     bottom: 2rem;
     opacity: 0.3;
 }
 
-.loginCard{
+.loginCard {
     position: absolute;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
     background-color: transparent;
@@ -31,25 +32,29 @@ body{
     backdrop-filter: blur(40px);
     width: 400px;
 }
-label{
+
+label {
     font-weight: 600;
 }
-.input-wrapper{
+
+.input-wrapper {
     display: flex;
     background-color: #ffffff;
-    
+
     margin: 10px 0;
     /* border-radius: 5px; */
 }
-.prefix{
+
+.prefix {
     position: relative;
     color: #7b7b93;
 }
-.prefix{
+
+.prefix {
     padding: 15px 0 15px 15px;
 }
 
-input{
+input {
     background-color: transparent;
     position: relative;
     width: 200px;
@@ -57,7 +62,7 @@ input{
     color: #2c2c51;
 }
 
-.input-wrapper:focus-within{
+.input-wrapper:focus-within {
     font-weight: bold;
 }
 
@@ -72,7 +77,7 @@ input{
     color: #000000;
     cursor: pointer;
     display: inline-block;
-    font-family: Clarkson,Helvetica,sans-serif;
+    font-family: Clarkson, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0;
@@ -86,7 +91,7 @@ input{
     text-decoration: none;
     text-rendering: geometricprecision;
     text-transform: uppercase;
-    transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1),background-color 100ms cubic-bezier(.694, 0, 0.335, 1),color 100ms cubic-bezier(.694, 0, 0.335, 1);
+    transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1), background-color 100ms cubic-bezier(.694, 0, 0.335, 1), color 100ms cubic-bezier(.694, 0, 0.335, 1);
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;

@@ -37,7 +37,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 <html lang="en">
 
 <head>
-    <title>Login Panel | TripUp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>Login Panel | Invoicing System | TripUp</title>
     <!--Google Font-->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
     <!--Stylesheet-->
@@ -66,12 +67,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             </div>
         </form>
     </div>
-    <img class="companyLogo" src="https://tripup.info/wp-content/uploads/2023/01/Tripup-logo-1.png" size="200px">
-    <!-- <script>
-        function redirect() {
-            window.location.href = "index.html";
-        }
-    </script> -->
+    <!-- <img class="companyLogo" src="Assets/Images/tripuplogocircle.png" style="width: 290px;"> -->
 </body>
 
 </html>

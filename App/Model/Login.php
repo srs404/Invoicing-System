@@ -56,7 +56,6 @@ class Login extends Database
      * ~ PRIVATE Function
      * @param string $email
      * @param string $password
-     * @return redirect $this->redirect()
      * @exception EMAIL_NOT_FOUND, INVALID_PASSWORD, DATABASE_ERROR
      * @session $_SESSION['agent']['id'], $_SESSION['agent']['loggedin']
      * @return boolean true

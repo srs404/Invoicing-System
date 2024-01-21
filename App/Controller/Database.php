@@ -12,7 +12,11 @@ class Database
 
     function __construct()
     {
-        $this->connect();
+        if (!$this->connection) {
+            $this->connect();
+        } else {
+            echo "<script>alert('Connection already established');</script>";
+        }
     }
 
     private function connect()
@@ -55,15 +59,6 @@ class Database
         }
     }
 
-    protected function close()
-    {
-        $this->connection = null;
-    }
-
-    protected function __destruct()
-    {
-        $this->close();
-    }
 
     function query($sql, $params = [])
     {
@@ -97,5 +92,17 @@ class Database
             // Handle database query error
             die("Database query failed: " . $e->getMessage());
         }
+    }
+
+
+    /**
+     * TITLE: Destructor
+     * ~ DESCRIPTION: This function will destroy the database connection
+     * ~ PROTECTED Function
+     * @return void
+     */
+    protected function __destruct()
+    {
+        $this->connection = null;
     }
 }

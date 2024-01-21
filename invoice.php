@@ -1,5 +1,9 @@
 <?php
 
+require_once "App/Model/Receipt.php";
+
+// $receipt = new Receipt();
+
 if (!isset($_SESSION['agent']['loggedin'])) {
     if (!$_SESSION['agent']['loggedin']) {
         include_once "index.php";
@@ -61,16 +65,21 @@ if (isset($_GET['logout'])) {
                                 <input type="number" max="1999999999" placeholder="1625469920" class="form-control" id="phone-number" aria-describedby="phone-Number-Prepend">
                             </div>
                         </div>
-                        <div class="col-md-3 position-relative">
+                        <div class="col-md-6 position-relative">
                             <label for="payment-date" class="form-label">Payment Date</label><input class="form-check-input bg-dark" type="checkbox" style="margin-left: 10px;" id="payment-date-checkbox" onchange="enableCurrentDateCheckbox(this)">
-                            <input type="datetime-local" onload="setDefaultDate()" id="payment-date" class="form-control" onchange="checkDate('unlock-due-date')" disabled>
+                            <input type="date" id="payment-date" class="form-control" onchange="checkDate('unlock-due-date')" disabled>
 
                         </div>
-                        <div class="col-md-3 position-relative">
+                        <div class="col-md-6 position-relative">
                             <label for="due-date" class="form-label">Due Date</label>
-                            <input type="datetime-local" id="due-date" class="form-control" onchange="checkDate('')">
+                            <input type="date" id="due-date" class="form-control" onchange="checkDate('')">
                         </div>
-                        <div class="col-md-3 position-relative">
+
+                        <!-- 
+                            // Title Payment Status: 
+                            // ~ Uncomment If Needed. Remember to change col-md-3 for both payment-date and due-date 
+                        -->
+                        <!-- <div class="col-md-3 position-relative">
                             <label for="payment-method" class="form-label">Payment Method</label>
                             <select class="form-select" id="payment-method">
                                 <option selected disabled value="">Choose...</option>
@@ -89,7 +98,7 @@ if (isset($_GET['logout'])) {
                                 <option value="Unpaid">Unpaid</option>
                                 <option value="Partially-paid">Partially Paid</option>
                             </select>
-                        </div>
+                        </div> -->
                 </div>
                 </form>
                 <div class="modal-footer">
@@ -478,8 +487,6 @@ if (isset($_GET['logout'])) {
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="Assets/JS/main.js"></script>
-    <script src="Assets/JS/modal.js"></script>
-    <script src="Assets/JS/pdf.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -512,6 +519,19 @@ if (isset($_GET['logout'])) {
                 wspFrame.focus();
                 wspFrame.print();
             });
+
+            setDefaultDate();
+
+            function setDefaultDate() {
+                // Create a new date object with the current date
+                var today = new Date();
+
+                // Format the date to YYYY-MM-DD
+                var date = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
+
+                // Set the value of the input to the formatted date
+                document.getElementById('payment-date').value = date;
+            }
 
         });
     </script>

@@ -1,3 +1,20 @@
+<?php
+
+if (!isset($_SESSION['agent']['loggedin'])) {
+    if (!$_SESSION['agent']['loggedin']) {
+        include_once "index.php";
+    }
+}
+
+if (isset($_GET['logout'])) {
+    if ($_GET['logout'] == true) {
+        session_destroy();
+        header("Refresh:0");
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,12 +24,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Stylesheet -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="Assets/CSS/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="Assets/CSS/receipt.css">
 
@@ -21,16 +35,13 @@
     <!-- Title: Customer Information Modal -->
     <!-- ~ Description: This is the infomation page of the modal or first page -->
 
-    <div class="modal fade" id="customerInformationModal" tabindex="-1" aria-labelledby="customerInformationModal"
-        aria-hidden="true">
+    <div class="modal fade" id="customerInformationModal" tabindex="-1" aria-labelledby="customerInformationModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="customerInformationModal">Receipt Number: <span
-                            id="invoiceNumber">070124-001</span>
+                    <h1 class="modal-title fs-5" id="customerInformationModal">Receipt Number: <span id="invoiceNumber">070124-001</span>
                     </h1>
-                    <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
                     <form class="row g-3">
@@ -47,16 +58,12 @@
                             <label for="phone-number" class="form-label">Phone Number</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="phone-Number-Prepend">+880</span>
-                                <input type="number" max="1999999999" placeholder="1625469920" class="form-control"
-                                    id="phone-number" aria-describedby="phone-Number-Prepend">
+                                <input type="number" max="1999999999" placeholder="1625469920" class="form-control" id="phone-number" aria-describedby="phone-Number-Prepend">
                             </div>
                         </div>
                         <div class="col-md-3 position-relative">
-                            <label for="payment-date" class="form-label">Payment Date</label><input
-                                class="form-check-input bg-dark" type="checkbox" style="margin-left: 10px;"
-                                id="payment-date-checkbox" onchange="enableCurrentDateCheckbox(this)">
-                            <input type="datetime-local" onload="setDefaultDate()" id="payment-date"
-                                class="form-control" onchange="checkDate('unlock-due-date')" disabled>
+                            <label for="payment-date" class="form-label">Payment Date</label><input class="form-check-input bg-dark" type="checkbox" style="margin-left: 10px;" id="payment-date-checkbox" onchange="enableCurrentDateCheckbox(this)">
+                            <input type="datetime-local" onload="setDefaultDate()" id="payment-date" class="form-control" onchange="checkDate('unlock-due-date')" disabled>
 
                         </div>
                         <div class="col-md-3 position-relative">
@@ -86,10 +93,8 @@
                 </div>
                 </form>
                 <div class="modal-footer">
-                    <button type="button" id="modalDiscardBtn" class="btn btn-danger" data-bs-dismiss="modal"
-                        style="position: absolute; left: 10px;">Discard</button>
-                    <button type="submit" id="nextModalBtn" class="btn btn-outline-dark"><span
-                            class="fa fa-arrow-right"></span></button>
+                    <button type="button" id="modalDiscardBtn" class="btn btn-danger" data-bs-dismiss="modal" style="position: absolute; left: 10px;">Discard</button>
+                    <button type="submit" id="nextModalBtn" class="btn btn-outline-dark"><span class="fa fa-arrow-right"></span></button>
                 </div>
 
             </div>
@@ -112,11 +117,9 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="createNewLabel">Receipt Number: <span
-                            id="invoiceNumber">070124-001</span>
+                    <h1 class="modal-title fs-5" id="createNewLabel">Receipt Number: <span id="invoiceNumber">070124-001</span>
                     </h1>
-                    <button type="button" id="tableModalCloseBtn" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" id="tableModalCloseBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3" style="height: 400px;">
                     <div class="col-md-12" style="text-align: right; margin-bottom: 10px;">
@@ -125,16 +128,13 @@
                     </div>
                     <form id="item-form" class="row g-3">
                         <div class="col-md-12">
-                            <div class="table-responsive-sm"
-                                style="max-height: 400px; margin-bottom: 10px; min-height: 300px; border-bottom: 1px solid black; overflow-y: auto;">
+                            <div class="table-responsive-sm" style="max-height: 400px; margin-bottom: 10px; min-height: 300px; border-bottom: 1px solid black; overflow-y: auto;">
                                 <table class="table text-center" id="item-table">
                                     <thead class="table-dark">
                                         <tr>
                                             <th>Item Name</th>
                                             <th>Item Description</th>
-                                            <th><label for="price-checkbox">Price</label> <input
-                                                    class="form-check-input" type="checkbox" value=""
-                                                    id="price-checkbox">
+                                            <th><label for="price-checkbox">Price</label> <input class="form-check-input" type="checkbox" value="" id="price-checkbox">
                                             </th>
                                             <th>Action</th>
                                         </tr>
@@ -151,9 +151,7 @@
                 <div id="row" style="margin-bottom: 10px;">
                     <div class="input-group">
                         <div class="form-floating">
-                            <input style="text-align: right; cursor: not-allowed;" type="number" disabled
-                                class="form-control" id="subtotal" name="subtotal" placeholder="0000"
-                                onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else if(document.getElementById('discountAmount').disabled) {handleDiscount('total-payable')} else { handleDiscount('discount'); }">
+                            <input style="text-align: right; cursor: not-allowed;" type="number" disabled class="form-control" id="subtotal" name="subtotal" placeholder="0000" onchange="if(document.getElementById('discount').disabled) { handleDiscount('total-payable'); } else if(document.getElementById('discountAmount').disabled) {handleDiscount('total-payable')} else { handleDiscount('discount'); }">
                             <label for="discount">Subtotal</label>
                         </div>
                         <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
@@ -166,16 +164,11 @@
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control" min="0"
-                                        max="100" oninput="handleDiscount('discount')" id="discount" name="discount"
-                                        placeholder="Discount"> <label for="discount">Discount</label>
+                                    <input style="text-align: right;" type="number" class="form-control" min="0" max="100" oninput="handleDiscount('discount')" id="discount" name="discount" placeholder="Discount"> <label for="discount">Discount</label>
                                 </div>
-                                <span class="input-group-text" style="cursor: not-allowed;"><span
-                                        class="fa fa-percent"></span></span>
+                                <span class="input-group-text" style="cursor: not-allowed;"><span class="fa fa-percent"></span></span>
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control"
-                                        id="discountAmount" oninput="handleDiscount('discountAmount')"
-                                        placeholder="1000">
+                                    <input style="text-align: right;" type="number" class="form-control" id="discountAmount" oninput="handleDiscount('discountAmount')" placeholder="1000">
                                     <label for="discountAmount">Amount</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed; width: 55px;">BDT</span>
@@ -187,10 +180,7 @@
                         <div id="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control" min="0"
-                                        oninput="handleDiscount('total-payable')" id="total-payable"
-                                        name="total-payable" placeholder="0000"> <label
-                                        for="total-payable">Payable</label>
+                                    <input style="text-align: right;" type="number" class="form-control" min="0" oninput="handleDiscount('total-payable')" id="total-payable" name="total-payable" placeholder="0000"> <label for="total-payable">Payable</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
                             </div>
@@ -199,9 +189,7 @@
                         <div id="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control"
-                                        id="convenience-fee" name="convenience-fee" placeholder="0000"> <label
-                                        for="convenience-fee" oninput="duePaymentCalculator()">Convenience
+                                    <input style="text-align: right;" type="number" class="form-control" id="convenience-fee" name="convenience-fee" placeholder="0000"> <label for="convenience-fee" oninput="duePaymentCalculator()">Convenience
                                         Fee</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
@@ -212,9 +200,7 @@
                         <div id="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control"
-                                        id="advance-payment" name="advance-payment" placeholder="0000"> <label
-                                        for="advance-payment" oninput="duePaymentCalculator()">Advance
+                                    <input style="text-align: right;" type="number" class="form-control" id="advance-payment" name="advance-payment" placeholder="0000"> <label for="advance-payment" oninput="duePaymentCalculator()">Advance
                                         Payment</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
@@ -225,9 +211,7 @@
                         <div id="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control"
-                                        id="due-payment" disabled value="0" name="due-payment"> <label
-                                        for="due-payment">Due
+                                    <input style="text-align: right;" type="number" class="form-control" id="due-payment" disabled value="0" name="due-payment"> <label for="due-payment">Due
                                         Payment</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
@@ -241,9 +225,7 @@
             <div class="modal-footer">
 
                 <button id="previewInvoiceBTN" class="btn btn-info text-white"><span class="fa fa-eye"></span></button>
-                <button type="button" id="backModalBtn" class="btn btn-outline-dark"
-                    style="position: absolute; left: 10px; bottom: 10px;"><span
-                        class="fa fa-arrow-left"></span></button>
+                <button type="button" id="backModalBtn" class="btn btn-outline-dark" style="position: absolute; left: 10px; bottom: 10px;"><span class="fa fa-arrow-left"></span></button>
                 <button type="submit" class="btn btn-primary">Create</button>
             </div>
 
@@ -264,14 +246,12 @@
         ~ Description: This is the modal to get table content information
     -->
 
-    <div class="modal fade" id="addNewTableItem" tabindex="-1" data-backdrop="static" data-keyboard="false"
-        aria-labelledby="addNewTableItem" aria-hidden="true">
+    <div class="modal fade" id="addNewTableItem" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="addNewTableItem" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h1 class="modal-title fs-5" id="addNewTableItem">Add New Item</h1>
-                    <button type="button" id="modalItemCloseBtn" class="btn-close btn-close-white"
-                        data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" id="modalItemCloseBtn" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
                     <div class="mb-3">
@@ -293,17 +273,14 @@
                         <label for="item-price-modal" class="form-label">Item Price</label>
                         <div class="input-group" id="item-price-container-modal">
                             <span class="input-group-text">BDT</span>
-                            <input type="number" class="form-control" style="text-align: right;" id="item-price-modal"
-                                oninput="subtotalCalculator()" placeholder="0" aria-label="Item Quantity">
+                            <input type="number" class="form-control" style="text-align: right;" id="item-price-modal" oninput="subtotalCalculator()" placeholder="0" aria-label="Item Quantity">
                             <span class="input-group-text">৳</span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer bg-dark text-bold">
-                    <button type="button" id="modalItemClearBtn" class="btn btn-outline-danger" data-bs-dismiss="modal"
-                        style="position: absolute; font-weight: bold; left: 10px; bottom: 10px;">Discard</button>
-                    <button type="button" class="btn btn-primary" id="modalItemSubmitBtn"
-                        data-bs-dismiss="modal">Insert</button>
+                    <button type="button" id="modalItemClearBtn" class="btn btn-outline-danger" data-bs-dismiss="modal" style="position: absolute; font-weight: bold; left: 10px; bottom: 10px;">Discard</button>
+                    <button type="button" class="btn btn-primary" id="modalItemSubmitBtn" data-bs-dismiss="modal">Insert</button>
                 </div>
                 </form>
             </div>
@@ -353,22 +330,17 @@
                         <a href="#" class="list-group-item list-group-item-action py-2 ripple" id="sidebarCreateNew">
                             <i class="fas fa-chart-area fa-book me-3"></i><span>Create New</span>
                         </a><br><br>
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple active"
-                            aria-current="true">
+                        <a href="#" class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
                             <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main Dashboard</span>
                         </a>
 
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i
-                                class="fas fa-chart-line fa-fw me-3"></i><span>Analytics (Soon)</span></a>
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i
-                                class="fas fa-users fa-fw me-3"></i><span>User Settings</span></a>
+                        <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-chart-line fa-fw me-3"></i><span>Analytics (Soon)</span></a>
+                        <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-users fa-fw me-3"></i><span>User Settings</span></a>
 
                     </div>
 
                 </div>
-                <a href="login.html" class="btn btn-danger"
-                    style="position: absolute; bottom: 0px; padding: 15px; width: 100%; border-radius: 0px;"><i
-                        class="fas fa-money-bill fa-power-off me-3"></i><span>Logout</span></a>
+                <a href="<?php echo $_SERVER['PHP_SELF'] ?>?logout=true" class="btn btn-danger" style="position: absolute; bottom: 0px; padding: 15px; width: 100%; border-radius: 0px;"><i class="fas fa-money-bill fa-power-off me-3"></i><span>Logout</span></a>
             </nav>
             <!-- Sidebar -->
 
@@ -378,9 +350,7 @@
                 <!-- Container wrapper -->
                 <div class="container-fluid">
                     <!-- Toggle button -->
-                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                        data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-                        aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
                     </button>
 
@@ -401,7 +371,7 @@
 
                         <!-- Icon -->
                         <li class="nav-item">
-                            <a class="nav-link me-3 me-lg-0" href="#">
+                            <a class="nav-link me-3 me-lg-0" href="<?php echo $_SERVER['PHP_SELF'] ?>?logout=true'">
                                 <i class="fas fa-user-pen"></i>
                             </a>
                         </li>
@@ -417,11 +387,9 @@
 
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between"
-                        style="padding-left: 12px; padding-bottom: 10px; padding-right: 12px;">
+                    <div class="d-flex justify-content-between" style="padding-left: 12px; padding-bottom: 10px; padding-right: 12px;">
                         <form class="input-group w-25">
-                            <input id="mySearch" autocomplete="off" type="search" class="form-control rounded border-3"
-                                placeholder='Search (ctrl + "/" to focus)' />
+                            <input id="mySearch" autocomplete="off" type="search" class="form-control rounded border-3" placeholder='Search (ctrl + "/" to focus)' />
                         </form>
                         <button class="btn btn-primary" id="newInvoice"><span class="fa fa-plus"></span> New</button>
                     </div>
@@ -447,10 +415,8 @@
                                         <td>400.00</td>
                                         <td style="color: green;">Paid</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm"><span
-                                                    class="fa fa-magnifying-glass"></span></button>
-                                            <button class="btn btn-success btn-sm"><span
-                                                    class="fa fa-pencil"></span></button>
+                                            <button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button>
+                                            <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button>
                                             <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>
                                         </td>
                                     </tr>
@@ -461,10 +427,8 @@
                                         <td>500.00</td>
                                         <td style="color: green; font-weight: bold;">Paid</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm"><span
-                                                    class="fa fa-magnifying-glass"></span></button>
-                                            <button class="btn btn-success btn-sm"><span
-                                                    class="fa fa-pencil"></span></button>
+                                            <button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button>
+                                            <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button>
                                             <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>
                                         </td>
                                     </tr>
@@ -475,10 +439,8 @@
                                         <td>2530.00</td>
                                         <td style="color: red;">Unpaid</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm"><span
-                                                    class="fa fa-magnifying-glass"></span></button>
-                                            <button class="btn btn-success btn-sm"><span
-                                                    class="fa fa-pencil"></span></button>
+                                            <button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button>
+                                            <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button>
                                             <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>
                                         </td>
                                     </tr>
@@ -494,10 +456,9 @@
 
         <!--Main layout-->
 
-        <footer id="footerMenu" style="position: absolute; bottom: 0px;"
-            class="bg-light text-center shadow-lg border-top">
+        <footer id="footerMenu" class="bg-light text-center shadow-lg border-top">
             <!-- Copyright -->
-            <div class="text-center p-3" style="">
+            <div class="text-center p-3">
                 © 2024 Copyright:
                 <a class="text-dark" href="https://www.linkedin.com/in/srs404">TripUp Inc.</a>
                 | All Rights Reserved
@@ -521,7 +482,7 @@
     <script src="Assets/JS/pdf.js"></script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // DataTable
             var myTable = $('#myTable').DataTable({
                 "lengthMenu": [
@@ -541,12 +502,12 @@
             $(".dataTables_filter").parent().hide();
 
             // Search input
-            $('#mySearch').on('keyup', function () {
+            $('#mySearch').on('keyup', function() {
                 myTable.search(this.value).draw();
             });
 
             // Print PDF Preview
-            $('#previewInvoiceBTN').click(function () {
+            $('#previewInvoiceBTN').click(function() {
                 let wspFrame = document.getElementById('frame').contentWindow;
                 wspFrame.focus();
                 wspFrame.print();

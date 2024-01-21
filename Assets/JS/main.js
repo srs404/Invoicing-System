@@ -387,17 +387,18 @@ function clearModal(option) {
 $('#nextModalBtn').on('click', function () {
     // ! THIS IS COMPLETED. UNCOMMENT IT AFTER WORK DONE
     // var fields = ['#name', '#email', '#phone-number', '#payment-date', '#due-date', '#payment-method', '#payment-status'];
+    var fields = ['#name', '#email', '#phone-number', '#payment-date', '#due-date'];
 
-    // if (fields.some(field => $(field).val() === '') || fields.some(field => $(field).val() === null)) {
-    //     alert('Please fill in all the fields');
-    // } else {
-    //     $('#createNewModal').modal('show');
-    //     $('#customerInformationModal').modal('hide');
-    // }
+    if (fields.some(field => $(field).val() === '') || fields.some(field => $(field).val() === null)) {
+        alert('Please fill in all the fields');
+    } else {
+        $('#createNewModal').modal('show');
+        $('#customerInformationModal').modal('hide');
+    }
 
     // Remove These After Uncommenting the previous codes
-    $('#createNewModal').modal('show');
-    $('#customerInformationModal').modal('hide');
+    // $('#createNewModal').modal('show');
+    // $('#customerInformationModal').modal('hide');
 });
 
 $('#backModalBtn').on('click', function () {

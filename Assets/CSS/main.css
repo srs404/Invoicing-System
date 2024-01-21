@@ -79,6 +79,15 @@ input[type=number] {
     /* Scrollable contents if viewport is shorter than content. */
 }
 
+#footerMenu {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: -999 !important;
+    border-top: 1px solid #ccc;
+}
+
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:after,

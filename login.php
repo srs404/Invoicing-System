@@ -18,7 +18,10 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $user->validate($username, $password);
+        if ($user->login($username, $password)) {
+            $user->last_logged_in_update($_SESSION['agent']['id']);
+            $user->redirect('index.php');
+        }
 
         // Register Algo
         // $username = $_POST['username'];
@@ -27,10 +30,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         // $user->register($username, $password);
     }
 }
-
-// Session Destroy Purpose
-// $user->logout();
-// $user = null;
 
 ?>
 

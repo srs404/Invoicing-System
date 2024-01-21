@@ -59,6 +59,7 @@ class Login extends Database
      * @return redirect $this->redirect()
      * @exception EMAIL_NOT_FOUND, INVALID_PASSWORD, DATABASE_ERROR
      * @session $_SESSION['agent']['id'], $_SESSION['agent']['loggedin']
+     * @return boolean true
      */
     private function validate($email, $password)
     {
@@ -75,8 +76,7 @@ class Login extends Database
                 if (password_verify($password, $row['password'])) {
                     $_SESSION['agent']['id'] = $row['agent_id'];
                     $_SESSION['agent']['loggedin'] = true;
-                    $this->redirect("index.php"); // Redirect to a Index page
-                    exit();
+                    return true;
                 } else {
                     // Invalid password
                     echo "<script>alert('Invalid password.');</script>";
@@ -97,11 +97,38 @@ class Login extends Database
      * ~ PUBLIC Function
      * @param string $email
      * @param string $password
-     * @return void
+     * @return boolean $this->validate()
      */
     public function login($email, $password)
     {
-        $this->validate($email, $password);
+        return $this->validate($email, $password);
+    }
+
+    /**
+     * TITLE: Last Logged In [MAIN FUNCTION]
+     * ~ DESCRIPTION: This function will update the last logged in date
+     * ~ PRIVATE Function
+     * @param string $agent_id
+     * @return void
+     */
+    private function last_logged_in($agent_id)
+    {
+        $query = "UPDATE users SET logged_in_at = NOW() WHERE agent_id = :agent_id";
+        $stmt = $this->getConnection()->prepare($query);
+        $stmt->bindParam(":agent_id", $agent_id, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    /**
+     * TITLE: Last Logged In [PLACEHOLDER FUNCTION]
+     * ~ DESCRIPTION: This function will call the last_logged_in function
+     * ~ PUBLIC Function
+     * @param string $agent_id
+     * @return void
+     */
+    public function last_logged_in_update($agent_id)
+    {
+        $this->last_logged_in($agent_id);
     }
 
     /**

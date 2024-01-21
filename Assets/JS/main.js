@@ -178,7 +178,17 @@ function subtotalCalculator() {
         sum += parseInt(prices[i].value) || 0; // Ensure to add 0 if the value is not a valid number
     }
 
+    if (sum === 0) {
+        document.getElementById('discount').value = '';
+        document.getElementById('discountAmount').value = '';
+        document.getElementById('total-payable').value = '';
+        document.getElementById('convenience-fee').value = '';
+        document.getElementById('advance-payment').value = '';
+    }
+
+
     document.getElementById('subtotal').value = sum.toFixed(2);
+    document.getElementById('due-payment').value = sum.toFixed(2);
     duePaymentCalculator();
 }
 

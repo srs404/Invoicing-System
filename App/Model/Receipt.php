@@ -1,8 +1,8 @@
 <?php
 
-require_once "App/Controller/Database.php";
+require_once "App/Controller/Customer.php";
 
-class Receipt extends Database
+class Receipt extends Customer
 {
     function __construct()
     {
@@ -164,25 +164,6 @@ class Receipt extends Database
     }
 
     /**
-     * Title: GetReceipt [MAIN FUNCTION]
-     * ~ Description: Get a receipt
-     * ~ PRIVATE FUNCTION
-     * 
-     * @param string $receipt_id
-     * 
-     * @return array $receipt
-     */
-    private function getReceipt($receipt_id)
-    {
-        $sql = "SELECT * FROM receipts WHERE receipt_id = :receipt_id";
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(":receipt_id", $receipt_id, PDO::PARAM_STR);
-        $stmt->execute();
-        $receipt = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $receipt;
-    }
-
-    /**
      * Title: GetReceipt [PLACEHOLDER FUNCTION]
      * ~ PUBLIC FUNCTION
      * 
@@ -192,26 +173,7 @@ class Receipt extends Database
      */
     public function get($receipt_id)
     {
-        return $this->getReceipt($receipt_id);
-    }
-
-    /**
-     * Title: Get All [MAIN FUNCTION]
-     * ~ Description: Get all receipts
-     * ~ PRIVATE FUNCTION
-     * 
-     * @param string $receipt_id
-     * 
-     * @return array $receipt
-     */
-    private function getAllReceipts($receipt_id)
-    {
-        $sql = "SELECT * FROM receipts WHERE receipt_id = :receipt_id";
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(":receipt_id", $receipt_id, PDO::PARAM_STR);
-        $stmt->execute();
-        $receipt = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $receipt;
+        return parent::get($receipt_id);
     }
 
     /**
@@ -222,26 +184,9 @@ class Receipt extends Database
      * 
      * @return array $receipt
      */
-    public function getAll($receipt_id)
+    public function getAll()
     {
-        return $this->getAllReceipts($receipt_id);
-    }
-
-    /**
-     * Title: Delete [MAIN FUNCTION]
-     * ~ Description: Delete a receipt
-     * ~ PRIVATE FUNCTION
-     * 
-     * @param string $receipt_id
-     * 
-     * @return void
-     */
-    private function deleteReceipt($receipt_id)
-    {
-        $sql = "DELETE FROM receipts WHERE receipt_id = :receipt_id";
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(":receipt_id", $receipt_id, PDO::PARAM_STR);
-        $stmt->execute();
+        return parent::getAll();
     }
 
     /**
@@ -254,7 +199,7 @@ class Receipt extends Database
      */
     public function delete($receipt_id)
     {
-        $this->deleteReceipt($receipt_id);
+        parent::delete($receipt_id);
     }
 
     /**

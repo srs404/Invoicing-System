@@ -525,28 +525,30 @@ $receipt_id = $receipt->generateReceiptID();
              * ~ This function will create a new receipt
              */
 
-            // Function to handle form submission
-            function handleSubmit() {
-
-            }
-
-            // Function to convert table body to JSON
-            function tableBodyToJson(tableId) {
+            function tableBodyToJson(table) {
                 var data = [];
-
-                // Get the table element by its ID
-                var table = document.getElementById(tableId);
+                var headerText = ['item-name', 'item-description', 'item-price'];
 
                 // Iterate through rows in the table body
                 var rows = table.querySelectorAll("tbody tr");
-                for (var i = 0; i < rows.length; i++) {
+
+                for (var i = 1; i < rows.length; i++) {
                     var row = rows[i];
                     var rowData = {};
                     var cells = row.querySelectorAll("td");
-                    for (var j = 0; j < cells.length; j++) {
-                        var headerText = table.querySelector("thead tr th:nth-child(" + (j + 1) + ")").textContent;
-                        rowData[headerText] = cells[j].textContent;
+
+                    // Assuming that the IDs are unique within each row
+                    var item_name = row.querySelector("#item-name");
+                    var item_description = row.querySelector("#item-description");
+                    var item_price = row.querySelector("#item-price");
+
+                    // Check if the elements exist before accessing their values
+                    if (item_name && item_description && item_price) {
+                        rowData[headerText[0]] = item_name.value; // Use .value for select input
+                        rowData[headerText[1]] = item_description.textContent;
+                        rowData[headerText[2]] = item_price.value; // Use .value for number input
                     }
+
                     data.push(rowData);
                 }
 
@@ -554,64 +556,45 @@ $receipt_id = $receipt->generateReceiptID();
             }
 
 
-            $('#submitReceiptBTN').click(function() {
+
+            function handleSubmit() {
                 // Collect input field data
-                let name = document.getElementById('name').value;
-                let email = document.getElementById('email').value;
-                let phone = document.getElementById('phone-number').value;
-                let paymentDate = document.getElementById('payment-date').value;
-                let dueDate = document.getElementById('due-date').value;
-                let paymentMethod = document.getElementById('payment-method').value;
-                let paymentStatus = document.getElementById('payment-status').value;
-
-                // Collect values for variables with default of 0
-                let discount = parseFloat(document.getElementById('discount').value) || 0;
-                let discountAmount = parseFloat(document.getElementById('discountAmount').value) || 0;
-                let totalPayable = parseFloat(document.getElementById('total-payable').value) || 0;
-                let convenienceFee = parseFloat(document.getElementById('convenience-fee').value) || 0;
-                let advancePayment = parseFloat(document.getElementById('advance-payment').value) || 0;
-                let duePayment = parseFloat(document.getElementById('due-payment').value) || 0;
-
-
-                // Convert table body to JSON
-                var tableJson = tableBodyToJson("item-table");
-
-                // Create an object to hold all the data
                 var formData = {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    paymentDate: paymentDate,
-                    dueDate: dueDate,
-                    paymentMethod: paymentMethod,
-                    paymentStatus: paymentStatus,
-                    subtotal: subtotal,
-                    discount: discount,
-                    discountAmount: discountAmount,
-                    totalPayable: totalPayable,
-                    convenienceFee: convenienceFee,
-                    advancePayment: advancePayment,
-                    duePayment: duePayment,
-                    tableData: JSON.parse(tableJson) // Parse the table JSON
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone-number').value,
+                    paymentDate: document.getElementById('payment-date').value,
+                    dueDate: document.getElementById('due-date').value,
+                    subtotal: parseFloat(document.getElementById('subtotal').value) || 0,
+                    discount: parseFloat(document.getElementById('discount').value) || 0,
+                    discountAmount: parseFloat(document.getElementById('discountAmount').value) || 0,
+                    totalPayable: parseFloat(document.getElementById('total-payable').value) || 0,
+                    convenienceFee: parseFloat(document.getElementById('convenience-fee').value) || 0,
+                    advancePayment: parseFloat(document.getElementById('advance-payment').value) || 0,
+                    duePayment: parseFloat(document.getElementById('due-payment').value) || 0,
+                    tableData: JSON.parse(tableBodyToJson(document.getElementById('item-table'))) // Parse the table JSON
                 };
-
-                // Convert the combined data object to JSON
-                var combinedJson = JSON.stringify(formData);
 
                 // Send data to PHP using AJAX (or any other method)
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "process.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         // Handle the response from PHP if needed
                         console.log(xhr.responseText);
                     }
                 };
-
-                // Send the combined JSON data
-                var requestData = "data=" + encodeURIComponent(combinedJson);
+                var requestData = JSON.stringify(formData);
                 xhr.send(requestData);
+            }
+
+            $('#submitReceiptBTN').click(function() {
+                if (document.getElementById('item-table').rows.length > 2) {
+                    handleSubmit();
+                } else {
+                    alert("Please add at least one item to the table");
+                }
             });
 
             /**

@@ -158,6 +158,38 @@ class Receipt extends Database
     }
 
     /**
+     * Title: GetReceipt [MAIN FUNCTION]
+     * ~ Description: Get a receipt
+     * ~ PRIVATE FUNCTION
+     * 
+     * @param string $receipt_id
+     * 
+     * @return array $receipt
+     */
+    private function getReceipt($receipt_id)
+    {
+        $sql = "SELECT * FROM receipts WHERE receipt_id = :receipt_id";
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->bindParam(":receipt_id", $receipt_id, PDO::PARAM_STR);
+        $stmt->execute();
+        $receipt = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $receipt;
+    }
+
+    /**
+     * Title: GetReceipt [PLACEHOLDER FUNCTION]
+     * ~ PUBLIC FUNCTION
+     * 
+     * @param string $receipt_id
+     * 
+     * @return array $receipt
+     */
+    public function get($receipt_id)
+    {
+        return $this->getReceipt($receipt_id);
+    }
+
+    /**
      * Title: Get All [MAIN FUNCTION]
      * ~ Description: Get all receipts
      * ~ PRIVATE FUNCTION

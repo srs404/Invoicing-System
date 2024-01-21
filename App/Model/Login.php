@@ -4,12 +4,24 @@ require_once "App/Controller/Database.php";
 
 class Login extends Database
 {
+    /**
+     * TITLE: Constructor
+     * ~ DESCRIPTION: This function will initialize the database connection
+     * @return void
+     */
     function __construct()
     {
         // Initialize new database connection
         parent::__construct();
     }
 
+    /**
+     * TITLE: Validate Agent ID
+     * ~ DESCRIPTION: This function will validate the agent ID
+     * ~ PUBLIC Function
+     * @param int $quantity
+     * @return string $id
+     */
     public function validate_Agent_ID($quantity)
     {
         while (true) {
@@ -20,11 +32,13 @@ class Login extends Database
         }
     }
 
-    // Generate Random String for Agent ID
     /**
+     * TITLE: Unique ID Generator
+     * ~ DESCRIPTION: This function will generate a unique ID
+     * ~ PRIVATE Function
      * $quantity ~ Length of the string
      * @param int $quantity
-     * @return string
+     * @return string $randomString
      */
     private function uniqID_generator($quantity)
     {
@@ -37,6 +51,16 @@ class Login extends Database
         return $randomString;
     }
 
+    /**
+     * TITLE: Validate Login Credentials
+     * ~ DESCRIPTION: This function will validate the login credentials
+     * ~ PUBLIC Function
+     * @param string $email
+     * @param string $password
+     * @return redirect $this->redirect()
+     * @exception EMAIL_NOT_FOUND, INVALID_PASSWORD, DATABASE_ERROR
+     * @session $_SESSION['agent']['id'], $_SESSION['agent']['loggedin']
+     */
     public function validate($email, $password)
     {
         try {
@@ -68,6 +92,14 @@ class Login extends Database
         }
     }
 
+    /**
+     * TITLE: Register New User [MAIN]
+     * ~ DESCRIPTION: This function will register a new user
+     * ~ PRIVATE Function
+     * @param string $email
+     * @param string $password
+     * @return void
+     */
     private function register_new_user($email, $password)
     {
         $secure_password = password_hash($password, PASSWORD_DEFAULT);
@@ -80,19 +112,38 @@ class Login extends Database
         $stmt->execute();
     }
 
-    // To Register New Login Credentials
+    /**
+     * TITLE: Register New User [PLACEHOLDER]
+     * ~ DESCRIPTION: This function will call the register_new_user function
+     * ~ PUBLIC Function
+     * @param string $email
+     * @param string $password
+     * @return void
+     */
     public function register($email, $password)
     {
         $this->register_new_user($email, $password);
     }
 
-
+    /**
+     * TITLE: Redirect
+     * ~ DESCRIPTION: This function will redirect the user to a specific page
+     * ~ PUBLIC Function
+     * @param string $url
+     * @return redirect $this->redirect()
+     */
     public function redirect($url)
     {
         // Redirect to dashboard
         parent::redirect($url);
     }
 
+    /**
+     * TITLE: Logout
+     * ~ DESCRIPTION: This function will logout the user
+     * ~ PUBLIC Function
+     * @return void
+     */
     public function logout()
     {
         // Logout
@@ -101,6 +152,11 @@ class Login extends Database
         exit;
     }
 
+    /**
+     * TITLE: Destructor
+     * ~ DESCRIPTION: This function will close the database connection
+     * @return void
+     */
     function __destruct()
     {
         // Close the database connection

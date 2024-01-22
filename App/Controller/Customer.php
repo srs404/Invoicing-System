@@ -33,21 +33,22 @@ class Customer extends Database
         // Construct the SQL query
         $columns = implode(', ', array_keys($data));
         $placeholders = ':' . implode(', :', array_keys($data));
-        $sql = "INSERT INTO users ($columns) VALUES ($placeholders)";
+        $sql = "INSERT INTO receipts ($columns) VALUES ($placeholders)";
 
         try {
             // Prepare and execute the SQL statement
-            $stmt = $this->getConnection()->prepare($sql);
+            $stmt = parent::getConnection()->prepare($sql);
             foreach ($data as $column => $value) {
-                $stmt->bindParam(":$column", $value, PDO::PARAM_STR);
+                $stmt->bindValue(":$column", $value);
             }
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            // Handle the error as needed
-            die("Error: " . $e->getMessage());
+            die("Database error: " . $e->getMessage());
+            return false;
         }
     }
+
 
     /**
      * Title: GET

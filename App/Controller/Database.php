@@ -54,7 +54,12 @@ class Database
      */
     protected function getConnection()
     {
-        return $this->connection;
+        if (!$this->connection) {
+            $this->connect();
+            return $this->connection;
+        } else {
+            return $this->connection;
+        }
     }
 
     /**
@@ -66,12 +71,14 @@ class Database
     protected function getLast($table)
     {
         try {
-            $sql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
+            // $sql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
+            $sql = "SELECT COUNT(*) FROM $table";
+
             $stmt = $this->getConnection()->prepare($sql);
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($row) {
-                return $row['id'];
+                return $row['id'] + 1;
             } else {
                 return "1";
             }

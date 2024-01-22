@@ -1,11 +1,21 @@
 <?php
 
+/**
+ * Title: Check User Login Session
+ * ~ Description: This function will check if the user is logged in or not
+ * ~ This function is called when the page is loaded
+ */
 if (!isset($_SESSION['agent']['loggedin'])) {
     if (!$_SESSION['agent']['loggedin']) {
         include_once "index.php";
     }
 }
 
+/**
+ * Title: Logout
+ * ~ Description: This function will logout the user
+ * ~ This function is called when the logout button is clicked
+ */
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
         session_destroy();
@@ -15,7 +25,16 @@ if (isset($_GET['logout'])) {
 
 require_once "App/Model/Receipt.php";
 
+/**
+ * Title: Generate Receipt Object
+ * ~ Description: This function will generate a new receipt object
+ */
 $receipt = new Receipt();
+
+/**
+ * Title: Generate Receipt ID
+ * ~ Description: This function will generate a new receipt ID
+ */
 $receipt_id = $receipt->generateReceiptID();
 
 ?>
@@ -489,7 +508,20 @@ $receipt_id = $receipt->generateReceiptID();
 
     <script>
         $(document).ready(function() {
-            // DataTable
+
+            /**
+             * Title: DataTables [COMPLETED]
+             * ~ Description: This function will initialize the DataTables
+             * ~ This function is called when the page is loaded
+             * 
+             * @return void
+             * 
+             * @uses DataTables
+             * 
+             * @uses jQuery
+             * 
+             * @uses Bootstrap
+             */
             var myTable = $('#myTable').DataTable({
                 "lengthMenu": [
                     [5, 10, 25, 50, -1],
@@ -504,14 +536,45 @@ $receipt_id = $receipt->generateReceiptID();
                 info: false,
             });
 
-            // Remove the default search input
+            /**
+             * Title: Hide Default DataTable Search Field [COMPLETED]
+             * ~ Description: This function will hide the default search field
+             * ~ This function is called when the page is loaded
+             * 
+             * @return void
+             * 
+             * @uses DataTables
+             */
             $(".dataTables_filter").parent().hide();
 
-            // Search input
+            /**
+             * Title: Main Table Search Field [COMPLETED]
+             * ~ Description: This function will search the table
+             * ~ This function is called when the mySearch input is changed
+             * 
+             * @return void
+             * 
+             * @uses myTable
+             * 
+             * @uses DataTables
+             * 
+             * @uses jQuery
+             * 
+             * @uses Bootstrap
+             */
             $('#mySearch').on('keyup', function() {
                 myTable.search(this.value).draw();
             });
 
+            /**
+             * Title: Print Preview Functionality [COMPLETED]
+             * ~ Description: This function will print the receipt
+             * ~ This function is called when the printPreviewBTN is clicked
+             * 
+             * ~ This function will collect all the data from the input fields
+             * 
+             * @return void
+             */
             // Print PDF Preview
             $('#previewInvoiceBTN').click(function() {
                 let wspFrame = document.getElementById('frame').contentWindow;
@@ -520,11 +583,18 @@ $receipt_id = $receipt->generateReceiptID();
             });
 
             /**
-             * Title: submitReceiptBTN
-             * ~ Description: This function is called when the submitReceiptBTN is clicked
-             * ~ This function will create a new receipt
+             * Title: tableBodyToJson
+             * ~ Description: This function will convert the table body to JSON
+             * ~ This function is called when the submitReceiptBTN is clicked
+             * 
+             * ~ This function will return JSON as string
+             * 
+             * @param table
+             * 
+             * @return string
+             * 
+             * @uses handleSubmit
              */
-
             function tableBodyToJson(table) {
                 var data = [];
                 var headerText = ['item-name', 'item-description', 'item-price'];
@@ -555,8 +625,18 @@ $receipt_id = $receipt->generateReceiptID();
                 return JSON.stringify(data);
             }
 
-
-
+            /**
+             * Title: handleSubmit
+             * ~ Description: This function will submit values to process.php
+             * ~ This function is called when the submitReceiptBTN is clicked
+             * 
+             * ~ This function will send the data to PHP using AJAX
+             * ~ This function will handle the response from PHP
+             * 
+             * @return void
+             * 
+             * @uses tableBodyToJson
+             */
             function handleSubmit() {
                 // Collect input field data
                 var formData = {
@@ -589,9 +669,19 @@ $receipt_id = $receipt->generateReceiptID();
                 xhr.send(requestData);
             }
 
+            /**
+             * Title: Final Receipt Submit Functionality
+             * ~ Description: This will trigger the handleSubmit function
+             * 
+             * @return void
+             * 
+             * @uses handleSubmit
+             */
             $('#submitReceiptBTN').click(function() {
                 if (document.getElementById('item-table').rows.length > 2) {
+                    $('#createNewModal').modal('hide');
                     handleSubmit();
+                    window.location.href = "index.php";
                 } else {
                     alert("Please add at least one item to the table");
                 }
@@ -617,6 +707,12 @@ $receipt_id = $receipt->generateReceiptID();
                 // Set the value of the input to the formatted date
                 document.getElementById('payment-date').value = date;
             }
+
+            $('#phone-number').on('input', function() {
+                if (this.value.length > 10) {
+                    this.value = this.value.slice(0, 10);
+                }
+            });
 
         });
     </script>

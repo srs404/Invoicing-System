@@ -139,18 +139,6 @@ class User extends Database
      */
 
     /**
-     * Title: Redirect
-     * ~ DESCRIPTION: This function will redirect the user to the specified page
-     * ~ PUBLIC Function
-     * @param string $url
-     * @return redirect $this->redirect()
-     */
-    function redirect($url)
-    {
-        parent::redirect($url);
-    }
-
-    /**
      * Title: Validate Agent ID
      * ~ DESCRIPTION: This function will validate the agent ID
      * ~ PRIVATE Function

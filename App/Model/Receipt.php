@@ -64,7 +64,7 @@ class Receipt extends Customer
             'agent_id' => $agent_id,
         );
 
-        return parent::post($data);
+        parent::post($data);
     }
 
     /**

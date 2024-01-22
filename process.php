@@ -2,6 +2,9 @@
 
 require_once "App/Model/Receipt.php";
 session_start();
+if (!isset($_SESSION['agent']['loggedIn'])) {
+    header("Location: index.php");
+}
 
 // Retrieve JSON data from the request body
 $str_json = file_get_contents('php://input');

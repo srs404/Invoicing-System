@@ -63,7 +63,7 @@ $receipt_id = $receipt->generateReceiptID();
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="customerInformationModal">Receipt No: <?php echo $receipt_id; ?></h1>
+                    <h1 class="modal-title fs-5" id="customerInformationModal">Receipt No: <span id="receipt_number_1"></span></h1>
                     <button type="button" id="modalCloseBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
@@ -145,7 +145,7 @@ $receipt_id = $receipt->generateReceiptID();
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="createNewLabel">Receipt No: <?php echo $receipt_id; ?></h1>
+                    <h1 class="modal-title fs-5" id="createNewLabel">Receipt No: <span id="receipt_number_2"></span></h1>
                     <button type="button" id="tableModalCloseBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3" style="height: 400px;">
@@ -412,11 +412,12 @@ $receipt_id = $receipt->generateReceiptID();
         <!--Main layout-->
         <main id="mainBody" style="min-height: calc(100vh - 58px);">
 
+
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between" style="padding-left: 12px; padding-bottom: 10px; padding-right: 12px;">
                         <form class="input-group w-25">
-                            <input id="mySearch" autocomplete="off" type="search" class="form-control rounded border-3" placeholder='Search (ctrl + "/" to focus)' />
+                            <!-- <input id="mySearch" id="myTable_filter" autocomplete="off" type="search" class="form-control rounded border-3" placeholder='Search (ctrl + "/" to focus)' /> -->
                         </form>
                         <button class="btn btn-primary" id="newInvoice"><span class="fa fa-plus"></span> New</button>
                     </div>
@@ -435,43 +436,6 @@ $receipt_id = $receipt->generateReceiptID();
                                 </thead>
                                 <tbody>
 
-                                    <tr>
-                                        <td>INV-001</td>
-                                        <td>Anisul Hoque</td>
-                                        <td>2023-01-01</td>
-                                        <td>400.00</td>
-                                        <td style="color: green;">Paid</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button>
-                                            <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button>
-                                            <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>INV-002</td>
-                                        <td>Rabbi Hoque</td>
-                                        <td>2023-01-01</td>
-                                        <td>500.00</td>
-                                        <td style="color: green; font-weight: bold;">Paid</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button>
-                                            <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button>
-                                            <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>INV-002</td>
-                                        <td>Mehedi Hoque</td>
-                                        <td>2023-01-07</td>
-                                        <td>2530.00</td>
-                                        <td style="color: red;">Unpaid</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button>
-                                            <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button>
-                                            <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>
-                                        </td>
-                                    </tr>
-                                    <!-- Add more rows as needed -->
                                 </tbody>
                             </table>
                         </div>
@@ -661,12 +625,82 @@ $receipt_id = $receipt->generateReceiptID();
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        // Handle the response from PHP if needed
-                        console.log(xhr.responseText);
+                        // Handle response from PHP
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            alert("Receipt created successfully");
+                        } else {
+                            alert("Receipt creation failed");
+                        }
                     }
                 };
                 var requestData = JSON.stringify(formData);
                 xhr.send(requestData);
+            }
+
+            function fetchDataAndPopulateTable() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "fetch_data.php", true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            var data = JSON.parse(xhr.responseText);
+                            var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
+
+                            // Clear existing table rows
+                            table.innerHTML = '';
+
+                            // Populate the table with the retrieved data
+                            data.forEach(function(item) {
+                                var row = table.insertRow();
+                                var cell1 = row.insertCell(0);
+                                var cell2 = row.insertCell(1);
+                                var cell3 = row.insertCell(2);
+                                var cell4 = row.insertCell(3);
+                                var cell5 = row.insertCell(4);
+                                var cell6 = row.insertCell(5);
+
+                                cell1.innerHTML = item.receipt_id;
+                                cell2.innerHTML = item.customer_name;
+                                cell3.innerHTML = item.payment_date; // Corrected property name
+                                cell4.innerHTML = item.subtotal;
+                                cell5.innerHTML = "Paid";
+                                cell6.innerHTML = '<button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>';
+
+                                // Add more cells for additional columns
+                                document.getElementById('receipt_number_1').innerHTML = incrementLastNumber(item.receipt_id);
+                                document.getElementById('receipt_number_2').innerHTML = incrementLastNumber(item.receipt_id);
+                            });
+                        }
+                    }
+                };
+                xhr.send();
+            }
+
+            // Call the function initially to populate the table
+            fetchDataAndPopulateTable();
+
+            // Set an interval to refresh the data periodically (e.g., every 5 seconds)
+            setInterval(fetchDataAndPopulateTable, 2000);
+
+            function incrementLastNumber(inputString) {
+                // Use a regular expression to find the last number in the string
+                var regex = /(\d+)$/;
+                var match = inputString.match(regex);
+
+                if (match) {
+                    // Extract the last number and increment it
+                    var lastNumber = parseInt(match[0]);
+                    var incrementedNumber = lastNumber + 1;
+
+                    // Replace the last number in the string with the incremented value
+                    var result = inputString.replace(regex, incrementedNumber.toString());
+
+                    return result;
+                } else {
+                    // If there's no number at the end, return the original string
+                    return inputString;
+                }
             }
 
             /**
@@ -681,7 +715,6 @@ $receipt_id = $receipt->generateReceiptID();
                 if (document.getElementById('item-table').rows.length > 2) {
                     $('#createNewModal').modal('hide');
                     handleSubmit();
-                    window.location.href = "index.php";
                 } else {
                     alert("Please add at least one item to the table");
                 }

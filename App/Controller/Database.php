@@ -5,7 +5,7 @@ class Database
     private $connection = null;
 
     // Redirect to a URL::Accessed by child classes
-    protected function redirect($url)
+    public function redirect($url)
     {
         header("Location: $url");
     }
@@ -71,8 +71,7 @@ class Database
     protected function getLast($table)
     {
         try {
-            // $sql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
-            $sql = "SELECT COUNT(*) FROM $table";
+            $sql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
 
             $stmt = $this->getConnection()->prepare($sql);
             $stmt->execute();

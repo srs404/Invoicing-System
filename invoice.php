@@ -216,7 +216,7 @@ $receipt_id = $receipt->generateReceiptID();
                         <div id="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control" id="convenience-fee" name="convenience-fee" placeholder="0000"> <label for="convenience-fee" oninput="duePaymentCalculator()">Convenience
+                                    <input style="text-align: right;" type="number" class="form-control" id="convenience-fee" placeholder="0000"> <label for="convenience-fee" oninput="duePaymentCalculator()">Convenience
                                         Fee</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
@@ -227,7 +227,7 @@ $receipt_id = $receipt->generateReceiptID();
                         <div id="row" style="margin-bottom: 10px;">
                             <div class="input-group">
                                 <div class="form-floating">
-                                    <input style="text-align: right;" type="number" class="form-control" id="advance-payment" name="advance-payment" placeholder="0000"> <label for="advance-payment" oninput="duePaymentCalculator()">Advance
+                                    <input style="text-align: right;" type="number" class="form-control" id="advance-payment" placeholder="0000"> <label for="advance-payment" oninput="duePaymentCalculator()">Advance
                                         Payment</label>
                                 </div>
                                 <span class="input-group-text" style="cursor: not-allowed;">BDT</span>
@@ -382,8 +382,8 @@ $receipt_id = $receipt->generateReceiptID();
                     </button>
 
                     <!-- Brand -->
-                    <a class="navbar-brand" href="#">
-                        <img src="Assets/Images/tripuplogo.png" height="35" alt="" loading="lazy" />
+                    <a class="navbar-brand" href="#" style="position: fixed; left: 20px; top: 10px;">
+                        <img src="Assets/Images/tripupmainlogo.png" height="55" alt="" loading="lazy" />
                     </a>
 
                     <!-- Right links -->
@@ -391,15 +391,22 @@ $receipt_id = $receipt->generateReceiptID();
                         <!-- Search form -->
 
                         <li class="nav-item">
-                            <a class="nav-link me-3 me-lg-0" href="#" id="createNewNavBtn" role="button">
+                            <a class="nav-link me-3 me-lg-3" href="#" id="createNewNavBtn" role="button">
                                 <i class="fas fa-folder-plus"></i>
                             </a>
                         </li>
 
                         <!-- Icon -->
                         <li class="nav-item">
-                            <a class="nav-link me-3 me-lg-0" href="<?php echo $_SERVER['PHP_SELF'] ?>?logout=true'">
+                            <a class="nav-link me-3 me-lg-3" href="#">
                                 <i class="fas fa-user-pen"></i>
+                            </a>
+                        </li>
+
+                        <!-- Icon -->
+                        <li class="nav-item">
+                            <a class="nav-link me-3 me-lg-3" href="<?php echo $_SERVER['PHP_SELF'] ?>?logout=true'">
+                                <i class="fas fa-power-off"></i>
                             </a>
                         </li>
                     </ul>
@@ -574,7 +581,7 @@ $receipt_id = $receipt->generateReceiptID();
              */
             function tableBodyToJson(table) {
                 var data = [];
-                var headerText = ['item-name', 'item-description', 'item-price'];
+                var headerText = ['item_name', 'item_description', 'item_price'];
 
                 // Iterate through rows in the table body
                 var rows = table.querySelectorAll("tbody tr");
@@ -629,13 +636,13 @@ $receipt_id = $receipt->generateReceiptID();
                     convenienceFee: parseFloat(document.getElementById('convenience-fee').value) || 0,
                     advancePayment: parseFloat(document.getElementById('advance-payment').value) || 0,
                     duePayment: parseFloat(document.getElementById('due-payment').value) || 0,
+                    receipt_action: "create",
                     tableData: JSON.parse(tableBodyToJson(document.getElementById('item-table'))) // Parse the table JSON
                 };
 
                 // Send data to PHP using AJAX (or any other method)
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "process.php", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         // Handle response from PHP
@@ -651,11 +658,33 @@ $receipt_id = $receipt->generateReceiptID();
                 xhr.send(requestData);
             }
 
+            /**
+             * ~ Description: Keep track of pageNumber when the page is loaded
+             */
             var currentPageNumber = 1; // Variable to store the current page number
+
+            /** 
+             * Title: fetchDataAndPopulateTable
+             * ~ Description: This function will fetch data from fetch_all.php and populate the table
+             * ~ This function is called when the page is loaded
+             * ~ This function is called when the deleteReceipt button is clicked
+             * 
+             * @return void
+             * 
+             * @uses incrementLastNumber
+             * 
+             * @uses DataTables
+             * 
+             * @uses jQuery
+             * 
+             * @uses Bootstrap
+             * 
+             * @uses fetch_all.php
+             */
 
             function fetchDataAndPopulateTable() {
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", "fetch_data.php", true);
+                xhr.open("POST", "process.php", true);
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
@@ -677,7 +706,7 @@ $receipt_id = $receipt->generateReceiptID();
                                     item.payment_date, // Corrected property name
                                     item.subtotal,
                                     "Paid",
-                                    '<button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
+                                    '<button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button id="getReceiptInformation" class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
                                 ]).draw(false);
                                 document.getElementById('receipt_number_1').innerHTML = incrementLastNumber(item.receipt_id);
                                 document.getElementById('receipt_number_2').innerHTML = incrementLastNumber(item.receipt_id);
@@ -688,7 +717,10 @@ $receipt_id = $receipt->generateReceiptID();
                         }
                     }
                 };
-                xhr.send();
+                var requestData = JSON.stringify({
+                    receipt_action: "getAll"
+                });
+                xhr.send(requestData);
             }
 
             // Call the function initially to populate the table
@@ -697,6 +729,15 @@ $receipt_id = $receipt->generateReceiptID();
             // Set an interval to refresh the data periodically (e.g., every 5 seconds)
             setInterval(fetchDataAndPopulateTable, 1000);
 
+            /**
+             * Title: Increment Receipt ID Number
+             * ~ Description: This function will increment the receipt ID Last Number
+             * ~ This function is called when the fetchDataAndPopulateTable is called
+             * 
+             * @param inputString
+             * 
+             * @return string
+             */
             function incrementLastNumber(inputString) {
                 // Use a regular expression to find the last number in the string
                 var regex = /(\d+)$/;
@@ -727,7 +768,7 @@ $receipt_id = $receipt->generateReceiptID();
                 if (confirm("Are you sure you want to delete '" + receipt_id + "' receipt?")) {
                     // Send data to PHP using AJAX (or any other method)
                     var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "delete_data.php", true);
+                    xhr.open("POST", "process.php", true);
                     xhr.setRequestHeader("Content-Type", "application/json");
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -742,7 +783,8 @@ $receipt_id = $receipt->generateReceiptID();
                     };
 
                     var requestData = JSON.stringify({
-                        receiptID: receipt_id
+                        receiptID: receipt_id,
+                        receipt_action: "delete"
                     }); // Wrap the receipt_id in an object
                     xhr.send(requestData);
                 }
@@ -761,10 +803,103 @@ $receipt_id = $receipt->generateReceiptID();
                 if (document.getElementById('item-table').rows.length > 2) {
                     $('#createNewModal').modal('hide');
                     handleSubmit();
+
+                    // Clear All Input Fields
+                    document.getElementById('name').value = "";
+                    document.getElementById('email').value = "";
+                    document.getElementById('phone-number').value = "";
+                    document.getElementById('due-date').value = "";
+                    document.getElementById('subtotal').value = "";
+                    document.getElementById('discount').value = "";
+                    document.getElementById('discountAmount').value = "";
+                    document.getElementById('total-payable').value = "";
+                    document.getElementById('convenience-fee').value = "";
+                    document.getElementById('advance-payment').value = "";
+                    document.getElementById('due-payment').value = "";
+
+                    // Delete all rows from the table
+                    var table = document.getElementById('item-table');
+                    var rowCount = table.rows.length;
+                    for (var i = rowCount - 1; i > 1; i--) {
+                        table.deleteRow(i);
+                    }
+
+                    fetchDataAndPopulateTable();
                 } else {
                     alert("Please add at least one item to the table");
                 }
             });
+
+            /**
+             * Title: Update Receipt Functionality
+             * ~ Description: This will take receipt ID and update the receipt
+             * 
+             * @return void
+             */
+            $(document).on('click', '#getReceiptInformation', function() {
+                var receipt_id = $(this).closest('tr').find('td:eq(0)').text();
+
+                // Send data to PHP using AJAX (or any other method)
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "process.php", true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            // Handle response from PHP
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                alert("Receipt Information Got");
+                                $('#name').val(response.data.customer_name);
+                                $('#email').val(response.data.customer_email);
+                                $('#phone-number').val(response.data.customer_phone);
+                                $('#payment-date').val(response.data.payment_date);
+                                $('#due-date').val(response.data.due_date);
+                                $('#subtotal').val(response.data.subtotal);
+                                $('#discount').val(response.data.discount_percentage);
+                                $('#discountAmount').val(response.data.discount_amount);
+                                $('#total-payable').val(response.data.payable);
+                                $('#convenience-fee').val(response.data.convenience_fee);
+                                $('#advance-payment').val(response.data.advance_payment);
+                                $('#due-payment').val(response.data.due_payment);
+                                $('#receipt_number_1').html(response.data.receipt_id);
+                                $('#receipt_number_2').html(response.data.receipt_id);
+
+                                var itemData = JSON.parse(response.data.item_list); // Assuming item_list is an array of objects
+
+                                // Delete all rows from the table
+                                var table = document.getElementById('item-table');
+                                var rowCount = table.rows.length;
+                                for (var i = rowCount - 1; i > 2; i--) {
+                                    table.deleteRow(i);
+                                }
+
+                                // Populate the table with the retrieved data
+                                for (var i = 0; i < itemData.length; i++) {
+                                    insRow(itemData[i].item_name, itemData[i].item_description, itemData[i].item_price);
+                                }
+
+                                $('#createNewModal').modal('show');
+
+                                // $('#customerInformationModal').modal('show');
+                            } else {
+                                alert("Receipt retrieval failed: " + response.message);
+                            }
+                        } else {
+                            console.error("Request failed with status code: " + xhr.status);
+                            alert("An error occurred while retrieving the receipt information.");
+                        }
+                    }
+                };
+
+                var requestData = JSON.stringify({
+                    receiptID: receipt_id,
+                    receipt_action: "get"
+                });
+                xhr.send(requestData);
+            });
+
+
+
 
             /**
              * Title: setDefaultDate

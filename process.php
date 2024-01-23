@@ -1,42 +1,124 @@
 <?php
-
+// Path: delete_data.php
 require_once "App/Model/Receipt.php";
-session_start();
-if (!isset($_SESSION['agent']['loggedIn'])) {
-    header("Location: index.php");
-}
 
-// Retrieve JSON data from the request body
+// Read JSON data from the request body
 $str_json = file_get_contents('php://input');
+$data = json_decode($str_json, true);
 
-$customer_data = json_decode($str_json, true);
-
-if (isset($customer_data['name'])) {
+if ($data['receipt_action'] === 'create') {
+    session_start();
+    if (!isset($_SESSION['agent']['loggedIn'])) {
+        header("Location: index.php");
+    }
+    /**
+     * TITLE: Create Receipt
+     * ~ Description: Create a new receipt
+     * ~ Retrieve JSON data from the request body
+     */
     $receipt = new Receipt();
 
     // Create a new receipt
     $receipt->create(
-        $customer_data['name'],
-        $customer_data['email'],
-        $customer_data['phone'],
-        date("Y-m-d", strtotime($customer_data['paymentDate'])),
-        date("Y-m-d", strtotime($customer_data['dueDate'])),
-        json_encode($customer_data['tableData']),
-        $customer_data['subtotal'],
-        $customer_data['discount'],
-        $customer_data['discountAmount'],
-        $customer_data['totalPayable'],
-        $customer_data['convenienceFee'],
-        $customer_data['advancePayment'],
-        $customer_data['duePayment'],
+        $data['name'],
+        $data['email'],
+        $data['phone'],
+        date("Y-m-d", strtotime($data['paymentDate'])),
+        date("Y-m-d", strtotime($data['dueDate'])),
+        json_encode($data['tableData']),
+        $data['subtotal'],
+        $data['discount'],
+        $data['discountAmount'],
+        $data['totalPayable'],
+        $data['convenienceFee'],
+        $data['advancePayment'],
+        $data['duePayment'],
         $_SESSION['agent']['id']
     );
 
-    // Respond with success
+    // Send the response
     header('Content-Type: application/json');
     echo json_encode(['status' => 'success']);
+} else if ($data['receipt_action'] == 'delete') {
+    /**
+     * TITLE: Delete Receipt
+     * ~ Description: Delete a receipt
+     * ~ Retrieve JSON data from the request body
+     */
+
+    $receipt = new Receipt();
+    $receipt->delete($data['receiptID']);
+
+    // Send the response
+    header('Content-Type: application/json');
+    echo json_encode(['status' => 'success']);
+} else if ($data['receipt_action'] == 'edit') {
+    // TODO: Edit receipt
+} else if ($data['receipt_action'] == 'get') {
+    // TODO: Get receipt
+    $receipt = new Receipt();
+    $data = $receipt->get($data['receiptID']);
+
+    // Send the response
+    header('Content-Type: application/json');
+    echo json_encode([
+        'status' => 'success',
+        'data' => array(
+            'receipt_id' => $data['receipt_id'],
+            'customer_name' => $data['customer_name'],
+            'customer_email' => $data['customer_email'],
+            'customer_phone' => $data['customer_phone'],
+            'payment_date' => $data['payment_date'],
+            'due_date' => $data['due_date'],
+            'item_list' => json_decode($data['item_list']),
+            'subtotal' => $data['subtotal'],
+            'discount_percentage' => $data['discount_percentage'],
+            'discount_amount' => $data['discount_amount'],
+            'payable' => $data['payable'],
+            'convenience_fee' => $data['convenience_fee'],
+            'advance_payment' => $data['advance_payment'],
+            'due_payment' => $data['due_payment'],
+            'agent_id' => $data['agent_id']
+        )
+    ]);
+} else if ($data['receipt_action'] == 'getAll') {
+    // TODO: Get all receipts
+    $receipt = new Receipt();
+
+    // Create a new database connection
+    $all_receipts = $receipt->getAll();
+
+    // Create an array to store all receipts
+    $allData = array();
+
+    foreach ($all_receipts as $row) {
+        $data = array(
+            'receipt_id' => $row['receipt_id'],
+            'customer_name' => $row['customer_name'],
+            'customer_email' => $row['customer_email'],
+            'customer_phone' => $row['customer_phone'],
+            'payment_date' => $row['payment_date'],
+            'due_date' => $row['due_date'],
+            'item_list' => json_decode($row['item_list']),
+            'subtotal' => $row['subtotal'],
+            'discount_percentage' => $row['discount_percentage'],
+            'discount_amount' => $row['discount_amount'],
+            'payable' => $row['payable'],
+            'convenience_fee' => $row['convenience_fee'],
+            'advance_payment' => $row['advance_payment'],
+            'due_payment' => $row['due_payment'],
+            'agent_id' => $row['agent_id']
+        );
+
+        // Append the data for the current receipt to the array
+        $allData[] = $data;
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($allData);
+    exit; // or die;
 } else {
-    // Respond with an error
+    // Send the response
     header('Content-Type: application/json');
     echo json_encode(['status' => 'error']);
 }

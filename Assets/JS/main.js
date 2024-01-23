@@ -359,6 +359,27 @@ function clearModal(option) {
         $('#item-price-modal').val('');
         editItemDict.flag = false;
         editItemDict.currentRow = null;
+    } else if (option == 'clearAll') {
+        $('#name').val('');
+        $('#email').val('');
+        $('#phone-number').val('');
+        $('#payment-date').val('');
+        $('#due-date').val('');
+        $('#payment-method').val('');
+        $('#payment-status').val('');
+        $('#invoice-number').val('');
+        $('#invoice-date').val('');
+        $('#invoice-due-date').val('');
+        $('#invoice-payment-method').val('');
+        $('#invoice-payment-status').val('');
+        $('#item-nameModal').val('');
+        $('#item-description-modal').val('');
+        $('#item-price-modal').val('');
+        editItemDict.flag = false;
+        editItemDict.currentRow = null;
+        $('#item-table').find("tr:gt(1)").remove();
+        subtotalCalculator();
+
     }
 }
 

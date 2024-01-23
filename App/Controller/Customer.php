@@ -71,8 +71,11 @@ class Customer extends Database
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             return $row;
         } catch (PDOException $e) {
-            // Handle database connection or query errors
-            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+            // Log the error to a file or send it to an error tracking system
+            error_log('Database error: ' . $e->getMessage());
+            // Display a user-friendly error message
+            echo "An error occurred while retrieving data. Please try again later.";
+            return false;
         }
     }
 

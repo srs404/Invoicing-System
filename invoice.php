@@ -254,6 +254,7 @@ $receipt_id = $receipt->generateReceiptID();
                 <button id="previewInvoiceBTN" class="btn btn-info text-white"><span class="fa fa-eye"></span></button>
                 <button id="backModalBtn" class="btn btn-outline-dark" style="position: absolute; left: 10px; bottom: 10px;"><span class="fa fa-arrow-left"></span></button>
                 <button id="submitReceiptBTN" class="btn btn-primary">Create</button>
+                <button id="updateReceiptBTN" style="display: none;" class="btn btn-primary">Update</button>
             </div>
 
         </div>
@@ -479,6 +480,14 @@ $receipt_id = $receipt->generateReceiptID();
 
     <script>
         $(document).ready(function() {
+            // ! =============================== START Variable Space ===============================
+            /** 
+             * Title: All Variables
+             * ~ Description: This section will contain all the variables
+             */
+
+            var currentPageNumber = 1; // Variable to store the current page number
+            // ! =============================== END Variable Space ===============================
 
             /**
              * Title: DataTables [COMPLETED]
@@ -658,11 +667,6 @@ $receipt_id = $receipt->generateReceiptID();
                 xhr.send(requestData);
             }
 
-            /**
-             * ~ Description: Keep track of pageNumber when the page is loaded
-             */
-            var currentPageNumber = 1; // Variable to store the current page number
-
             /** 
              * Title: fetchDataAndPopulateTable
              * ~ Description: This function will fetch data from fetch_all.php and populate the table
@@ -804,26 +808,6 @@ $receipt_id = $receipt->generateReceiptID();
                     $('#createNewModal').modal('hide');
                     handleSubmit();
 
-                    // Clear All Input Fields
-                    document.getElementById('name').value = "";
-                    document.getElementById('email').value = "";
-                    document.getElementById('phone-number').value = "";
-                    document.getElementById('due-date').value = "";
-                    document.getElementById('subtotal').value = "";
-                    document.getElementById('discount').value = "";
-                    document.getElementById('discountAmount').value = "";
-                    document.getElementById('total-payable').value = "";
-                    document.getElementById('convenience-fee').value = "";
-                    document.getElementById('advance-payment').value = "";
-                    document.getElementById('due-payment').value = "";
-
-                    // Delete all rows from the table
-                    var table = document.getElementById('item-table');
-                    var rowCount = table.rows.length;
-                    for (var i = rowCount - 1; i > 1; i--) {
-                        table.deleteRow(i);
-                    }
-
                     fetchDataAndPopulateTable();
                 } else {
                     alert("Please add at least one item to the table");
@@ -849,6 +833,11 @@ $receipt_id = $receipt->generateReceiptID();
                             var response = JSON.parse(xhr.responseText);
                             if (response.status === "success") {
                                 alert("Receipt Information Got");
+
+                                // Set the flag to true
+                                document.getElementById('updateReceiptBTN').style.display = "block";
+                                document.getElementById('submitReceiptBTN').style.display = "none";
+
                                 $('#name').val(response.data.customer_name);
                                 $('#email').val(response.data.customer_email);
                                 $('#phone-number').val(response.data.customer_phone);
@@ -898,7 +887,18 @@ $receipt_id = $receipt->generateReceiptID();
                 xhr.send(requestData);
             });
 
-
+            /**
+             * Title: Update Receipt Button Functionality
+             * ~ Description: This will take receipt ID and update the receipt
+             * 
+             * @return void
+             */
+            $("#updateReceiptBTN").on("click", function() {
+                $('#createNewModal').modal('hide');
+                alert("Update Receipt Button Clicked");
+                document.getElementById('updateReceiptBTN').style.display = "none";
+                document.getElementById('submitReceiptBTN').style.display = "block";
+            });
 
 
             /**

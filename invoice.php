@@ -413,11 +413,11 @@ $receipt_id = $receipt->generateReceiptID();
         <main id="mainBody" style="min-height: calc(100vh - 58px);">
 
 
-            <div class="card">
+            <div class="card" style="max-height:600px !important; overflow: auto;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between" style="padding-left: 12px; padding-bottom: 10px; padding-right: 12px;">
                         <form class="input-group w-25">
-                            <!-- <input id="mySearch" id="myTable_filter" autocomplete="off" type="search" class="form-control rounded border-3" placeholder='Search (ctrl + "/" to focus)' /> -->
+                            <input id="mySearch" id="myTable_filter" autocomplete="off" type="search" class="form-control rounded border-3" placeholder='Search (ctrl + "/" to focus)' />
                         </form>
                         <button class="btn btn-primary" id="newInvoice"><span class="fa fa-plus"></span> New</button>
                     </div>
@@ -498,7 +498,20 @@ $receipt_id = $receipt->generateReceiptID();
                     search: "Find",
                 },
                 info: false,
+                columnDefs: [{
+                    targets: 0, // First column (change this to the correct column index)
+                    type: 'num', // Set the data type to 'num' for numeric sorting
+                    render: function(data, type, full, meta) {
+                        if (type === 'sort') {
+                            // Extract the numeric part after "-"
+                            return parseInt(data.split('-')[1]);
+                        }
+                        return data;
+                    }
+                }]
             });
+
+
 
             /**
              * Title: Hide Default DataTable Search Field [COMPLETED]
@@ -638,6 +651,8 @@ $receipt_id = $receipt->generateReceiptID();
                 xhr.send(requestData);
             }
 
+            var currentPageNumber = 1; // Variable to store the current page number
+
             function fetchDataAndPopulateTable() {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "fetch_data.php", true);
@@ -645,32 +660,31 @@ $receipt_id = $receipt->generateReceiptID();
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
                             var data = JSON.parse(xhr.responseText);
-                            var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
+                            var table = $('#myTable').DataTable();
+
+                            // Store the current page number
+                            var pageInfo = table.page.info();
+                            currentPageNumber = pageInfo.page + 1;
 
                             // Clear existing table rows
-                            table.innerHTML = '';
+                            table.clear().draw();
 
                             // Populate the table with the retrieved data
                             data.forEach(function(item) {
-                                var row = table.insertRow();
-                                var cell1 = row.insertCell(0);
-                                var cell2 = row.insertCell(1);
-                                var cell3 = row.insertCell(2);
-                                var cell4 = row.insertCell(3);
-                                var cell5 = row.insertCell(4);
-                                var cell6 = row.insertCell(5);
-
-                                cell1.innerHTML = item.receipt_id;
-                                cell2.innerHTML = item.customer_name;
-                                cell3.innerHTML = item.payment_date; // Corrected property name
-                                cell4.innerHTML = item.subtotal;
-                                cell5.innerHTML = "Paid";
-                                cell6.innerHTML = '<button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>';
-
-                                // Add more cells for additional columns
+                                table.row.add([
+                                    item.receipt_id,
+                                    item.customer_name,
+                                    item.payment_date, // Corrected property name
+                                    item.subtotal,
+                                    "Paid",
+                                    '<button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
+                                ]).draw(false);
                                 document.getElementById('receipt_number_1').innerHTML = incrementLastNumber(item.receipt_id);
                                 document.getElementById('receipt_number_2').innerHTML = incrementLastNumber(item.receipt_id);
                             });
+
+                            // Restore the current page after redrawing
+                            table.page(currentPageNumber - 1).draw('page');
                         }
                     }
                 };
@@ -681,7 +695,7 @@ $receipt_id = $receipt->generateReceiptID();
             fetchDataAndPopulateTable();
 
             // Set an interval to refresh the data periodically (e.g., every 5 seconds)
-            setInterval(fetchDataAndPopulateTable, 2000);
+            setInterval(fetchDataAndPopulateTable, 1000);
 
             function incrementLastNumber(inputString) {
                 // Use a regular expression to find the last number in the string
@@ -702,6 +716,31 @@ $receipt_id = $receipt->generateReceiptID();
                     return inputString;
                 }
             }
+
+            /**
+             * Title: Receipt Delete
+             * ~ Description: Delete Individual Receipts according to their delete button
+             */
+            $(document).on('click', '#deleteReceipt', function() {
+                var receipt_id = $(this).closest('tr').find('td:eq(0)').text();
+                alert(receipt_id);
+
+                $.ajax({
+                    url: 'delete_data.php',
+                    type: 'POST', // You can also use 'GET' if it's more appropriate for your use case
+                    data: {
+                        receipt_id: receipt_id
+                    },
+                    success: function(response) {
+                        // Handle the response from delete_data.php here
+                        alert(response); // You can replace this with your desired handling code
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.error('Ajax request failed:', errorThrown);
+                        // Handle the error here
+                    }
+                });
+            });
 
             /**
              * Title: Final Receipt Submit Functionality
@@ -749,6 +788,7 @@ $receipt_id = $receipt->generateReceiptID();
 
         });
     </script>
+
 </body>
 
 </html>

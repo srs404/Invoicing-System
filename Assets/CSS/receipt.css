@@ -1,4 +1,23 @@
 @media print {
+    @page {
+        size: 210mm 297mm;
+        margin: 0;
+
+        .mainCircleLogo {
+            position: fixed;
+            bottom: -170px;
+            right: -300px;
+            opacity: 20%;
+        }
+
+
+        .receiptTopPart {
+            width: 100%;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    }
 
     /* Ensures the background color and text color in the table headers are printed */
     .itemReceiptTable thead tr th {
@@ -6,16 +25,24 @@
         background-color: #1965af !important;
         -webkit-print-color-adjust: exact;
     }
+
+
+
 }
 
 .mainCircleLogo {
     position: fixed;
-    bottom: -10%;
-    right: -10%;
-    opacity: 30%;
+    bottom: -170px;
+    right: -300px;
+    opacity: 20%;
+}
+
+.mainCircleLogo img {
+    width: 600px;
 }
 
 body {
+    padding: 10px;
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -23,17 +50,16 @@ body {
 }
 
 .receiptTopPart {
+    padding-top: 20px;
     width: 100%;
     position: absolute;
-    top: 0;
-    left: 0;
-    padding: 10px;
+    top: 20px;
+    left: 20px;
 }
 
 .receiptTopPart .receiptTopLeftPart {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    left: 20px;
     width: 50%;
 }
 
@@ -52,8 +78,8 @@ body {
 
 .receiptTopPart .receiptTopRightPart {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 60px;
     background-color: #fff;
     width: 39%;
 }
@@ -63,9 +89,10 @@ body {
 }
 
 .receiptMiddlePart {
+    background-color: transparent !important;
     width: 100%;
     position: absolute;
-    top: 350px;
+    top: 355px;
     left: 0;
     padding: 0px;
 }
@@ -76,7 +103,12 @@ body {
 }
 
 .itemReceiptTable thead tr th {
+    text-align: center;
     padding: 15px;
+}
+
+.itemReceiptTable tbody tr td {
+    text-align: center;
 }
 
 .itemReceiptTable tbody tr td:nth-child(1) {
@@ -106,9 +138,11 @@ body {
 .subtotalTable {
     min-width: fit-content;
     border-top: 1px solid gray;
+    background-color: transparent;
 }
 
 .subtotalTable tbody tr td {
+    background-color: transparent;
     font-weight: bold;
     border: none;
 }
@@ -126,7 +160,7 @@ body {
     border-top: 1px solid #ccc;
 }
 
-
-.disclaimer ul li {
-    margin: 10px 0;
+.disclaimer {
+    padding-left: 30px;
+    padding-right: 30px;
 }

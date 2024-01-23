@@ -34,6 +34,7 @@ class Customer extends Database
         $columns = implode(', ', array_keys($data));
         $placeholders = ':' . implode(', :', array_keys($data));
         $sql = "INSERT INTO receipts ($columns) VALUES ($placeholders)";
+        $status = false;
 
         try {
             // Prepare and execute the SQL statement
@@ -42,10 +43,12 @@ class Customer extends Database
                 $stmt->bindValue(":$column", $value);
             }
             $stmt->execute();
-            return true;
+            $status = true;
         } catch (PDOException $e) {
             die("Database error: " . $e->getMessage());
-            return false;
+            $status = false;
+        } finally {
+            return $status;
         }
     }
 

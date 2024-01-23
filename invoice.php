@@ -723,24 +723,31 @@ $receipt_id = $receipt->generateReceiptID();
              */
             $(document).on('click', '#deleteReceipt', function() {
                 var receipt_id = $(this).closest('tr').find('td:eq(0)').text();
-                alert(receipt_id);
 
-                $.ajax({
-                    url: 'delete_data.php',
-                    type: 'POST', // You can also use 'GET' if it's more appropriate for your use case
-                    data: {
-                        receipt_id: receipt_id
-                    },
-                    success: function(response) {
-                        // Handle the response from delete_data.php here
-                        alert(response); // You can replace this with your desired handling code
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        console.error('Ajax request failed:', errorThrown);
-                        // Handle the error here
-                    }
-                });
+                if (confirm("Are you sure you want to delete '" + receipt_id + "' receipt?")) {
+                    // Send data to PHP using AJAX (or any other method)
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "delete_data.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            // Handle response from PHP
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                fetchDataAndPopulateTable();
+                            } else {
+                                alert("Receipt deletion failed");
+                            }
+                        }
+                    };
+
+                    var requestData = JSON.stringify({
+                        receiptID: receipt_id
+                    }); // Wrap the receipt_id in an object
+                    xhr.send(requestData);
+                }
             });
+
 
             /**
              * Title: Final Receipt Submit Functionality

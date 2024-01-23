@@ -9,42 +9,7 @@ $receipt = new Receipt();
 
 // Create a new database connection
 $all_receipts = $receipt->getAll();
-// $myfile = fopen("testfile.txt", "w");
-// $myfile2 = fopen("testfile2.txt", "w");
 
-// foreach ($all_receipts as $row) {
-//     fwrite($myfile, $row['receipt_id']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['customer_name']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['customer_email']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['customer_phone']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['payment_date']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['due_date']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['item_list']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['subtotal']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['discount_percentage']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['discount_amount']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['payable']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['convenience_fee']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['advance_payment']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['due_payment']);
-//     fwrite($myfile, "\n");
-//     fwrite($myfile, $row['agent_id']);
-//     fwrite($myfile, "\n");
-// }
-// fclose($myfile);
 
 // Create an array to store all receipts
 $allData = array();

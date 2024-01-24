@@ -6,7 +6,7 @@ class Customer extends Database
 {
     /**
      * TITLE: Constructor
-     * ~ DESCRIPTION: This function will initialize the database connection
+     * ~ DESCRIPTION: This function will initialize the database connections
      * @return void
      */
     function __construct()

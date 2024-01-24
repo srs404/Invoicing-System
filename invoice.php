@@ -673,7 +673,7 @@ $receipt_id = $receipt->generateReceiptID();
 
             /** 
              * Title: fetchDataAndPopulateTable
-             * ~ Description: This function will fetch data from fetch_all.php and populate the table
+             * ~ Description: This function will fetch data and populate the table
              * ~ This function is called when the page is loaded
              * ~ This function is called when the deleteReceipt button is clicked
              * 
@@ -687,7 +687,6 @@ $receipt_id = $receipt->generateReceiptID();
              * 
              * @uses Bootstrap
              * 
-             * @uses fetch_all.php
              */
 
             function fetchDataAndPopulateTable() {

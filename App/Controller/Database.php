@@ -1,6 +1,6 @@
 <?php
 
-require_once "../../Server/Credentials.php";
+require_once "App/Controller/Credentials.php";
 
 class Database extends Credentials
 {
@@ -31,8 +31,8 @@ class Database extends Credentials
     {
         $host = $this->host;
         $database = $this->database;
-        $username = $this->username; 
-        $password = $this->password; 
+        $username = $this->username;
+        $password = $this->password;
 
         try {
             $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);

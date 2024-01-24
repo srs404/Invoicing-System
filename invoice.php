@@ -43,6 +43,7 @@ $receipt_id = $receipt->generateReceiptID();
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <title>TripUp Invoice</title>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
@@ -54,6 +55,7 @@ $receipt_id = $receipt->generateReceiptID();
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="Assets/CSS/receipt.css">
 
+    <input type="hidden" id="agent_id" value="<?php echo $_SESSION['agent']['id']; ?>">
 
     <!-- Modal: 1 -->
     <!-- Title: Customer Information Modal -->
@@ -487,6 +489,7 @@ $receipt_id = $receipt->generateReceiptID();
              */
 
             var currentPageNumber = 1; // Variable to store the current page number
+            var flag_update_page_receipt_id_fixed = false;
             // ! =============================== END Variable Space ===============================
 
             /**
@@ -646,6 +649,7 @@ $receipt_id = $receipt->generateReceiptID();
                     advancePayment: parseFloat(document.getElementById('advance-payment').value) || 0,
                     duePayment: parseFloat(document.getElementById('due-payment').value) || 0,
                     receipt_action: "create",
+                    agent_id: document.getElementById('agent_id').value,
                     tableData: JSON.parse(tableBodyToJson(document.getElementById('item-table'))) // Parse the table JSON
                 };
 
@@ -712,8 +716,10 @@ $receipt_id = $receipt->generateReceiptID();
                                     "Paid",
                                     '<button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button id="getReceiptInformation" class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
                                 ]).draw(false);
-                                document.getElementById('receipt_number_1').innerHTML = incrementLastNumber(item.receipt_id);
-                                document.getElementById('receipt_number_2').innerHTML = incrementLastNumber(item.receipt_id);
+                                if (!flag_update_page_receipt_id_fixed) {
+                                    document.getElementById('receipt_number_1').innerHTML = incrementLastNumber(item.receipt_id);
+                                    document.getElementById('receipt_number_2').innerHTML = incrementLastNumber(item.receipt_id);
+                                }
                             });
 
                             // Restore the current page after redrawing
@@ -823,6 +829,8 @@ $receipt_id = $receipt->generateReceiptID();
             $(document).on('click', '#getReceiptInformation', function() {
                 var receipt_id = $(this).closest('tr').find('td:eq(0)').text();
 
+                flag_update_page_receipt_id_fixed = true;
+
                 // Send data to PHP using AJAX (or any other method)
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "process.php", true);
@@ -832,8 +840,6 @@ $receipt_id = $receipt->generateReceiptID();
                             // Handle response from PHP
                             var response = JSON.parse(xhr.responseText);
                             if (response.status === "success") {
-                                alert("Receipt Information Got");
-
                                 // Set the flag to true
                                 document.getElementById('updateReceiptBTN').style.display = "block";
                                 document.getElementById('submitReceiptBTN').style.display = "none";
@@ -894,10 +900,85 @@ $receipt_id = $receipt->generateReceiptID();
              * @return void
              */
             $("#updateReceiptBTN").on("click", function() {
+
+                var formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone-number').value,
+                    paymentDate: document.getElementById('payment-date').value,
+                    dueDate: document.getElementById('due-date').value,
+                    subtotal: parseFloat(document.getElementById('subtotal').value) || 0,
+                    discount: parseFloat(document.getElementById('discount').value) || 0,
+                    discountAmount: parseFloat(document.getElementById('discountAmount').value) || 0,
+                    totalPayable: parseFloat(document.getElementById('total-payable').value) || 0,
+                    convenienceFee: parseFloat(document.getElementById('convenience-fee').value) || 0,
+                    advancePayment: parseFloat(document.getElementById('advance-payment').value) || 0,
+                    duePayment: parseFloat(document.getElementById('due-payment').value) || 0,
+                    receipt_action: "edit",
+                    receiptID: document.getElementById('receipt_number_1').innerHTML,
+                    agent_id: document.getElementById('agent_id').value,
+                    tableData: JSON.parse(tableBodyToJson(document.getElementById('item-table'))) // Parse the table JSON
+                };
+
+                // Send data to PHP using AJAX (or any other method)
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "process.php", true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            // Handle response from PHP
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                alert("Receipt updated successfully");
+                            } else {
+                                alert("Receipt update failed");
+                            }
+                        }
+                    }
+                };
+                var requestData = JSON.stringify(formData);
+                xhr.send(requestData);
+
+
+
                 $('#createNewModal').modal('hide');
                 alert("Update Receipt Button Clicked");
                 document.getElementById('updateReceiptBTN').style.display = "none";
                 document.getElementById('submitReceiptBTN').style.display = "block";
+                flag_update_page_receipt_id_fixed = false;
+            });
+
+            $('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function() {
+                // Clear All Input Fields
+                flag_update_page_receipt_id_fixed = false;
+
+                // Delete all rows from the table
+                var table = document.getElementById('item-table');
+                var rowCount = table.rows.length;
+                for (var i = rowCount - 1; i > 1; i--) {
+                    table.deleteRow(i);
+                }
+
+                $("#name").val("");
+                $("#email").val("");
+                $("#phone-number").val("");
+                setDefaultDate();
+                $("#due-date").val("");
+                $("#subtotal").val("");
+                $("#discount").val("");
+                $("#discountAmount").val("");
+                $("#total-payable").val("");
+                $("#advance-payment").val("");
+                $("#due-payment").val("");
+                $("#convenience-fee").val("");
+                $("#payment-date-checkbox").checked = false;
+                $("#payment-date").disabled = true;
+                fetchDataAndPopulateTable();
+
+                document.getElementById("updateReceiptBTN").style.display = "none";
+                document.getElementById("submitReceiptBTN").style.display = "block";
+
+                $('#customerInformationModal').modal('show');
             });
 
 

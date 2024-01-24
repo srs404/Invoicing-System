@@ -1,1 +1,15 @@
-{"name":"awd","email":"wda","phone":"123","paymentDate":"2024-01-24","dueDate":"2024-01-27","subtotal":232323,"discount":0,"discountAmount":0,"totalPayable":0,"convenienceFee":0,"advancePayment":0,"duePayment":232323,"receipt_action":"create","tableData":[{"item_name":"Hotel\/Resort","item_description":"abcccccc","item_price":"232323"}]}
+customer_name: Sami Rahman 
+customer_email: sami@rahman.dev 
+customer_phone: 1555555555 
+payment_date: 2024-01-24 
+due_date: 2024-01-26 
+item_list: "[{\"item_name\":\"Flight\",\"item_description\":\"1x Premium Deluxe Bed\",\"item_price\":\"25700\"},{\"item_name\":\"Ship\",\"item_description\":\"1x Ship Ticket\",\"item_price\":\"32000\"}]" 
+subtotal: 57700 
+discount_percentage: 3.47 
+discount_amount: 2000 
+payable: 55700 
+convenience_fee: 200 
+advance_payment: 50000 
+due_payment: 5900 
+agent_id: cs54ad6w5s 
+UPDATE receipts SET customer_name = :customer_name, customer_email = :customer_email, customer_phone = :customer_phone, payment_date = :payment_date, due_date = :due_date, item_list = :item_list, subtotal = :subtotal, discount_percentage = :discount_percentage, discount_amount = :discount_amount, payable = :payable, convenience_fee = :convenience_fee, advance_payment = :advance_payment, due_payment = :due_payment, agent_id = :agent_id WHERE receipt_id = :receipt_id 

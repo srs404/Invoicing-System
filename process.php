@@ -2,15 +2,14 @@
 // Path: delete_data.php
 require_once "App/Model/Receipt.php";
 
-// Read JSON data from the request body
+/**
+ * ~ Description: Read JSON data from the request body
+ * ~ Retrieve JSON data from the request body
+ */
 $str_json = file_get_contents('php://input');
 $data = json_decode($str_json, true);
 
 if ($data['receipt_action'] === 'create') {
-    session_start();
-    if (!isset($_SESSION['agent']['loggedIn'])) {
-        header("Location: index.php");
-    }
     /**
      * TITLE: Create Receipt
      * ~ Description: Create a new receipt
@@ -33,7 +32,7 @@ if ($data['receipt_action'] === 'create') {
         $data['convenienceFee'],
         $data['advancePayment'],
         $data['duePayment'],
-        $_SESSION['agent']['id']
+        $data['agent_id']
     );
 
     // Send the response
@@ -53,9 +52,45 @@ if ($data['receipt_action'] === 'create') {
     header('Content-Type: application/json');
     echo json_encode(['status' => 'success']);
 } else if ($data['receipt_action'] == 'edit') {
-    // TODO: Edit receipt
+    /**
+     * TITLE: Edit Receipt
+     * ~ Description: Edit a receipt
+     * ~ Retrieve JSON data from the request body
+     */
+    $receipt = new Receipt();
+    $receipt->update(
+        $data['receiptID'],
+        $data['name'],
+        $data['email'],
+        $data['phone'],
+        date("Y-m-d", strtotime($data['paymentDate'])),
+        date("Y-m-d", strtotime($data['dueDate'])),
+        json_encode($data['tableData']),
+        $data['subtotal'],
+        $data['discount'],
+        $data['discountAmount'],
+        $data['totalPayable'],
+        $data['convenienceFee'],
+        $data['advancePayment'],
+        $data['duePayment'],
+        $data['agent_id']
+    );
+
+    // Send the response
+    header('Content-Type: application/json');
+    echo json_encode(['status' => 'success']);
 } else if ($data['receipt_action'] == 'get') {
-    // TODO: Get receipt
+    /**
+     * TITLE: Get Receipt
+     * ~ Description: Get a receipt
+     * ~ Retrieve JSON data from the request body
+     * ~ Return the receipt data
+     * 
+     * @param string $receipt_id
+     * 
+     * @return array $receipt
+     */
+
     $receipt = new Receipt();
     $data = $receipt->get($data['receiptID']);
 
@@ -82,7 +117,15 @@ if ($data['receipt_action'] === 'create') {
         )
     ]);
 } else if ($data['receipt_action'] == 'getAll') {
-    // TODO: Get all receipts
+    /**
+     * TITLE: Get All Receipts
+     * ~ Description: Get all receipts
+     * ~ Retrieve JSON data from the request body
+     * ~ Return the receipt data
+     * 
+     * @return array $receipt
+     */
+
     $receipt = new Receipt();
 
     // Create a new database connection
@@ -118,6 +161,11 @@ if ($data['receipt_action'] === 'create') {
     echo json_encode($allData);
     exit; // or die;
 } else {
+    /**
+     * ! Error
+     * ~ Description: Return an error
+     */
+
     // Send the response
     header('Content-Type: application/json');
     echo json_encode(['status' => 'error']);

@@ -146,52 +146,28 @@ class Receipt extends Customer
         $due_payment,
         $agent_id
     ) {
-        $sql = "UPDATE receipts SET
-            customer_name = :customer_name,
-            customer_email = :customer_email,
-            customer_phone = :customer_phone,
-            payment_date = :payment_date,
-            due_date = :due_date,
-            item_list = :item_list,
-            subtotal = :subtotal,
-            discount_percentage = :discount_percentage,
-            discount_amount = :discount_amount,
-            payable = :payable,
-            convenience_fee = :convenience_fee,
-            advance_payment = :advance_payment,
-            due_payment = :due_payment,
-            agent_id = :agent_id
-        WHERE receipt_id = :receipt_id";
+        $data = array(
+            'customer_name' => $customer_name,
+            'customer_email' => $customer_email,
+            'customer_phone' => $customer_phone,
+            'payment_date' => $payment_date,
+            'due_date' => $due_date,
+            'item_list' => json_encode($item_list),
+            'subtotal' => (float)$subtotal,
+            'discount_percentage' => (float)$discount_percentage,
+            'discount_amount' => (float)$discount_amount,
+            'payable' => (float)$payable,
+            'convenience_fee' => (float)$convenience_fee,
+            'advance_payment' => (float)$advance_payment,
+            'due_payment' => (float)$due_payment,
+            'agent_id' => $agent_id,
+        );
 
-        try {
-            $stmt = $this->getConnection()->prepare($sql);
+        $file = fopen("log.txt", "w");
+        fwrite($file, "Receipt ID: " . $receipt_id . " \n");
+        fclose($file);
 
-            // Binding parameters
-            $stmt->bindParam(':receipt_id', $receipt_id);
-            $stmt->bindParam(':customer_name', $customer_name);
-            $stmt->bindParam(':customer_email', $customer_email);
-            $stmt->bindParam(':customer_phone', $customer_phone);
-            $stmt->bindParam(':payment_date', $payment_date);
-            $stmt->bindParam(':due_date', $due_date);
-            $stmt->bindParam(':item_list', $item_list);
-            $stmt->bindParam(':subtotal', $subtotal);
-            $stmt->bindParam(':discount_percentage', $discount_percentage);
-            $stmt->bindParam(':discount_amount', $discount_amount);
-            $stmt->bindParam(':payable', $payable);
-            $stmt->bindParam(':convenience_fee', $convenience_fee);
-            $stmt->bindParam(':advance_payment', $advance_payment);
-            $stmt->bindParam(':due_payment', $due_payment);
-            $stmt->bindParam(':agent_id', $agent_id);
-
-            // Execute the prepared statement
-            $stmt->execute();
-
-            // Return the ID of the inserted row
-            return true;
-        } catch (PDOException $e) {
-            // Handle error
-            die("Error: " . $e->getMessage());
-        }
+        parent::put($receipt_id, $data);
     }
 
     /**

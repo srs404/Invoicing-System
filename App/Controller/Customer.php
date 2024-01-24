@@ -112,24 +112,38 @@ class Customer extends Database
     protected function put($receipt_id, $data)
     {
         try {
+            // Construct the SQL query
             $sql = "UPDATE receipts SET ";
             foreach ($data as $column => $value) {
                 $sql .= "$column = :$column, ";
+                $file = fopen("test.txt", "a");
+                fwrite($file, $column . ": " . $value . " \n");
+                fclose($file);
             }
-            $sql = substr($sql, 0, -2);
+            $sql = rtrim($sql, ', '); // Remove trailing comma and space
             $sql .= " WHERE receipt_id = :receipt_id";
+
+            $file = fopen("test.txt", "a");
+            fwrite($file, $sql . " \n");
+            fclose($file);
+
+            // Prepare and execute the SQL statement
             $stmt = $this->getConnection()->prepare($sql);
             $stmt->bindParam(":receipt_id", $receipt_id, PDO::PARAM_STR);
             foreach ($data as $column => $value) {
                 $stmt->bindParam(":$column", $value, PDO::PARAM_STR);
             }
             $stmt->execute();
+
             return true;
         } catch (PDOException $e) {
             // Handle database connection or query errors
+            // Log the error or return a specific error response
             echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+            return false; // Indicate failure
         }
     }
+
 
     /**
      * Title: DELETE

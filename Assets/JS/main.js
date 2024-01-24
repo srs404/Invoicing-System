@@ -438,35 +438,7 @@ $('#tableModalCloseBtn').on('click', function () {
     - Submit button to add the new invoice
     - Cancel button to close the modal without adding the invoice
 */
-$('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function () {
-    // Clear All Input Fields
-    alert("Clearing All Fields");
 
-    // Delete all rows from the table
-    var table = document.getElementById('item-table');
-    var rowCount = table.rows.length;
-    for (var i = rowCount - 1; i > 1; i--) {
-        table.deleteRow(i);
-    }
-
-    $("#name").val("");
-    $("#email").val("");
-    $("#phone-number").val("");
-    $("#payment-date").val("");
-    $("#due-date").val("");
-    $("#subtotal").val("");
-    $("#discount").val("");
-    $("#discountAmount").val("");
-    $("#total-payable").val("");
-    $("#advance-payment").val("");
-    $("#due-payment").val("");
-    $("#convenience-fee").val("");
-
-    document.getElementById("updateReceiptBTN").style.display = "none";
-    document.getElementById("submitReceiptBTN").style.display = "block";
-
-    $('#customerInformationModal').modal('show');
-});
 
 // Close modal
 $('#modalCloseBtn, #modalDiscardBtn').on('click', function () {

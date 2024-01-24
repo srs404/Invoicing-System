@@ -930,6 +930,11 @@ $receipt_id = $receipt->generateReceiptID();
                             var response = JSON.parse(xhr.responseText);
                             if (response.status === "success") {
                                 alert("Receipt updated successfully");
+                                $('#createNewModal').modal('hide');
+                                alert("Update Receipt Button Clicked");
+                                document.getElementById('updateReceiptBTN').style.display = "none";
+                                document.getElementById('submitReceiptBTN').style.display = "block";
+                                flag_update_page_receipt_id_fixed = false;
                             } else {
                                 alert("Receipt update failed");
                             }
@@ -938,14 +943,6 @@ $receipt_id = $receipt->generateReceiptID();
                 };
                 var requestData = JSON.stringify(formData);
                 xhr.send(requestData);
-
-
-
-                $('#createNewModal').modal('hide');
-                alert("Update Receipt Button Clicked");
-                document.getElementById('updateReceiptBTN').style.display = "none";
-                document.getElementById('submitReceiptBTN').style.display = "block";
-                flag_update_page_receipt_id_fixed = false;
             });
 
             $('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function() {

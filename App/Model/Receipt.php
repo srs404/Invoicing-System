@@ -167,7 +167,7 @@ class Receipt extends Customer
         fwrite($file, "Receipt ID: " . $receipt_id . " \n");
         fclose($file);
 
-        parent::put($receipt_id, $data);
+        parent::put((string)$receipt_id, $data);
     }
 
     /**

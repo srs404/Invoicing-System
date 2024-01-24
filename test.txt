@@ -1,4 +1,4 @@
-customer_name: Sami Rahman 
+customer_name: Sami Rahman S 
 customer_email: sami@rahman.dev 
 customer_phone: 1555555555 
 payment_date: 2024-01-24 
@@ -13,3 +13,4 @@ advance_payment: 50000
 due_payment: 5900 
 agent_id: cs54ad6w5s 
 UPDATE receipts SET customer_name = :customer_name, customer_email = :customer_email, customer_phone = :customer_phone, payment_date = :payment_date, due_date = :due_date, item_list = :item_list, subtotal = :subtotal, discount_percentage = :discount_percentage, discount_amount = :discount_amount, payable = :payable, convenience_fee = :convenience_fee, advance_payment = :advance_payment, due_payment = :due_payment, agent_id = :agent_id WHERE receipt_id = :receipt_id 
+Receipt ID: R230124-1

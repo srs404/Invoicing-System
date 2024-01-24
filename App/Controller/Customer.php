@@ -116,26 +116,36 @@ class Customer extends Database
             $sql = "UPDATE receipts SET ";
             foreach ($data as $column => $value) {
                 $sql .= "$column = :$column, ";
-                $file = fopen("test.txt", "a");
-                fwrite($file, $column . ": " . $value . " \n");
-                fclose($file);
             }
             $sql = rtrim($sql, ', '); // Remove trailing comma and space
             $sql .= " WHERE receipt_id = :receipt_id";
 
-            $file = fopen("test.txt", "a");
-            fwrite($file, $sql . " \n");
-            fclose($file);
-
-            // Prepare and execute the SQL statement
+            // Prepare the SQL statement
             $stmt = $this->getConnection()->prepare($sql);
-            $stmt->bindParam(":receipt_id", $receipt_id, PDO::PARAM_STR);
-            foreach ($data as $column => $value) {
-                $stmt->bindParam(":$column", $value, PDO::PARAM_STR);
-            }
-            $stmt->execute();
 
-            return true;
+            // Bind the receipt_id parameter
+            $stmt->bindParam(":receipt_id", $receipt_id, PDO::PARAM_STR);
+
+            // Bind the parameters based on their actual types
+            foreach ($data as $column => $value) {
+                $paramType = PDO::PARAM_STR;
+                if (is_int($value)) {
+                    $paramType = PDO::PARAM_INT;
+                } elseif (is_float($value)) {
+                    $value = (string)$value;
+                } elseif ($column == 'item_list') {
+                    $value = json_encode($value);
+                }
+                $stmt->bindValue(":$column", $value, $paramType);
+            }
+
+            // Execute the statement and check for errors
+            if (!$stmt->execute()) {
+                print_r($stmt->errorInfo());
+                return false; // Indicate failure
+            }
+
+            return true; // Indicate success
         } catch (PDOException $e) {
             // Handle database connection or query errors
             // Log the error or return a specific error response

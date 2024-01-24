@@ -1,6 +1,8 @@
 <?php
 
-class Database
+require_once "../../Server/Credentials.php";
+
+class Database extends Credentials
 {
     private $connection = null;
 
@@ -27,10 +29,10 @@ class Database
      */
     private function connect()
     {
-        $host = "localhost"; // Change this to your MySQL server host
-        $database = "tripup_invoice"; // Change this to your database name
-        $username = "root"; // Change this to your MySQL username
-        $password = ""; // Change this to your MySQL password
+        $host = $this->host;
+        $database = $this->database;
+        $username = $this->username; 
+        $password = $this->password; 
 
         try {
             $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);

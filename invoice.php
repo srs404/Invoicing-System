@@ -729,7 +729,7 @@ $receipt_id = $receipt->generateReceiptID();
                                     item.payment_date, // Corrected property name
                                     item.subtotal,
                                     "Paid",
-                                    '<button class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button id="getReceiptInformation" class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
+                                    '<button id="primaryPrintPreviewBTN" class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button id="getReceiptInformation" class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
                                 ]).draw(false);
                                 if (!flag_update_page_receipt_id_fixed) {
                                     document.getElementById('receipt_number_1').innerHTML = incrementLastNumber(item.receipt_id);
@@ -833,6 +833,45 @@ $receipt_id = $receipt->generateReceiptID();
                 } else {
                     alert("Please add at least one item to the table");
                 }
+            });
+
+            /**
+             * TITLE: Primary Preview Button
+             * ~ Description: This will get data using receipt ID and trigger the print function
+             * 
+             * @return void
+             */
+            $(document).on('click', '#primaryPrintPreviewBTN', function() {
+                var receipt_id = $(this).closest('tr').find('td:eq(0)').text();
+
+                // Send data to PHP using AJAX (or any other method)
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "process.php", true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            // Handle response from PHP
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                // Send Data To Preview Print
+                                dynamicIframeUpdateOption(response.data);
+                                wspFrameGlobal.focus();
+                                wspFrameGlobal.print();
+                            } else {
+                                alert("Receipt retrieval failed: " + response.message);
+                            }
+                        } else {
+                            console.error("Request failed with status code: " + xhr.status);
+                            alert("An error occurred while retrieving the receipt information.");
+                        }
+                    }
+                };
+
+                var requestData = JSON.stringify({
+                    receiptID: receipt_id,
+                    receipt_action: "get"
+                });
+                xhr.send(requestData);
             });
 
             /**

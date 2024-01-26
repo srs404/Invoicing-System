@@ -129,7 +129,7 @@ class Receipt extends Customer
      * 
      * @return void
      */
-    private function updateReceipt(
+    public function update(
         $receipt_id,
         $customer_name,
         $customer_email,
@@ -152,7 +152,7 @@ class Receipt extends Customer
             'customer_phone' => $customer_phone,
             'payment_date' => $payment_date,
             'due_date' => $due_date,
-            'item_list' => json_encode($item_list),
+            'item_list' => $item_list,
             'subtotal' => (float)$subtotal,
             'discount_percentage' => (float)$discount_percentage,
             'discount_amount' => (float)$discount_amount,
@@ -168,64 +168,6 @@ class Receipt extends Customer
         fclose($file);
 
         parent::put((string)$receipt_id, $data);
-    }
-
-    /**
-     * Title: Update [PLACEHOLDER FUNCTION]
-     * ~ PUBLIC FUNCTION
-     * 
-     * @param string $receipt_id
-     * @param string $customer_name
-     * @param string $customer_email
-     * @param int $customer_phone
-     * @param date $payment_date
-     * @param date $due_date
-     * @param JSON $item_list
-     * @param float $subtotal
-     * @param float $discount_percentage
-     * @param float $discount_amount
-     * @param float $payable
-     * @param float $convenience_fee
-     * @param float $advance_payment
-     * @param float $due_payment
-     * @param string $agent_id
-     * 
-     * @return void
-     */
-    public function update(
-        $receipt_id,
-        $customer_name,
-        $customer_email,
-        $customer_phone,
-        $payment_date,
-        $due_date,
-        $item_list,
-        $subtotal,
-        $discount_percentage,
-        $discount_amount,
-        $payable,
-        $convenience_fee,
-        $advance_payment,
-        $due_payment,
-        $agent_id
-    ) {
-        $this->updateReceipt(
-            $receipt_id,
-            $customer_name,
-            $customer_email,
-            $customer_phone,
-            $payment_date,
-            $due_date,
-            $item_list,
-            $subtotal,
-            $discount_percentage,
-            $discount_amount,
-            $payable,
-            $convenience_fee,
-            $advance_payment,
-            $due_payment,
-            $agent_id
-        );
     }
 
     /**

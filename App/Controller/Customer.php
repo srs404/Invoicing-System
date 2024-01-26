@@ -134,7 +134,7 @@ class Customer extends Database
                 } elseif (is_float($value)) {
                     $value = (string)$value;
                 } elseif ($column == 'item_list') {
-                    $value = json_encode($value);
+                    $value = $value;
                 }
                 $stmt->bindValue(":$column", $value, $paramType);
             }

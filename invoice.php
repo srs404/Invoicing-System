@@ -863,18 +863,16 @@ $receipt_id = $receipt->generateReceiptID();
                                 // Delete all rows from the table
                                 var table = document.getElementById('item-table');
                                 var rowCount = table.rows.length;
-                                for (var i = rowCount - 1; i > 2; i--) {
+                                for (var i = rowCount - 1; i > 1; i--) {
                                     table.deleteRow(i);
                                 }
 
-                                // Populate the table with the retrieved data
-                                for (var i = 0; i < itemData.length; i++) {
-                                    insRow(itemData[i].item_name, itemData[i].item_description, itemData[i].item_price);
-                                }
+                                // Populate the table
+                                itemData.forEach(function(item) {
+                                    insRow(item.item_name, item.item_description, item.item_price);
+                                });
 
-                                $('#createNewModal').modal('show');
-
-                                // $('#customerInformationModal').modal('show');
+                                $('#customerInformationModal').modal('show');
                             } else {
                                 alert("Receipt retrieval failed: " + response.message);
                             }
@@ -919,6 +917,8 @@ $receipt_id = $receipt->generateReceiptID();
                     tableData: JSON.parse(tableBodyToJson(document.getElementById('item-table'))) // Parse the table JSON
                 };
 
+                alert(JSON.stringify(formData));
+
                 // Send data to PHP using AJAX (or any other method)
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "process.php", true);
@@ -930,7 +930,6 @@ $receipt_id = $receipt->generateReceiptID();
                             if (response.status === "success") {
                                 alert("Receipt updated successfully");
                                 $('#createNewModal').modal('hide');
-                                alert("Update Receipt Button Clicked");
                                 document.getElementById('updateReceiptBTN').style.display = "none";
                                 document.getElementById('submitReceiptBTN').style.display = "block";
                                 flag_update_page_receipt_id_fixed = false;

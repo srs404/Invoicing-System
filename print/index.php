@@ -12,7 +12,176 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="../Assets/CSS/receipt.css">
+    <!-- <link rel="stylesheet" href="../Assets/CSS/receipt.css"> -->
+
+    <style>
+        @media print {
+            @page {
+                size: 210mm 297mm;
+                margin: 0;
+
+                .mainCircleLogo {
+                    position: fixed;
+                    bottom: -170px;
+                    right: -300px;
+                    opacity: 20%;
+                }
+
+
+                .receiptTopPart {
+                    width: 100%;
+                    position: absolute;
+                    top: 20px;
+                    left: 20px;
+                }
+            }
+
+            /* Ensures the background color and text color in the table headers are printed */
+            .itemReceiptTable thead tr th {
+                color: white !important;
+                background-color: #1965af !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+
+
+        }
+
+        .mainCircleLogo {
+            position: fixed;
+            bottom: -170px;
+            right: -300px;
+            opacity: 20%;
+        }
+
+        .mainCircleLogo img {
+            width: 600px;
+        }
+
+        body {
+            padding: 10px;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .receiptTopPart {
+            padding-top: 20px;
+            width: 100%;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .receiptTopPart .receiptTopLeftPart {
+            position: absolute;
+            left: 20px;
+            width: 50%;
+        }
+
+        .customerDetailsTable {
+            width: 250px;
+        }
+
+        .customerDetailsTable tbody tr td:nth-child(2) {
+            text-align: right;
+        }
+
+        .itemReceiptTable thead tr th {
+            color: white;
+            background-color: #000;
+        }
+
+        .receiptTopPart .receiptTopRightPart {
+            position: absolute;
+            top: 20px;
+            right: 60px;
+            background-color: #fff;
+            width: 39%;
+        }
+
+        .receiptTopPart .receiptTopRightPart {
+            text-align: right;
+        }
+
+        .receiptMiddlePart {
+            background-color: transparent !important;
+            width: 100%;
+            position: absolute;
+            top: 355px;
+            left: 0;
+            padding: 0px;
+        }
+
+        .itemReceiptTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .itemReceiptTable thead tr th {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .itemReceiptTable tbody tr td {
+            text-align: center;
+        }
+
+        .itemReceiptTable tbody tr td:nth-child(1) {
+            width: 10%;
+            max-width: 10%;
+        }
+
+        .itemReceiptTable tbody tr td:nth-child(2) {
+            width: 30%;
+            max-width: 30%;
+        }
+
+        .itemReceiptTable tbody tr td:nth-child(3) {
+            width: 40%;
+            max-width: 40%;
+        }
+
+        .itemReceiptTable tbody tr td:nth-child(4) {
+            width: 20%;
+            max-width: 20%;
+        }
+
+        .noborder {
+            border: none;
+        }
+
+        .subtotalTable {
+            min-width: fit-content;
+            border-top: 1px solid gray;
+            background-color: transparent;
+        }
+
+        .subtotalTable tbody tr td {
+            background-color: transparent;
+            font-weight: bold;
+            border: none;
+        }
+
+        .subtotalTable tbody tr td:nth-child(1) {
+            text-align: right;
+        }
+
+        #footerMenu {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            z-index: 999;
+            border-top: 1px solid #ccc;
+        }
+
+        .disclaimer {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,9 +205,7 @@
             <table class="table customerDetailsTable" style="width: 250px;">
                 <tr class="border-0">
                     <td class="noborder" style="font-weight: bold;">Name:</td>
-                    <td class="noborder" id="dynamicCustomerName" style="font-weight: normal;">
-                        Anisul Hoque
-                    </td>
+                    <td class="noborder" id="dynamicCustomerName" style="font-weight: normal;">Anisul</td>
                 </tr>
                 <tr class="border-0">
                     <td class="noborder" style="font-weight: bold;">Contact:
@@ -58,7 +225,7 @@
         <div class="receiptTopRightPart">
             <div style="text-align: right; margin-top: 30px;">
                 <h3 style="font-size: 34px; font-weight: bold;">RECEIPT</h3>
-                <h3 style="font-weight: 500;" id="DynamicInvoiceNumber">070124-001
+                <h3 style="font-weight: 500;" id="DynamicReceiptNumber">070124-001
                 </h3>
             </div>
             <div style="margin-top: 20px;" class="table-responsive-sm">

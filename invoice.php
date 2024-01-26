@@ -488,6 +488,7 @@ $receipt_id = $receipt->generateReceiptID();
              */
 
             var currentPageNumber = 1; // Variable to store the current page number
+            var iframe_preview_first_time = true; // Variable to store the iframe
             var flag_update_page_receipt_id_fixed = false;
             // ! =============================== END Variable Space ===============================
 
@@ -572,55 +573,26 @@ $receipt_id = $receipt->generateReceiptID();
              */
             // Print PDF Preview
             $('#previewInvoiceBTN').click(function() {
-                dynamicIframe();
-            });
-
-            function printReceipt() {
-                var container = document.getElementById('previewModal');
-                var receipt_id = document.getElementById('receipt_number_2').innerHTML;
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "print/index.php", true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            // Handle response from PHP
-                            var response = JSON.parse(xhr.responseText);
-                            if (response.status === "success") {
-                                container.innerHTML = '<iframe id="frame" style="visibility: hidden; width: 0px; border: 0; height: 0px;" src="print/"></iframe>';
-                                var wspFrame = document.getElementById('frame').contentWindow;
-                                wspFrame.focus();
-                                wspFrame.print();
-
-                                // var itemData = JSON.parse(response.data.item_list); // Assuming item_list is an array of objects
-                            } else {
-                                alert("Receipt retrieval failed: " + response.message);
-                            }
-                        } else {
-                            console.error("Request failed with status code: " + xhr.status);
-                            alert("An error occurred while retrieving the receipt information.");
-                        }
-                    }
-                };
-
-                var requestData = JSON.stringify({
-                    receiptID: receipt_id,
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone-number').value,
-                    paymentDate: document.getElementById('payment-date').value,
-                    dueDate: document.getElementById('due-date').value,
+                var data = {
+                    customer_name: document.getElementById('name').value,
+                    customer_email: document.getElementById('email').value,
+                    customer_phone: document.getElementById('phone-number').value,
+                    payment_date: document.getElementById('payment-date').value,
+                    due_date: document.getElementById('due-date').value,
                     subtotal: parseFloat(document.getElementById('subtotal').value) || 0,
-                    discount: parseFloat(document.getElementById('discount').value) || 0,
-                    discountAmount: parseFloat(document.getElementById('discountAmount').value) || 0,
-                    totalPayable: parseFloat(document.getElementById('total-payable').value) || 0,
-                    convenienceFee: parseFloat(document.getElementById('convenience-fee').value) || 0,
-                    advancePayment: parseFloat(document.getElementById('advance-payment').value) || 0,
-                    duePayment: parseFloat(document.getElementById('due-payment').value) || 0,
-                    tableData: JSON.parse(tableBodyToJson(document.getElementById('item-table'))) // Parse the table JSON
-                });
-                xhr.send(requestData);
-            }
+                    discount_percentage: parseFloat(document.getElementById('discount').value) || 0,
+                    discount_amount: parseFloat(document.getElementById('discountAmount').value) || 0,
+                    payable: parseFloat(document.getElementById('total-payable').value) || 0,
+                    convenience_fee: parseFloat(document.getElementById('convenience-fee').value) || 0,
+                    advance_payment: parseFloat(document.getElementById('advance-payment').value) || 0,
+                    due_payment: parseFloat(document.getElementById('due-payment').value) || 0,
+                    item_list: tableBodyToJson(document.getElementById('item-table')), // Parse the table JSON
+                    receipt_id: document.getElementById('receipt_number_1').innerHTML
+                };
+                dynamicIframeUpdateOption(data);
+                wspFrameGlobal.focus();
+                wspFrameGlobal.print();
+            });
 
             /**
              * Title: tableBodyToJson
@@ -916,6 +888,9 @@ $receipt_id = $receipt->generateReceiptID();
                                     insRow(item.item_name, item.item_description, item.item_price);
                                 });
 
+                                // Send Data To Preview Print
+                                dynamicIframeUpdateOption(response.data);
+
                                 $('#customerInformationModal').modal('show');
                             } else {
                                 alert("Receipt retrieval failed: " + response.message);
@@ -958,10 +933,8 @@ $receipt_id = $receipt->generateReceiptID();
                     receipt_action: "edit",
                     receiptID: document.getElementById('receipt_number_1').innerHTML,
                     agent_id: document.getElementById('agent_id').value,
-                    tableData: JSON.parse(tableBodyToJson(document.getElementById('item-table'))) // Parse the table JSON
+                    tableData: tableBodyToJson(document.getElementById('item-table')) // Parse the table JSON
                 };
-
-                alert(JSON.stringify(formData));
 
                 // Send data to PHP using AJAX (or any other method)
                 var xhr = new XMLHttpRequest();
@@ -1048,10 +1021,29 @@ $receipt_id = $receipt->generateReceiptID();
                 }
             });
 
-            function dynamicIframe() {
+            dynamicIframeUpdateOption(data = {
+                "receipt_id": "TRIPUP-0001",
+                "customer_name": "SRS",
+                "customer_email": "demo",
+                "customer_phone": "demo",
+                "payment_date": "demo",
+                "due_date": "demo",
+                "subtotal": "demo",
+                "discount_percentage": "demo",
+                "discount_amount": "demo",
+                "payable": "demo",
+                "convenience_fee": "demo",
+                "advance_payment": "demo",
+                "due_payment": "demo",
+                "item_list": "[{\"item_name\":\"Hotel/Resort\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Ship\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Flight\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Package\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Bus\",\"item_description\":\"demo\",\"item_price\":\"demo\"}]"
+
+            });
+            var wspFrameGlobal;
+
+            function dynamicIframeUpdateOption(data, preview = false) {
                 var container = document.getElementById('iframeModal');
                 var iframe = document.createElement('iframe');
-                var html = dynamicIframeHTML();
+                var html = dynamicIframeHTML(data);
 
                 // Set iframe attributes
                 iframe.id = 'frame';
@@ -1072,16 +1064,41 @@ $receipt_id = $receipt->generateReceiptID();
                 wspFrame.document.write(html);
                 wspFrame.document.close();
 
-                // Focus and print the iframe content
-                wspFrame.focus();
-                wspFrame.print();
+                wspFrameGlobal = wspFrame;
             }
 
-            function dynamicIframeHTML() {
-                var htmlcode = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Print</title><link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" /><link rel="stylesheet" href="Assets/CSS/receipt.css"></head><body><div class="mainCircleLogo"><img src="Assets/Images/tripupappicon.png" loading="lazy" width="400px"></div><div class="receiptTopPart"><div class="receiptTopLeftPart"><img src="tripupmainlogo.png" loading="lazy" width="200px" alt="TripUp Logo"><p style="font-weight: bold; margin-top: 10px; color: #1965af;">Address: <span id="dynamicAddress" style="font-weight: normal; color: black;">143, Road 01, Avenue 01, Mirpur DOHS.</span><br>Contact: <span id="dynamicContact" style="color: black; font-weight: normal;">+880 1234 567 890</span></p><p style="margin-top: 20px; text-align: left;"><h3 style="font-weight: bold;">Customer Details</h3><table class="table customerDetailsTable" style="width: 250px;"><tr class="border-0"><td class="noborder" style="font-weight: bold;">Name:</td><td class="noborder" id="dynamicCustomerName" style="font-weight: normal;">Anisul</td></tr><tr class="border-0"><td class="noborder" style="font-weight: bold;">Contact:</td><td class="noborder" id="dynamicCustomerContact" style="font-weight: normal;">+880 1234 567 890</td></tr><tr class="border-0"><td class="noborder" style="font-weight: bold;">Email:</td><td class="noborder" id="dynamicCustomerEmail" style="font-weight: normal;">demo@email.com</td></tr></table></p></div><div class="receiptTopRightPart"><div style="text-align: right; margin-top: 30px;"><h3 style="font-size: 34px; font-weight: bold;">RECEIPT</h3><h3 style="font-weight: 500;" id="DynamicReceiptNumber">070124-001</h3></div><div style="margin-top: 20px;" class="table-responsive-sm"><table class="table"><tr><td style="font-weight: bold; border: none; text-align: right;">Payment Date:</td><td class="border-0" id="dynamicPaymentDate">07 January 2021</td></tr><tr><td style="font-weight: bold; border: none; text-align: right;">Payment Status:</td><td class="border-0" id="dynamicPaymentMethod">Partially Paid (Bkash)</td></tr><tr><td style="font-weight: bold; border: none; text-align: right;">Due Date:</td><td class="border-0" id="dynamicDueDate">15 February 2024</td></tr></table></div></div></div><div class="receiptMiddlePart"><table class="table itemReceiptTable"><thead class=""><tr><th style="max-width: 10%;">#</th><th style="max-width: 30%;">Item Name</th><th style="max-width: 40%;">Item Description</th><th style="max-width: 20%;">Amount</th></tr></thead><tbody><tr><td class="border-0" id="dynamicItemDescription">1</td><td class="border-0" id="dynamicItemQuantity">Hotel/Resort</td><td class="border-0" id="dynamicItemUnitPrice">Demo Description</td><td class="border-0" id="dynamicItemSubtotal"><span class="dynamicItemSubtotalAmount">5000</span> BDT</td></tr><tr><td class="border-0" id="dynamicItemDescription">2</td><td class="border-0" id="dynamicItemQuantity">Ship</td><td class="border-0" id="dynamicItemUnitPrice">Dwipantor Beach Resort Premium Couple Cottage (Sea View) BDT 6450 per night</td><td class="border-0" id="dynamicItemSubtotal"><span class="dynamicItemSubtotalAmount">5000</span> BDT</td></tr><tr><td class="border-0" id="dynamicItemDescription">2</td><td class="border-0" id="dynamicItemQuantity">Ship</td><td class="border-0" id="dynamicItemUnitPrice">Dwipantor Beach Resort Premium Couple Cottage (Sea View) BDT 6450 per night</td><td class="border-0" id="dynamicItemSubtotal"><span class="dynamicItemSubtotalAmount">5000</span> BDT</td></tr><tr><td class="border-0" id="dynamicItemDescription">2</td><td class="border-0" id="dynamicItemQuantity">Ship</td><td class="border-0" id="dynamicItemUnitPrice">Dwipantor Beach Resort Premium Couple Cottage (Sea View) BDT 6450 per night</td><td class="border-0" id="dynamicItemSubtotal"><span class="dynamicItemSubtotalAmount">5000</span> BDT</td></tr></tbody></table><div class="col-12 d-flex justify-content-end" style="background-color: transparent !important;"><div class="card border-0" style="background-color: transparent !important;"><div class="card-body" style="background-color: transparent !important;"><table class="table subtotalTable" style="background-color: transparent !important;"><tbody><tr><td>Subtotal</td><td><span class="dynamicSubtotalAmount" style="font-weight: normal;">: 5,000</span> BDT</td></tr><tr><td>Advance Paid</td><td><span class="dynamicAdvanceAmount" style="font-weight: normal;">: 3,300</span> BDT</td></tr><tr><td>Due</td><td><span class="dynamicDueAmount" style="font-weight: normal;">: 1,700</span> BDT</td></tr></tbody></table></div></div></div><div class="disclaimer"><p style="font-weight: bold;">Terms & Policy:</p><ul><li>The due amount must be paid at the time of check-in.</li><li>Booking money is not refundable.</li><li>In the event of political turmoil or natural disaster, we will reconsider the policy and shift (booking date) based on the circumstances.</li><li>If guests want to change their reservation date, may be moved to the next available date. However, you must let us know a week before your scheduled booking. If you choose to shift, 30% of your reservation fee will be deducted automatically.</li></ul></div></div></body></html>';
+            function formatDate(inputDate) {
+                const options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                const date = new Date(inputDate);
+                return date.toLocaleDateString('en-GB', options);
+            }
+
+            function formatCurrency(inputString) {
+                // Parse the input string as a number
+                const number = parseFloat(inputString);
+
+                // Check if the parsed number is a valid number
+                if (isNaN(number)) {
+                    return "Invalid Number";
+                }
+
+                // Use the toLocaleString() method to format as currency
+                return number.toLocaleString('en-US');
+            }
+
+            function dynamicIframeHTML(data) {
+                var tableHTMLcode = "";
+                tableRowItems = JSON.parse(data.item_list);
+                tableRowItems.forEach(function(item) {
+                    tableHTMLcode += '<tr><td class="border-0" id="dynamicItemQuantity">' + item.item_name + '</td><td class="border-0" id="dynamicItemUnitPrice">' + item.item_description + '</td><td class="border-0" id="dynamicItemSubtotal"><span class="dynamicItemSubtotalAmount">' + item.item_price + '</span> BDT</td></tr>';
+                });
+                var htmlcode = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Print</title><link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" /><link rel="stylesheet" href="Assets/CSS/receipt.css"></head><body><div class="mainCircleLogo"><img src="Assets/Images/tripupappicon.png" width="400px"></div><div class="receiptTopPart"><div class="receiptTopLeftPart"><img src="Assets/Images/tripupmainlogo.png" loading="lazy" width="200px" alt="TripUp Logo"><p style="font-weight: bold; margin-top: 10px; color: #1965af;">Address: <span id="dynamicAddress" style="font-weight: normal; color: black;">143, Road 01, Avenue 01, Mirpur DOHS.</span><br>Contact: <span id="dynamicContact" style="color: black; font-weight: normal;">+880 1234 567 890</span></p><p style="margin-top: 20px; text-align: left;"><h3 style="font-weight: bold;">Customer Details</h3><table class="table customerDetailsTable" style="width: 250px;"><tr class="border-0"><td class="noborder" style="font-weight: bold;">Name:</td><td class="noborder" id="dynamicCustomerName" style="font-weight: normal;">' + data.customer_name + '</td></tr><tr class="border-0"><td class="noborder" style="font-weight: bold;">Contact:</td><td class="noborder" id="dynamicCustomerContact" style="font-weight: normal;">+880 ' + data.customer_phone + '</td></tr><tr class="border-0"><td class="noborder" style="font-weight: bold;">Email:</td><td class="noborder" id="dynamicCustomerEmail" style="font-weight: normal;">' + data.customer_email + '</td></tr></table></p></div><div class="receiptTopRightPart"><div style="text-align: right; margin-top: 30px;"><h3 style="font-size: 34px; font-weight: bold;">RECEIPT</h3><h3 style="font-weight: 500;" id="DynamicReceiptNumber">' + data.receipt_id + '</h3></div><div style="margin-top: 20px;" class="table-responsive-sm"><table class="table"><tr><td style="font-weight: bold; border: none; text-align: right;">Payment Date:</td><td class="border-0" id="dynamicPaymentDate">' + formatDate(data.payment_date) + '</td></tr><tr><td style="font-weight: bold; border: none; text-align: right;">Payment Status:</td><td class="border-0" id="dynamicPaymentMethod">Partially Paid (Bkash)</td></tr><tr><td style="font-weight: bold; border: none; text-align: right;">Due Date:</td><td class="border-0" id="dynamicDueDate">' + formatDate(data.due_date) + '</td></tr></table></div></div></div><div class="receiptMiddlePart"><table class="table itemReceiptTable"><thead class=""><tr><th style="width: 25%;">Item Name</th><th style="width: 50%;">Item Description</th><th style="width: 25%;">Amount</th></tr></thead><tbody>' + tableHTMLcode + '</tbody></table><div class="col-12 d-flex justify-content-end" style="background-color: transparent !important;"><div class="card border-0" style="background-color: transparent !important;"><div class="card-body" style="background-color: transparent !important;"><table class="table subtotalTable" style="background-color: transparent !important;"><tbody><tr><td>Subtotal</td><td><span class="dynamicSubtotalAmount" style="font-weight: normal;">: ' + formatCurrency(data.subtotal) + '</span> BDT</td></tr><tr><td>Advance Paid</td><td><span class="dynamicAdvanceAmount" style="font-weight: normal;">: ' + formatCurrency(data.advance_payment) + '</span> BDT</td></tr><tr><td>Due</td><td><span class="dynamicDueAmount" style="font-weight: normal;">: ' + formatCurrency(data.due_payment) + '</span> BDT</td></tr></tbody></table></div></div></div><div class="disclaimer"><p style="font-weight: bold;">Terms & Policy:</p><ul><li>The due amount must be paid at the time of check-in.</li><li>Booking money is not refundable.</li><li>In the event of political turmoil or natural disaster, we will reconsider the policy and shift (booking date) based on the circumstances.</li><li>If guests want to change their reservation date, may be moved to the next available date. However, you must let us know a week before your scheduled booking. If you choose to shift, 30% of your reservation fee will be deducted automatically.</li></ul></div></div></body></html>';
                 return htmlcode;
             }
-
 
         });
     </script>

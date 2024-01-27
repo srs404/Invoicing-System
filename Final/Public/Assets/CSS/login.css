@@ -1,0 +1,130 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+
+}
+
+body {
+    background-color: #e2ebf0;
+}
+
+.companyLogo {
+    position: absolute;
+    right: 1rem;
+    bottom: 2rem;
+    opacity: 0.3;
+}
+
+.loginCard {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    background-color: transparent;
+    padding: 50px 30px;
+    border-radius: 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    backdrop-filter: blur(40px);
+    width: 400px;
+}
+
+label {
+    font-weight: 600;
+}
+
+.input-wrapper {
+    display: flex;
+    background-color: #ffffff;
+
+    margin: 10px 0;
+    /* border-radius: 5px; */
+}
+
+.prefix {
+    position: relative;
+    color: #7b7b93;
+}
+
+.prefix {
+    padding: 15px 0 15px 15px;
+}
+
+input {
+    background-color: transparent;
+    position: relative;
+    width: 200px;
+    padding: 15px;
+    color: #2c2c51;
+}
+
+.input-wrapper:focus-within {
+    font-weight: bold;
+}
+
+/* Login Button CSS */
+
+/* CSS */
+.customBTN {
+    appearance: none;
+    background-color: #FFFFFF;
+    border-width: 0;
+    box-sizing: border-box;
+    color: #000000;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Clarkson, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1em;
+    margin: 0;
+    opacity: 1;
+    outline: 0;
+    padding: 1.5em 2.2em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-rendering: geometricprecision;
+    text-transform: uppercase;
+    transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1), background-color 100ms cubic-bezier(.694, 0, 0.335, 1), color 100ms cubic-bezier(.694, 0, 0.335, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+
+.customBTN:before {
+    animation: opacityFallbackOut .5s step-end forwards;
+    backface-visibility: hidden;
+    background-color: #EBEBEB;
+    clip-path: polygon(-1% 0, 0 0, -25% 100%, -1% 100%);
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform: translateZ(0);
+    transition: clip-path .5s cubic-bezier(.165, 0.84, 0.44, 1), -webkit-clip-path .5s cubic-bezier(.165, 0.84, 0.44, 1);
+    width: 100%;
+}
+
+.customBTN:hover:before {
+    animation: opacityFallbackIn 0s step-start forwards;
+    clip-path: polygon(0 0, 101% 0, 101% 101%, 0 101%);
+    border-radius: 10px;
+}
+
+.customBTN:after {
+    background-color: #FFFFFF;
+}
+
+.customBTN span {
+    z-index: 1;
+    position: relative;
+}

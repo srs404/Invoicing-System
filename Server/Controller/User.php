@@ -49,8 +49,6 @@ class User extends Database
         }
     }
 
-
-
     /**
      * Title: GET
      * ~ DESCRIPTION: This function will get user data

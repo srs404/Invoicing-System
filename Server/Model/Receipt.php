@@ -46,6 +46,11 @@ class Receipt extends Customer
         $due_payment,
         $agent_id
     ) {
+        if ($advance_payment == 0) {
+            $payment_status = "Paid";
+        } else {
+            $payment_status = "Partially Paid";
+        }
         $data = array(
             'receipt_id' => $this->generateReceiptID(),
             'customer_name' => $customer_name,
@@ -53,6 +58,7 @@ class Receipt extends Customer
             'customer_phone' => $customer_phone,
             'payment_date' => $payment_date,
             'due_date' => $due_date,
+            'payment_status' => $payment_status,
             'item_list' => json_encode($item_list),
             'subtotal' => (float)$subtotal,
             'discount_percentage' => (float)$discount_percentage,
@@ -146,12 +152,18 @@ class Receipt extends Customer
         $due_payment,
         $agent_id
     ) {
+        if ($advance_payment == 0) {
+            $payment_status = "paid";
+        } else {
+            $payment_status = "Partially Paid";
+        }
         $data = array(
             'customer_name' => $customer_name,
             'customer_email' => $customer_email,
             'customer_phone' => $customer_phone,
             'payment_date' => $payment_date,
             'due_date' => $due_date,
+            'payment_status' => $payment_status,
             'item_list' => $item_list,
             'subtotal' => (float)$subtotal,
             'discount_percentage' => (float)$discount_percentage,

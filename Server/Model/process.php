@@ -110,6 +110,7 @@ if ($data['receipt_action'] === 'create') {
             'customer_phone' => $data['customer_phone'],
             'payment_date' => $data['payment_date'],
             'due_date' => $data['due_date'],
+            'payment_status' => $data['payment_status'], // 'paid' or 'unpaid
             'item_list' => json_decode($data['item_list']),
             'subtotal' => $data['subtotal'],
             'discount_percentage' => $data['discount_percentage'],
@@ -147,6 +148,7 @@ if ($data['receipt_action'] === 'create') {
             'customer_phone' => $row['customer_phone'],
             'payment_date' => $row['payment_date'],
             'due_date' => $row['due_date'],
+            'payment_status' => $row['payment_status'], // 'paid' or 'unpaid
             'item_list' => json_decode($row['item_list']),
             'subtotal' => $row['subtotal'],
             'discount_percentage' => $row['discount_percentage'],

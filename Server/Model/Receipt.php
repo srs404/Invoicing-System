@@ -163,10 +163,6 @@ class Receipt extends Customer
             'agent_id' => $agent_id,
         );
 
-        $file = fopen("log.txt", "w");
-        fwrite($file, "Receipt ID: " . $receipt_id . " \n");
-        fclose($file);
-
         parent::put((string)$receipt_id, $data);
     }
 

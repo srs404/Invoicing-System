@@ -1,0 +1,6 @@
+# Allow access to index.php
+
+<Files "index.php">
+Order allow,deny
+Allow from all
+</Files>

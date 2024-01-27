@@ -1,3 +1,0 @@
-# Deny all access by default
-Order deny,allow
-Deny from all

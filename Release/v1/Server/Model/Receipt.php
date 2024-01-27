@@ -1,6 +1,6 @@
 <?php
 
-require_once "App/Controller/Customer.php";
+require_once "../Server/Controller/Customer.php";
 
 class Receipt extends Customer
 {

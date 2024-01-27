@@ -1,6 +1,6 @@
 <?php
 
-require_once "App/Controller/Credentials.php";
+require_once "../Server/Controller/Credentials.php";
 
 class Database extends Credentials
 {

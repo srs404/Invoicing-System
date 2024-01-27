@@ -1,6 +1,6 @@
 <?php
 
-require_once "App/Controller/User.php";
+require_once "../Server/Controller/User.php";
 
 class Login extends User
 {

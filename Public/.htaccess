@@ -1,0 +1,9 @@
+# Disable directory listing
+
+Options -Indexes
+
+# Allow access to the images through index.php
+
+<Files "index.php">
+Allow from all
+</Files>

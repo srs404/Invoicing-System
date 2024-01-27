@@ -1,0 +1,4 @@
+# Allow access to all files through index.php
+<Files "index.php">
+Allow from all
+</Files>

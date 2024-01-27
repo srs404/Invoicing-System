@@ -23,7 +23,7 @@ if (isset($_GET['logout'])) {
     }
 }
 
-require_once "App/Model/Receipt.php";
+require_once "../Server/Model/Receipt.php";
 
 /**
  * Title: Generate Receipt Object
@@ -50,10 +50,10 @@ $receipt_id = $receipt->generateReceiptID();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Stylesheet -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="Assets/CSS/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="Assets/CSS/receipt.css">
+    <link rel="stylesheet" href="Assets/CSS/main.css">
 
     <input type="hidden" id="agent_id" value="<?php echo $_SESSION['agent']['id']; ?>">
 
@@ -385,7 +385,7 @@ $receipt_id = $receipt->generateReceiptID();
 
                     <!-- Brand -->
                     <a class="navbar-brand" href="#" style="position: fixed; left: 20px; top: 10px;">
-                        <img src="Assets/Images/tripupmainlogo.png" height="55" alt="" loading="lazy" />
+                        <img src="Assets/Images/tripupmainlogo.png" height="55" />
                     </a>
 
                     <!-- Right links -->

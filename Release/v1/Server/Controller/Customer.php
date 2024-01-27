@@ -1,6 +1,6 @@
 <?php
 
-require_once "App/Controller/Database.php";
+require_once "../Server/Controller/Database.php";
 
 class Customer extends Database
 {

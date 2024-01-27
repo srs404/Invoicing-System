@@ -1,6 +1,6 @@
 <?php
 
-require_once "App/Model/Login.php";
+require_once "../Server/Model/Login.php";
 
 $user = new Login();
 
@@ -22,12 +22,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             $user->last_logged_in_update($_SESSION['agent']['id']);
             $user->redirect('index.php');
         }
-
-        // Register Algo
-        // $username = $_POST['username'];
-        // $password = $_POST['password'];
-
-        // $user->register($username, $password);
     }
 }
 
@@ -67,7 +61,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             </div>
         </form>
     </div>
-    <!-- <img class="companyLogo" src="Assets/Images/tripuplogocircle.png" style="width: 290px;"> -->
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 <?php
-// Path: delete_data.php
-require_once "App/Model/Receipt.php";
+
+require_once "../Server/Model/Receipt.php";
 
 /**
  * ~ Description: Read JSON data from the request body

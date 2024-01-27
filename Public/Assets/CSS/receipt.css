@@ -151,15 +151,6 @@ body {
     text-align: right;
 }
 
-#footerMenu {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #fff;
-    z-index: 999;
-    border-top: 1px solid #ccc;
-}
-
 .disclaimer {
     padding-left: 30px;
     padding-right: 30px;

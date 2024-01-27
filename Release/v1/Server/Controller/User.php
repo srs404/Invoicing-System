@@ -1,6 +1,6 @@
 <?php
 
-require_once "App/Controller/Database.php";
+require_once "../Server/Controller/Database.php";
 
 class User extends Database
 {
@@ -79,7 +79,7 @@ class User extends Database
      * @param string $email
      * @return array $row
      */
-    protected function getAll($email)
+    protected function getAll()
     {
         $sql = "SELECT * FROM users";
         $stmt = $this->getConnection()->prepare($sql);

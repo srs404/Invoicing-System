@@ -16,36 +16,60 @@ class Register extends User
     }
 
     /**
-     * TITLE: POST
-     * ~ DESCRIPTION: This function will create a new user
-     * ~ PROTECTED Function
-     * @exception EMAIL_ALREADY_EXISTS, DATABASE_ERROR
-     *  
-     * Perform a dynamic INSERT operation into a table.
-     *  
-     * @param string $table The name of the table to insert data into.
-     * @param array $data An associative array of column names and values to insert.
-     *
-     * @return bool True if the insertion was successful; otherwise, false.
+     * TITLE: Validate Agent ID
+     * ~ DESCRIPTION: This function will validate the agent ID
+     * ~ PUBLIC Function
+     * @param int $quantity
+     * @return string $id
      */
-    protected function post($data)
+    public function validate_Agent_ID($quantity)
     {
-        // Construct the SQL query
-        $columns = implode(', ', array_keys($data));
-        $placeholders = ':' . implode(', :', array_keys($data));
-        $sql = "INSERT INTO users ($columns) VALUES ($placeholders)";
-
-        try {
-            // Prepare and execute the SQL statement
-            $stmt = $this->getConnection()->prepare($sql);
-            foreach ($data as $column => $value) {
-                $stmt->bindParam(":$column", $value, PDO::PARAM_STR);
+        while (true) {
+            $id = $this->uniqID_generator($quantity);
+            if ($this->validate_Unique_ID($id)) {
+                return $id;
             }
-            $stmt->execute();
-            return true;
-        } catch (PDOException $e) {
-            // Handle the error as needed
-            die("Error: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * TITLE: Unique ID Generator
+     * ~ DESCRIPTION: This function will generate a unique ID
+     * ~ PRIVATE Function
+     * @param int $quantity ~ Length of the string
+     * @return string $randomString
+     */
+    private function uniqID_generator($quantity)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $quantity; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+
+    /**
+     * TITLE: Register New User [MAIN FUNCTION]
+     * ~ DESCRIPTION: This function will register a new user
+     * ~ PRIVATE Function
+     * @param string $email
+     * @param string $password
+     * @return void
+     */
+    private function register($email, $password, $name = "Demo")
+    {
+        $data = array(
+            'agent_id' => $this->validate_Agent_ID(10),
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        );
+        if ($this->post($data)) {
+            echo "Data inserted successfully.";
+        } else {
+            echo "Error inserting data.";
         }
     }
 }

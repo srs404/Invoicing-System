@@ -16,41 +16,6 @@ class Login extends User
     }
 
     /**
-     * TITLE: Validate Agent ID
-     * ~ DESCRIPTION: This function will validate the agent ID
-     * ~ PUBLIC Function
-     * @param int $quantity
-     * @return string $id
-     */
-    public function validate_Agent_ID($quantity)
-    {
-        while (true) {
-            $id = $this->uniqID_generator($quantity);
-            if ($this->validate_Unique_ID($id)) {
-                return $id;
-            }
-        }
-    }
-
-    /**
-     * TITLE: Unique ID Generator
-     * ~ DESCRIPTION: This function will generate a unique ID
-     * ~ PRIVATE Function
-     * @param int $quantity ~ Length of the string
-     * @return string $randomString
-     */
-    private function uniqID_generator($quantity)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $quantity; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-
-    /**
      * TITLE: Validate Login Credentials [MAIN FUNCTION]
      * ~ DESCRIPTION: This function will validate the login credentials
      * ~ PRIVATE Function
@@ -110,41 +75,6 @@ class Login extends User
     public function last_logged_in_update($agent_id)
     {
         $this->last_logged_in($agent_id);
-    }
-
-    /**
-     * TITLE: Register New User [MAIN FUNCTION]
-     * ~ DESCRIPTION: This function will register a new user
-     * ~ PRIVATE Function
-     * @param string $email
-     * @param string $password
-     * @return void
-     */
-    private function register($email, $password, $name = "Demo")
-    {
-        $data = array(
-            'agent_id' => $this->validate_Agent_ID(10),
-            'email' => $email,
-            'password' => password_hash($password, PASSWORD_DEFAULT)
-        );
-        if ($this->post($data)) {
-            echo "Data inserted successfully.";
-        } else {
-            echo "Error inserting data.";
-        }
-    }
-
-    /**
-     * TITLE: Redirect
-     * ~ DESCRIPTION: This function will redirect the user to a specific page
-     * ~ PUBLIC Function
-     * @param string $url
-     * @return redirect $this->redirect()
-     */
-    public function redirect($url)
-    {
-        // Redirect to dashboard
-        parent::redirect($url);
     }
 
     /**

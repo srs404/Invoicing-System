@@ -253,7 +253,7 @@ function fetchDataAndPopulateTable() {
                         item.subtotal,
                         item.payment_status,
                         // 'Paid',
-                        '<button id="primaryPrintPreviewBTN" class="btn btn-primary btn-sm"><span class="fa fa-magnifying-glass"></span></button> <button id="getReceiptInformation" class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
+                        '<button id="primaryPrintPreviewBTN" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span></button> <button id="getReceiptInformation" class="btn btn-success btn-sm"><span class="fa fa-pencil"></span></button> <button id="deleteReceipt" class="btn btn-danger btn-sm"><span class="fa fa-x"></span></button>'
                     ]).draw(false);
                     if (!flag_update_page_receipt_id_fixed) {
                         document.getElementById('receipt_number_1').innerHTML = incrementLastNumber(item.receipt_id);

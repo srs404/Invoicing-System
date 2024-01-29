@@ -29,4 +29,12 @@ def footer():
 ```
 
 # LICENSE
-ALL RIGHTS RESERVED
+All Rights Reserved
+
+The source code and other content in this repository are proprietary and confidential. No part of this repository may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the code owner.
+
+Unauthorized use, reproduction, or distribution of the content in this repository may be subject to legal action and penalties.
+
+This repository is intended for reference and demonstration purposes only. It is not intended for public use or collaboration.
+
+For inquiries or permissions, please contact the code owner.

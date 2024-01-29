@@ -27,3 +27,6 @@ Fully Functional Invoicing System Implementation Based on MVC Structure
 def footer():
     print("Adios!")
 ```
+
+# LICENSE
+ALL RIGHTS RESERVED

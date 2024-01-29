@@ -2,24 +2,24 @@
 
 Fully Functional Invoicing System Implementation Based on MVC Structure
 
-## Authors
+## Author
 
 - [@srs404](https://www.github.com/srs404)
 
 ## Features (Ongoing)
 
-- Advanced CRUD System For Invoice Management
-- AES-256 Credentials Encryption
-- Secure Data Management
-- User Administration
-- Secure Payment Gateway API
-- Email/SMS Verification Through 3rd Party API
+- Advanced CRUD System For Invoice/Receipt Management
+- AES-256 Credentials Encryption (Ongoing)
+- Secure Data Management & Distribution
+- User Administration & Management
+- Secure Payment Gateway API (Future)
+- Email/SMS Verification Through 3rd Party API (Future)
 
 ## Tech Stack
 
-**Client:** HTML5, CSS3, JS
+**Client-Side:** HTML5, CSS3, JS, jQuery, Bootstrap
 
-**Server:** PHP | **Database:** MySQL
+**Server-Side:** PHP | **Database:** MySQL
 
 ## Footer
 

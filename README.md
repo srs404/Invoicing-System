@@ -50,9 +50,3 @@ Unauthorized use, reproduction, or distribution of the content in this repositor
 This repository is intended for reference and demonstration purposes only. It is not intended for public use or collaboration.
 
 For inquiries or permissions, please contact the code owners listed above.
-
-Unauthorized use, reproduction, or distribution of the content in this repository may be subject to legal action and penalties.
-
-This repository is intended for reference and demonstration purposes only. It is not intended for public use or collaboration.
-
-For inquiries or permissions, please contact the code owner.

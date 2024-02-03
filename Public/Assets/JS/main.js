@@ -212,7 +212,9 @@ $('#price-checkbox').on('change', function () {
 // Validate Date Input
 function checkDate(option) {
     if (option === 'unlock-due-date') {
-        if (document.getElementById("payment-date").value === "") {} else if (document.getElementById("payment-date").value > document.getElementById("due-date").value && document.getElementById("due-date").value !== "") {
+        if (document.getElementById("payment-date").value === "") {
+
+        } else if (document.getElementById("payment-date").value > document.getElementById("due-date").value && document.getElementById("due-date").value !== "") {
             document.getElementById("due-date").value = "";
             alert("Due Date Cannot be earlier than Issued Date");
         }
@@ -403,7 +405,15 @@ function clearModal(option) {
 $('#nextModalBtn').on('click', function () {
     // ! THIS IS COMPLETED. UNCOMMENT IT AFTER WORK DONE
     // var fields = ['#name', '#email', '#phone-number', '#payment-date', '#due-date', '#payment-method', '#payment-status'];
-    var fields = ['#name', '#email', '#phone-number', '#payment-date', '#due-date'];
+    var fields = ['#name', '#email', '#phone-number', '#payment-date'];
+
+
+    if (document.getElementById('due-date').value === "" || document.getElementById('due-date').value === null) {
+        document.getElementById('advance-payment').disabled = true;
+        document.getElementById('advance-payment').value = "";
+    } else {
+        document.getElementById('advance-payment').disabled = false;
+    }
 
     if (fields.some(field => $(field).val() === '') || fields.some(field => $(field).val() === null)) {
         alert('Please fill in all the fields');

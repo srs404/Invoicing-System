@@ -92,9 +92,13 @@ $('#mySearch').on('keyup', function () {
 $('#previewInvoiceBTN').click(function () {
     if (document.getElementById('advance-payment').value == "" || document.getElementById('advance-payment').value == null || document.getElementById('advance-payment').value == 0) {
         var payment_status_x = "Paid";
+    } else if (document.getElementById('due-payment').value == "" || document.getElementById('due-payment').value == null || document.getElementById('due-payment').value == 0) {
+        document.getElementById('advance-payment').value = 0;
+        var payment_status_x = "Paid";
     } else {
         var payment_status_x = "Partially Paid";
     }
+
     var data = {
         customer_name: document.getElementById('name').value,
         customer_email: document.getElementById('email').value,
@@ -422,6 +426,23 @@ $(document).on('click', '#getReceiptInformation', function () {
                     document.getElementById('updateReceiptBTN').style.display = "block";
                     document.getElementById('submitReceiptBTN').style.display = "none";
 
+                    // Check if any value is 0 or null and change it to empty string for discount, payable, convenience fee, advance payment, due payment
+                    if (response.data.discount_percentage == 0) {
+                        response.data.discount_percentage = "";
+                    }
+                    if (response.data.discount_amount == 0) {
+                        response.data.discount_amount = "";
+                    }
+                    if (response.data.convenience_fee == 0) {
+                        response.data.convenience_fee = "";
+                    }
+                    if (response.data.advance_payment == 0) {
+                        response.data.advance_payment = "";
+                    }
+                    if (response.data.payable == 0) {
+                        response.data.payable = "";
+                    }
+
                     $('#name').val(response.data.customer_name);
                     $('#email').val(response.data.customer_email);
                     $('#phone-number').val(response.data.customer_phone);
@@ -450,6 +471,14 @@ $(document).on('click', '#getReceiptInformation', function () {
                     itemData.forEach(function (item) {
                         insRow(item.item_name, item.item_description, item.item_price);
                     });
+
+                    // Check Due Date
+                    if (response.data.due_date == null) {
+                        document.getElementById('advance-payment').value = 0;
+                        document.getElementById('advance-payment').disabled = true;
+                    } else {
+                        document.getElementById('advance-payment').disabled = false;
+                    }
 
                     // Send Data To Preview Print
                     dynamicIframeUpdateOption(response.data);
@@ -556,7 +585,6 @@ $('#newInvoice, #sidebarCreateNew, #createNewNavBtn').on('click', function () {
     $('#customerInformationModal').modal('show');
 });
 
-
 /**
  * Title: setDefaultDate
  * ~Description: This function sets the default date to the current date
@@ -584,26 +612,9 @@ $('#phone-number').on('input', function () {
     }
 });
 
-dynamicIframeUpdateOption(data = {
-    "receipt_id": "TRIPUP-0001",
-    "customer_name": "SRS",
-    "customer_email": "demo",
-    "customer_phone": "demo",
-    "payment_date": "demo",
-    "due_date": "demo",
-    "subtotal": "demo",
-    "discount_percentage": "demo",
-    "discount_amount": "demo",
-    "payable": "demo",
-    "convenience_fee": "demo",
-    "advance_payment": "demo",
-    "due_payment": "demo",
-    "item_list": "[{\"item_name\":\"Hotel/Resort\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Ship\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Flight\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Package\",\"item_description\":\"demo\",\"item_price\":\"demo\"},{\"item_name\":\"Bus\",\"item_description\":\"demo\",\"item_price\":\"demo\"}]"
-
-});
 var wspFrameGlobal;
 
-function dynamicIframeUpdateOption(data, preview = false) {
+function dynamicIframeUpdateOption(data) {
     var container = document.getElementById('iframeModal');
     var iframe = document.createElement('iframe');
     var html = dynamicIframeHTML(data);
@@ -636,8 +647,11 @@ function formatDate(inputDate) {
         month: 'long',
         day: 'numeric'
     };
-    const date = new Date(inputDate);
-    return date.toLocaleDateString('en-GB', options);
+
+    const [year, month, day] = inputDate.split('-');
+    const formattedDate = new Date(year, month - 1, day).toLocaleDateString('en-GB', options);
+
+    return formattedDate;
 }
 
 function formatCurrency(inputString) {
@@ -655,10 +669,23 @@ function formatCurrency(inputString) {
 
 function dynamicIframeHTML(data) {
     var tableHTMLcode = "";
+
+    // Check if due-date is empty
+    if (data.due_date == "" || data.due_date == null || data.due_date == 0 || data.due_date == "0000-00-00" || data.due_date == "1970-01-01" || data.due_date == "1969-12-31") {
+        due_date_validator_payment_status = '<tr><td style="font-weight:bold;border:none;text-align:right;">Payment Status:</td><td class="border-0" id="dynamicPaymentMethod">Paid</td></tr>';
+    } else {
+        due_date_validator_payment_status = '<tr><td style="font-weight:bold;border:none;text-align:right;">Due Date:</td><td class="border-0" id="dynamicDueDate">' + formatDate(data.due_date) + '</td></tr><tr><td style="font-weight:bold;border:none;text-align:right;">Payment Status:</td><td class="border-0" id="dynamicPaymentMethod">' + data.payment_status + '</td></tr>';
+    }
+
     tableRowItems = JSON.parse(data.item_list);
     tableRowItems.forEach(function (item) {
-        tableHTMLcode += '<tr><td class="border-0" id="dynamicItemQuantity">' + item.item_name + '</td><td class="border-0" id="dynamicItemUnitPrice">' + item.item_description + '</td><td class="border-0" id="dynamicItemSubtotal"><span class="dynamicItemSubtotalAmount">' + item.item_price + '</span> BDT</td></tr>';
+        tableHTMLcode += '<tr><td class="border-0" id="dynamicItemQuantity" style="margin-top: 200px;">' + item.item_name + '</td><td class="border-0" id="dynamicItemUnitPrice">' + item.item_description + '</td><td class="border-0" id="dynamicItemSubtotal"><span class="dynamicItemSubtotalAmount">' + item.item_price + '</span> BDT</td></tr>';
     });
-    var htmlcode = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Print</title><link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="crossorigin="anonymous" referrerpolicy="no-referrer" /><link rel="stylesheet" href="Assets/CSS/receipt.css"></head><body><div class="mainCircleLogo"><img src="Assets/Images/tripupappicon.png" width="400px"></div><div class="receiptTopPart"><div class="receiptTopLeftPart"><img src="Assets/Images/tripupmainlogo.png" loading="lazy" width="200px" alt="TripUp Logo"><p style="font-weight:bold;margin-top:10px;color:#1965af;">Address:<span id="dynamicAddress"style="font-weight:normal;color:black;"> 143, Road 01, Avenue 01, Mirpur DOHS.</span></p><p style="margin-top:20px;text-align:left;"><h3 style="font-weight:bold;">Customer Details</h3><table class="table customerDetailsTable" style="width:250px;"><tr class="border-0"><td class="noborder" style="font-weight:bold;">Name:</td><td class="noborder" id="dynamicCustomerName" style="font-weight:normal;">' + data.customer_name + '</td></tr><tr class="border-0"><td class="noborder" style="font-weight:bold;">Contact:</td><td class="noborder" id="dynamicCustomerContact" style="font-weight:normal;">0' + data.customer_phone + '</td></tr><tr class="border-0"><td class="noborder" style="font-weight:bold;">Email:</td><td class="noborder" id="dynamicCustomerEmail" style="font-weight:normal;">' + data.customer_email + '</td></tr></table></p></div><div class="receiptTopRightPart"><div style="text-align:right;"><h3 style="font-size:34px;font-weight:bold; color: #1965af;">RECEIPT</h3><h3 style="font-weight:500;" id="DynamicReceiptNumber">' + data.receipt_id + '</h3></div><div style="margin-top:90px;" class="table-responsive-sm"><table class="table"><tr><td style="font-weight:bold;border:none;text-align:right;">Payment Date:</td><td class="border-0" id="dynamicPaymentDate">' + formatDate(data.payment_date) + '</td></tr><tr><td style="font-weight:bold;border:none;text-align:right;">Due Date:</td><td class="border-0" id="dynamicDueDate">' + formatDate(data.due_date) + '</td></tr><tr><td style="font-weight:bold;border:none;text-align:right;">Payment Status:</td><td class="border-0" id="dynamicPaymentMethod">' + data.payment_status + '</td></tr></table></div></div></div><div class="receiptMiddlePart"><table class="table itemReceiptTable"><thead><tr><th style="width:25%;">Item Name</th><th style="width:50%;">Item Description</th><th style="width:25%;">Amount</th></tr></thead><tbody>' + tableHTMLcode + '</tbody></table><div class="col-12 d-flex justify-content-end" style="background-color:transparent!important;"><div class="card border-0" style="background-color:transparent!important;"><div class="card-body" style="background-color:transparent!important;"><table class="table subtotalTable" style="background-color:transparent!important;"><tbody><tr><td>Subtotal :</td><td style="text-align: right;"><span style="font-weight:normal;"> ' + formatCurrency(data.subtotal) + '</span> BDT</td></tr><tr><td>Discount (' + data.discount_percentage + '%) :</td><td style="text-align: right;"><spanstyle="font-weight:normal;">' + formatCurrency(data.discount_amount) + '</span> BDT</td></tr><tr><td>Convenience Fee :</td><td style="text-align: right;"><span style="font-weight:normal;">' + formatCurrency(data.convenience_fee) + '</span> BDT</td></tr><tr><td>Grand Total :</td><td style="text-align: right;"><span style="font-weight:normal;">' + formatCurrency(data.payable) + '</span> BDT</td></tr><tr><td style="padding-top: 20px;">Advance Paid :</td><td style="padding-top: 20px; text-align: right;"><span style="font-weight:normal;">' + formatCurrency(data.advance_payment) + '</span> BDT</td></tr><tr><td>Due :</td><td style="text-align: right;"><span style="font-weight:normal;">' + formatCurrency(data.due_payment) + '</span> BDT</td></tr></tbody></table></div></div></div></div><div class="disclaimer"><p style="font-weight:bold;">Terms & Policy:</p><ul><li>The due amount must be paid at the time of check-in.</li><li>Booking money is not refundable.</li><li>In the event of political turmoil or natural disaster, we will reconsider the policy and shift (bookingdate) based on the circumstances.</li><li>If guests want to change their reservation date, may be moved to the next available date. However, youmust let us know a week before your scheduled booking. If you choose to shift, 30% of your reservationfee will be deducted automatically.</li></ul></div><div class="receiptFooterDiv col-12"><div class="row justify-content-between col-12"><div class="col-4">info@tripup.io</div><div class="col-4 text-center">01897713000<span style="font-weight:bold;"></span></div><div class="col-4 text-right" style="text-align:right;">www.tripup.io</div></div></div></body></html>';
+
+    if (data.payable == 0) {
+        data.payable = data.subtotal;
+    }
+
+    var htmlcode = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Print</title><link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="crossorigin="anonymous" referrerpolicy="no-referrer" /><link rel="stylesheet" href="Assets/CSS/receipt.css"></head><body><div class="mainCircleLogo"><img src="Assets/Images/tripupappicon.png" width="400px"></div><div class="receiptTopPart"><div class="receiptTopLeftPart"><img src="Assets/Images/tripupmainlogo.png" loading="lazy" width="200px" alt="TripUp Logo"><p style="font-weight:bold;margin-top:10px;color:#1965af;">Address:<span id="dynamicAddress"style="font-weight:normal;color:black;"> 143, Road 01, Avenue 01, Mirpur DOHS.</span></p><p style="margin-top:20px;text-align:left;"><h3 style="font-weight:bold;">Customer Details</h3><table class="table customerDetailsTable" style="width:250px;"><tr class="border-0"><td class="noborder" style="font-weight:bold;">Name:</td><td class="noborder" id="dynamicCustomerName" style="font-weight:normal;">' + data.customer_name + '</td></tr><tr class="border-0"><td class="noborder" style="font-weight:bold;">Contact:</td><td class="noborder" id="dynamicCustomerContact" style="font-weight:normal;">0' + data.customer_phone + '</td></tr><tr class="border-0"><td class="noborder" style="font-weight:bold;">Email:</td><td class="noborder" id="dynamicCustomerEmail" style="font-weight:normal;">' + data.customer_email + '</td></tr></table></p></div><div class="receiptTopRightPart"><div style="text-align:right;"><h3 style="font-size:34px;font-weight:bold; color: #1965af;">RECEIPT</h3><h3 style="font-weight:500;" id="DynamicReceiptNumber">' + data.receipt_id + '</h3></div><div style="margin-top:90px;" class="table-responsive-sm"><table class="table"><tr><td style="font-weight:bold;border:none;text-align:right;">Payment Date:</td><td class="border-0" id="dynamicPaymentDate">' + formatDate(data.payment_date) + '</td></tr>' + due_date_validator_payment_status + '</table></div></div></div><div class="receiptMiddlePart"><table class="table itemReceiptTable"><thead><tr><th style="width:25%;">Item Name</th><th style="width:50%;">Item Description</th><th style="width:25%;">Amount</th></tr></thead><tbody>' + tableHTMLcode + '</tbody></table><div class="col-12 d-flex justify-content-end" style="background-color:transparent!important;"><div class="card border-0" style="background-color:transparent!important;"><div class="card-body" style="background-color:transparent!important;"><table class="table subtotalTable" style="background-color:transparent!important;"><tbody><tr><td>Subtotal :</td><td style="text-align: right;"><span style="font-weight:normal;"> ' + formatCurrency(data.subtotal) + '</span> BDT</td></tr><tr><td>Discount (' + data.discount_percentage + '%) :</td><td style="text-align: right;"><span style="font-weight:normal;">' + formatCurrency(data.discount_amount) + '</span> BDT</td></tr><tr><td>Convenience Fee :</td><td style="text-align: right;"><span style="font-weight:normal;">' + formatCurrency(data.convenience_fee) + '</span> BDT</td></tr><tr><td>Grand Total :</td><td style="text-align: right;"><span style="font-weight:normal;">' + formatCurrency(parseFloat(data.payable) + parseFloat(data.convenience_fee)) + '</span> BDT</td></tr><tr><td style="padding-top: 20px;">Advance Paid :</td><td style="padding-top: 20px; text-align: right;"><span style="font-weight:normal;">' + formatCurrency(data.advance_payment) + '</span> BDT</td></tr><tr><td>Due :</td><td style="text-align: right;"><span style="font-weight:normal;">' + formatCurrency((parseFloat(data.payable) + parseFloat(data.convenience_fee)) - parseFloat(data.advance_payment)) + '</span> BDT</td></tr></tbody></table></div></div></div></div><div class="disclaimer"><p style="font-weight:bold;">Terms & Policy:</p><ul><li>The due amount must be paid at the time of check-in.</li><li>Booking money is not refundable.</li><li>In the event of political turmoil or natural disaster, we will reconsider the policy and shift (bookingdate) based on the circumstances.</li><li>If guests want to change their reservation date, may be moved to the next available date. However, youmust let us know a week before your scheduled booking. If you choose to shift, 30% of your reservationfee will be deducted automatically.</li></ul></div><div class="receiptFooterDiv col-12"><div class="row justify-content-between col-12"><div class="col-4">info@tripup.io</div><div class="col-4 text-center">01897713000<span style="font-weight:bold;"></span></div><div class="col-4 text-right" style="text-align:right;">www.tripup.io</div></div></div></body></html>';
     return htmlcode;
 }

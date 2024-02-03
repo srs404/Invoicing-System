@@ -22,13 +22,19 @@ if ($data['receipt_action'] === 'create') {
      */
     $receipt = new Receipt();
 
+    if ($data['dueDate'] == "" || $data['dueDate'] == null && $data['dueDate'] == 0 || $data['dueDate'] == "0000-00-00" || $data['dueDate'] == "1970-01-01" || $data['dueDate'] == "1969-12-31") {
+        $data['dueDate'] = NULL;
+    } else {
+        $data['dueDate'] = date("Y-m-d", strtotime($data['dueDate']));
+    }
+
     // Create a new receipt
     $receipt->create(
         $data['name'],
         $data['email'],
         $data['phone'],
         date("Y-m-d", strtotime($data['paymentDate'])),
-        date("Y-m-d", strtotime($data['dueDate'])),
+        $data['dueDate'],
         json_encode($data['tableData']),
         $data['subtotal'],
         $data['discount'],
@@ -62,6 +68,18 @@ if ($data['receipt_action'] === 'create') {
      * ~ Description: Edit a receipt
      * ~ Retrieve JSON data from the request body
      */
+    if ($data['dueDate'] == "" || $data['dueDate'] == null && $data['dueDate'] == 0 || $data['dueDate'] == "0000-00-00" || $data['dueDate'] == "1970-01-01" || $data['dueDate'] == "1969-12-31") {
+        $data['dueDate'] = NULL;
+        $data['payment_status'] = "Paid";
+    } else {
+        $data['dueDate'] = date("Y-m-d", strtotime($data['dueDate']));
+        if ($data['duePayment'] == 0) {
+            $data['payment_status'] = "Paid";
+        } else {
+            $data['payment_status'] = "Partially Paid";
+        }
+    }
+
     $receipt = new Receipt();
     $receipt->update(
         $data['receiptID'],
@@ -69,7 +87,8 @@ if ($data['receipt_action'] === 'create') {
         $data['email'],
         $data['phone'],
         date("Y-m-d", strtotime($data['paymentDate'])),
-        date("Y-m-d", strtotime($data['dueDate'])),
+        $data['dueDate'],
+        $data['payment_status'],
         json_encode($data['tableData']),
         $data['subtotal'],
         $data['discount'],

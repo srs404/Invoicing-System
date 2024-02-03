@@ -51,6 +51,12 @@ class Receipt extends Customer
         } else {
             $payment_status = "Partially Paid";
         }
+
+        // Check if due_date initialized
+        // if ($due_date == "" || $due_date == null && $due_date == 0 || $due_date == "0000-00-00" || $due_date == "1970-01-01" || $due_date == "1969-12-31") {
+        //     $due_date = NULL;
+        // }
+
         $data = array(
             'receipt_id' => $this->generateReceiptID(),
             'customer_name' => $customer_name,
@@ -142,6 +148,7 @@ class Receipt extends Customer
         $customer_phone,
         $payment_date,
         $due_date,
+        $payment_status,
         $item_list,
         $subtotal,
         $discount_percentage,
@@ -153,10 +160,11 @@ class Receipt extends Customer
         $agent_id
     ) {
         if ($advance_payment == 0) {
-            $payment_status = "paid";
+            $payment_status = "Paid";
         } else {
             $payment_status = "Partially Paid";
         }
+
         $data = array(
             'customer_name' => $customer_name,
             'customer_email' => $customer_email,

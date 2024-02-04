@@ -2,7 +2,6 @@
 
 namespace Server\Model;
 
-use PDOException;
 use Server\Controller\User;
 
 class Login extends User

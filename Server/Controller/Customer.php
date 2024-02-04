@@ -1,6 +1,10 @@
 <?php
 
-require_once "../Server/Controller/Database.php";
+namespace Server\Controller;
+
+use PDO;
+use PDOException;
+use Server\Controller\Database;
 
 class Customer extends Database
 {

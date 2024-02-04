@@ -1,6 +1,10 @@
 <?php
 
-require_once "../Server/Controller/Database.php";
+namespace Server\Controller;
+
+use PDO;
+use PDOException;
+use Server\Controller\Database;
 
 class User extends Database
 {
@@ -58,15 +62,20 @@ class User extends Database
      */
     protected function get($value, $placeholder, $returns = "*")
     {
-        $sql = "SELECT $returns FROM users WHERE $placeholder = :$placeholder";
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(":$placeholder", $value, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
-            return $row;
-        } else {
-            return false;
+        try {
+            $sql = "SELECT $returns FROM users WHERE $placeholder = :$placeholder";
+            $stmt = $this->getConnection()->prepare($sql);
+            $stmt->bindParam(":$placeholder", $value, PDO::PARAM_STR);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                return $row;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Handle the error as needed
+            die("Error: " . $e->getMessage());
         }
     }
 
@@ -155,6 +164,21 @@ class User extends Database
         } else {
             return true;
         }
+    }
+
+    /**
+     * TITLE: Last Logged In [MAIN FUNCTION]
+     * ~ DESCRIPTION: This function will update the last logged in date
+     * ~ PRIVATE Function
+     * @param string $agent_id
+     * @return void
+     */
+    protected function last_logged_in($agent_id)
+    {
+        $query = "UPDATE users SET logged_in_at = NOW() WHERE agent_id = :agent_id";
+        $stmt = parent::getConnection()->prepare($query);
+        $stmt->bindParam(":agent_id", $agent_id, PDO::PARAM_STR);
+        $stmt->execute();
     }
 
     /**

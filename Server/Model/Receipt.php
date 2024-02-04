@@ -1,7 +1,8 @@
 <?php
 
-// Required Libraries
-require_once "../Server/Controller/Customer.php";
+namespace Server\Model;
+
+use Server\Controller\Customer;
 
 class Receipt extends Customer
 {

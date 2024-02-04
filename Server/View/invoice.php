@@ -95,33 +95,8 @@ $receipt_id = $receipt->generateReceiptID();
                             <label for="due-date" class="form-label">Due Date</label>
                             <input type="date" id="due-date" class="form-control" onchange="checkDate('')">
                         </div>
-
-                        <!-- 
-                            // Title Payment Status: 
-                            // ~ Uncomment If Needed. Remember to change col-md-3 for both payment-date and due-date 
-                        -->
-                        <!-- <div class="col-md-3 position-relative">
-                            <label for="payment-method" class="form-label">Payment Method</label>
-                            <select class="form-select" id="payment-method">
-                                <option selected disabled value="">Choose...</option>
-                                <option value="Bkash">Bkash</option>
-                                <option value="Nagad">Nagad</option>
-                                <option value="Rocket">Rocket</option>
-                                <option value="Bank-transfer">Bank Transfer</option>
-                                <option value="Cash">Cash</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 position-relative">
-                            <label for="payment-status" class="form-label">Payment Status</label>
-                            <select class="form-select" id="payment-status">
-                                <option selected disabled value="">Choose...</option>
-                                <option value="Paid">Paid</option>
-                                <option value="Unpaid">Unpaid</option>
-                                <option value="Partially-paid">Partially Paid</option>
-                            </select>
-                        </div> -->
+                    </form>
                 </div>
-                </form>
                 <div class="modal-footer">
                     <button type="button" id="modalDiscardBtn" class="btn btn-danger" data-bs-dismiss="modal" style="position: absolute; left: 10px;">Discard</button>
                     <button type="submit" id="nextModalBtn" class="btn btn-outline-dark"><span class="fa fa-arrow-right"></span></button>

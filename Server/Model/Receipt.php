@@ -52,11 +52,6 @@ class Receipt extends Customer
             $payment_status = "Partially Paid";
         }
 
-        // Check if due_date initialized
-        // if ($due_date == "" || $due_date == null && $due_date == 0 || $due_date == "0000-00-00" || $due_date == "1970-01-01" || $due_date == "1969-12-31") {
-        //     $due_date = NULL;
-        // }
-
         $data = array(
             'receipt_id' => $this->generateReceiptID(),
             'customer_name' => $customer_name,

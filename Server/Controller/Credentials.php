@@ -1,5 +1,7 @@
 <?php
 
+namespace Server\Controller;
+
 class Credentials
 {
     protected $host = "localhost";

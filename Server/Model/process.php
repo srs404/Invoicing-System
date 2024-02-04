@@ -1,11 +1,13 @@
 <?php
 
-require_once "../Server/Model/Receipt.php";
-
 session_start();
 if (!isset($_SESSION['agent']['loggedin'])) {
     exit;
 }
+
+require_once "autoloader.php";
+
+use Server\Model\Receipt;
 
 /**
  * ~ Description: Read JSON data from the request body

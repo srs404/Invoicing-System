@@ -23,19 +23,16 @@ if (isset($_GET['logout'])) {
     }
 }
 
-require_once "../Server/Model/Receipt.php";
-
 /**
  * Title: Generate Receipt Object
  * ~ Description: This function will generate a new receipt object
  */
-$receipt = new Receipt();
 
-/**
- * Title: Generate Receipt ID
- * ~ Description: This function will generate a new receipt ID
- */
-$receipt_id = $receipt->generateReceiptID();
+use Server\Model\Receipt; # Import the Receipt class
+
+$receipt = new Receipt(); # Create a new receipt object
+
+$receipt_id = $receipt->generateReceiptID(); # Generate a new receipt ID
 
 ?>
 

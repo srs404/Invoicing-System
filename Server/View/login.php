@@ -1,6 +1,6 @@
 <?php
 
-require_once "../Server/Model/Login.php";
+use Server\Model\Login;
 
 $user = new Login();
 

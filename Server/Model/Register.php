@@ -1,6 +1,8 @@
 <?php
 
-require_once "../Server/Controller/User.php";
+namespace Server\Model;
+
+use Server\Controller\User;
 
 class Register extends User
 {

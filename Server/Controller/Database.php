@@ -1,6 +1,10 @@
 <?php
 
-require_once "../Server/Controller/Credentials.php";
+namespace Server\Controller;
+
+use PDO;
+use PDOException;
+use Server\Controller\Credentials;
 
 class Database extends Credentials
 {

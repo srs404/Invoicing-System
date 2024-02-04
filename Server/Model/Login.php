@@ -1,6 +1,9 @@
 <?php
 
-require_once "../Server/Controller/User.php";
+namespace Server\Model;
+
+use PDOException;
+use Server\Controller\User;
 
 class Login extends User
 {
@@ -27,42 +30,22 @@ class Login extends User
      */
     public function login($email, $password)
     {
-        try {
-            $row = $this->get($email, "email", "email, password, agent_id");
+        $row = $this->get($email, "email", "email, password, agent_id");
 
-            if ($row) {
-                // Verify the password using password_verify
-                if (password_verify($password, $row['password'])) {
-                    $_SESSION['agent']['id'] = $row['agent_id'];
-                    $_SESSION['agent']['loggedin'] = true;
-                    return true;
-                } else {
-                    // Invalid password
-                    echo "<script>alert('Invalid password.');</script>";
-                }
+        if ($row) {
+            // Verify the password using password_verify
+            if (password_verify($password, $row['password'])) {
+                $_SESSION['agent']['id'] = $row['agent_id'];
+                $_SESSION['agent']['loggedin'] = true;
+                return true;
             } else {
-                // Username not found
-                echo "<script>alert('Email not found.');</script>";
+                // Invalid password
+                echo "<script>alert('Invalid password.');</script>";
             }
-        } catch (PDOException $e) {
-            // Handle database connection or query errors
-            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+        } else {
+            // Username not found
+            echo "<script>alert('Email not found.');</script>";
         }
-    }
-
-    /**
-     * TITLE: Last Logged In [MAIN FUNCTION]
-     * ~ DESCRIPTION: This function will update the last logged in date
-     * ~ PRIVATE Function
-     * @param string $agent_id
-     * @return void
-     */
-    private function last_logged_in($agent_id)
-    {
-        $query = "UPDATE users SET logged_in_at = NOW() WHERE agent_id = :agent_id";
-        $stmt = parent::getConnection()->prepare($query);
-        $stmt->bindParam(":agent_id", $agent_id, PDO::PARAM_STR);
-        $stmt->execute();
     }
 
     /**

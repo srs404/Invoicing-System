@@ -1,5 +1,6 @@
 <?php
 
+// Required Libraries
 require_once "../Server/Controller/Customer.php";
 
 class Receipt extends Customer
